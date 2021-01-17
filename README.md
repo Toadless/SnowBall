@@ -42,6 +42,6 @@ The setup guide is on the wiki.
 ## Bot configuration
 Download binaries from the github releases page.
 
-Put an `application.yml` file in your working directory. [Example](https://github.com/Toadless/Lavalite/blob/master/config/templates/application.yml)
+Put an `application.yml` file in your working directory. [Example](https://github.com/Toadless/Lavalite/blob/master/config/templates/example.application.yml)
 
 Run with `java -jar Lavalite.jar`
