@@ -21,6 +21,7 @@ public class Config {
     private String Game;
     private String Status;
     private Boolean Invite;
+    private String Join;
 
     private Config(String file) {
         config = new File(file);
@@ -46,6 +47,7 @@ public class Config {
         this.Game = config.getString("config.game");
         this.Status = config.getString("config.status");
         this.Invite = config.getBoolean("config.invite");
+        this.Join = config.getString("config.join");
     }
 
     //Fetching the bots token
@@ -81,5 +83,10 @@ public class Config {
     //Fetching the invite command status
     public Boolean getInvite() {
         return Invite;
+    }
+
+    //Fetching the default guild join message
+    public String getJoin() {
+        return Join;
     }
 }

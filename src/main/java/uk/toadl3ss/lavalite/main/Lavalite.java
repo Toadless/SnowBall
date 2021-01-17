@@ -11,8 +11,12 @@ import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.utils.Info;
 import uk.toadl3ss.lavalite.utils.SetActivity;
 import uk.toadl3ss.lavalite.utils.Vanity;
+import uk.toadl3ss.lavalite.utils.Version;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
 
 public class Lavalite {
     // ################################################################################
@@ -21,13 +25,15 @@ public class Lavalite {
     public static DefaultShardManagerBuilder builder;
     public static ShardManager jda;
     public static final Logger logger = LoggerFactory.getLogger(Lavalite.class);
-    public static String version = "1.0.1";
+    public static String version;
     public static final long START_TIME = System.currentTimeMillis();
     public static final int UNKNOWN_SHUTDOWN_CODE = -991023;
     public static int shutdownCode = UNKNOWN_SHUTDOWN_CODE;
-    public static void main(String[] args) throws LoginException {
+    public static void main(String[] args) throws LoginException, URISyntaxException, IOException {
         System.out.println(Vanity.getVanity());
         Config.init("application.yml");
+        byte[] content = Files.readAllBytes(Version.Version().toPath());
+        version = new String(content);
         if (Config.INS.getDevelopment()) {
             version = version + " " + "DEV";
         }
@@ -37,6 +43,7 @@ public class Lavalite {
         CommandInitializer.initCommands();
         new LavaliteBot();
         SetActivity.SetActivity(jda);
+
     }
 
     public static void shutdown(int code) {
