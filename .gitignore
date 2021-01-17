@@ -1,0 +1,5 @@
+logs
+build
+.gradle
+.idea
+application.yml
