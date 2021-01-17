@@ -12,7 +12,7 @@ public class Info {
         // ################################################################################
         // ##                     Logging Info
         // ################################################################################
-        String indentation = "\t\t\t";
+        String indentation = "\t";
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss z");
         String startTime = format.format(new Date());
         int Cores = Runtime.getRuntime().availableProcessors();
