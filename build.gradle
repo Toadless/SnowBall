@@ -3,9 +3,9 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
-mainClassName = 'uk.toadl3ss.lavalite.Lavalite'
+mainClassName = 'uk.toadl3ss.lavalite.main.Lavalite'
 
-version '1.0'
+version '1.0.1'
 def jdaVersion = '4.2.0_224'
 
 sourceCompatibility = targetCompatibility = 1.8

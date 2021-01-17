@@ -1,7 +1,7 @@
 package uk.toadl3ss.lavalite.commands.admin;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import uk.toadl3ss.lavalite.Lavalite;
+import uk.toadl3ss.lavalite.main.Lavalite;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.data.Constants;
 

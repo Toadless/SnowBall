@@ -1,7 +1,8 @@
 package uk.toadl3ss.lavalite.utils;
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
-import uk.toadl3ss.lavalite.Lavalite;
+import net.dv8tion.jda.api.JDAInfo;
+import uk.toadl3ss.lavalite.main.Lavalite;
 import uk.toadl3ss.lavalite.data.Config;
 
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ public class Info {
                 .append(indentation + "StartTime:      ") .append(startTime + "\n")
                 .append(indentation + "JVM:            ") .append(System.getProperty("java.version") + "\n")
                 .append(indentation + "Lavaplayer      ") .append(PlayerLibrary.VERSION + "\n")
+                .append(indentation + "JDA             ") .append(JDAInfo.VERSION + "\n")
                 .toString()
         ;
         return info;

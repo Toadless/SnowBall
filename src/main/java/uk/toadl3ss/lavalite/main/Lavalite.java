@@ -1,32 +1,18 @@
-package uk.toadl3ss.lavalite;
+package uk.toadl3ss.lavalite.main;
 
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import net.dv8tion.jda.api.utils.Compression;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import net.dv8tion.jda.api.utils.cache.ShardCacheView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.commandmeta.init.CommandInitializer;
-import uk.toadl3ss.lavalite.events.EventListenerLite;
 import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.data.Constants;
-import uk.toadl3ss.lavalite.events.EventLogger;
 import uk.toadl3ss.lavalite.utils.Info;
 import uk.toadl3ss.lavalite.utils.SetActivity;
 import uk.toadl3ss.lavalite.utils.Vanity;
 
 import javax.security.auth.login.LoginException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Lavalite {
     // ################################################################################
@@ -35,7 +21,7 @@ public class Lavalite {
     public static DefaultShardManagerBuilder builder;
     public static ShardManager jda;
     public static final Logger logger = LoggerFactory.getLogger(Lavalite.class);
-    public static String version = "1.0.0";
+    public static String version = "1.0.1";
     public static final long START_TIME = System.currentTimeMillis();
     public static final int UNKNOWN_SHUTDOWN_CODE = -991023;
     public static int shutdownCode = UNKNOWN_SHUTDOWN_CODE;
@@ -46,26 +32,10 @@ public class Lavalite {
             version = version + " " + "DEV";
         }
         System.out.println("\n" + Info.getInfo());
+        logger.info("Starting lavalite v" + version + ".");
         Constants.Init();
-        builder = DefaultShardManagerBuilder.createDefault(
-                Config.INS.getToken(),
-                GatewayIntent.GUILD_MESSAGES,
-                GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.GUILD_EMOJIS
-        );
-        builder.disableCache(
-                CacheFlag.MEMBER_OVERRIDES
-        );
-        builder.enableCache(
-                CacheFlag.VOICE_STATE
-        );
-        builder.setBulkDeleteSplittingEnabled(false);
-        builder.setCompression(Compression.NONE);
-        builder.setShardsTotal(-1);
-        builder.addEventListeners(new EventListenerLite());
-        builder.addEventListeners(new EventLogger());
-        jda = builder.build();
         CommandInitializer.initCommands();
+        new LavaliteBot();
         SetActivity.SetActivity(jda);
     }
 

@@ -2,7 +2,7 @@ package uk.toadl3ss.lavalite.utils;
 
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.sharding.ShardManager;
-import uk.toadl3ss.lavalite.Lavalite;
+import uk.toadl3ss.lavalite.main.Lavalite;
 import uk.toadl3ss.lavalite.data.Constants;
 
 public class SetActivity {

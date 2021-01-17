@@ -1,6 +1,6 @@
 package uk.toadl3ss.lavalite.utils;
 
-import uk.toadl3ss.lavalite.Lavalite;
+import uk.toadl3ss.lavalite.main.Lavalite;
 
 public class Logger {
     // ################################################################################
