@@ -44,6 +44,7 @@ public class EvalCommand extends Command implements ICommandOwnerRestricted {
             String script = imports + event.getMessage().getContentRaw().split("\\s+", 2)[1];
             Object out = engine.evaluate(script);
 
+            event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(out == null ? "Executed without error" : out.toString()).queue();
         }
         catch (Exception e) {

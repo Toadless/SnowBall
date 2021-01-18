@@ -46,7 +46,7 @@ public class PlayCommand extends Command implements ICommandMusic {
             song = "ytsearch:" + songName;
         }
         PlayerManager.getInstance()
-                .loadAndPlay(channel, song);
+                .loadAndPlay(channel, song, event);
         return;
     }
 }

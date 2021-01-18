@@ -32,12 +32,14 @@ public class CommandInitializer {
         CommandRegistry.registerAlias("leave", "disconnect");
         CommandRegistry.registerCommand("nowplaying", new NowPlayingCommand());
         CommandRegistry.registerAlias("nowplaying", "np");
-        CommandRegistry.registerCommand("queue", new NowPlayingCommand());
+        CommandRegistry.registerCommand("queue", new QueueCommand());
         CommandRegistry.registerCommand("repeat", new RepeatCommand());
         CommandRegistry.registerAlias("repeat", "loop");
         CommandRegistry.registerCommand("skip", new SkipCommand());
         CommandRegistry.registerAlias("skip", "next");
         CommandRegistry.registerCommand("stop", new StopCommand());
+        CommandRegistry.registerCommand("setvolume", new VolumeCommand());
+        CommandRegistry.registerAlias("setvolume", "volume");
 
         CommandRegistry.registerCommand("eval", new EvalCommand());
         CommandRegistry.registerCommand("exit", new ExitCommand());
