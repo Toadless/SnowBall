@@ -1,6 +1,6 @@
 package uk.toadl3ss.lavalite.utils;
 
-import uk.toadl3ss.lavalite.main.Lavalite;
+import uk.toadl3ss.lavalite.main.Launcher;
 
 public class Logger {
     // ################################################################################
@@ -8,16 +8,16 @@ public class Logger {
     // ################################################################################
     // Logging an error to the console
     public static void error(String text) {
-        Lavalite.logger.error(text);
+        Launcher.logger.error(text);
     }
 
     // Logging info to the console
     public static void info(String text) {
-        Lavalite.logger.info(text);
+        Launcher.logger.info(text);
     }
 
     // Logging warns to the console
     public static void warn(String text) {
-        Lavalite.logger.warn(text);
+        Launcher.logger.warn(text);
     }
 }

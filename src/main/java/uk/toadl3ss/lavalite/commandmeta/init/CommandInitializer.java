@@ -4,6 +4,7 @@ import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.commands.admin.EvalCommand;
 import uk.toadl3ss.lavalite.commands.admin.ExitCommand;
 import uk.toadl3ss.lavalite.commands.admin.ReviveCommand;
+import uk.toadl3ss.lavalite.commands.admin.TestCommand;
 import uk.toadl3ss.lavalite.commands.maintenance.ShardsCommand;
 import uk.toadl3ss.lavalite.commands.maintenance.StatsCommand;
 import uk.toadl3ss.lavalite.commands.maintenance.VersionCommand;
@@ -17,6 +18,7 @@ public class CommandInitializer {
     // ################################################################################
     public static void initCommands() {
 
+        CommandRegistry.registerCommand("test", new TestCommand());
         CommandRegistry.registerCommand("help", new HelpCommand());
         CommandRegistry.registerCommand("invite", new InviteCommand());
         CommandRegistry.registerCommand("version", new VersionCommand());

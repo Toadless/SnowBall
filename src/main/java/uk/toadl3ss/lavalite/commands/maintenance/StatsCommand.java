@@ -3,13 +3,13 @@ package uk.toadl3ss.lavalite.commands.maintenance;
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMaintenance;
-import uk.toadl3ss.lavalite.main.Lavalite;
+import uk.toadl3ss.lavalite.main.Launcher;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 
 public class StatsCommand extends Command implements ICommandMaintenance {
     @Override
     public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
-        long totalSecs = (System.currentTimeMillis() - Lavalite.START_TIME) / 1000;
+        long totalSecs = (System.currentTimeMillis() - Launcher.START_TIME) / 1000;
 
         String str;
 
@@ -22,10 +22,10 @@ public class StatsCommand extends Command implements ICommandMaintenance {
 
         str = str + "\n----------\n\n";
 
-        str = str + "Shards:                         " + Lavalite.getAllShards() + "\n";
+        str = str + "Shards:                         " + Launcher.getAllShards() + "\n";
 
-        str = str + "Known servers:                  " + Lavalite.getAllGuilds() + "\n";
-        str = str + "Known users in servers:         " + Lavalite.getAllUsersAsMap() + "\n";
+        str = str + "Known servers:                  " + Launcher.getAllGuilds().size() + "\n";
+        str = str + "Known users in servers:         " + Launcher.getAllUsersAsMap().size() + "\n";
         str = str + "JDA responses total:            " + event.getGuild().getJDA().getResponseTotal() + "\n";
         str = str + "JDA version:                    " + JDAInfo.VERSION;
 

@@ -22,6 +22,7 @@ public class Config {
     private String Status;
     private Boolean Invite;
     private String Join;
+    private int numShards;
 
     private Config(String file) {
         config = new File(file);
@@ -48,6 +49,7 @@ public class Config {
         this.Status = config.getString("config.status");
         this.Invite = config.getBoolean("config.invite");
         this.Join = config.getString("config.join");
+        this.numShards = config.getInt("config.shardCount");
     }
 
     //Fetching the bots token
@@ -88,5 +90,10 @@ public class Config {
     //Fetching the default guild join message
     public String getJoin() {
         return Join;
+    }
+
+    //Fetching the amount of shards
+    public int getNumShards() {
+        return numShards;
     }
 }

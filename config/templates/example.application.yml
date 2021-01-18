@@ -33,9 +33,8 @@ config:
   game:                 'Lavalite | ;;help'        # What the bots playing
   status:               'playing'                  # The status type "playing" or "listening" or "watching" or "competing"
   ownerid:              '582560658575589381'       # The bots owner id
-
+  shardCount:               1                          # The number of shards this bot supports. Leave at 1 unless you know what you are doing.
   invite:               false                      # The bot invite command, this will display the bots invite link. Keep this false if the bot will be private
-
   join: "**Thank you for adding me!** :white_check_mark: \n `-` My prefix is: ` {prefix} `"     # The message that gets sent when the bot gets added. Placeholders {prefix}, {guildName} and \n for a new line
 
 
