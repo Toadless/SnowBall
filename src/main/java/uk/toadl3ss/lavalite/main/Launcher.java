@@ -24,7 +24,7 @@ public class Launcher {
     public static JDABuilder builder;
     public static JDA jda;
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
-    public static String version = "2.0.0";
+    public static String version = "2.1.0";
     public static EventListenerLite listenerBot;
     private static final ArrayList<Launcher> shards = new ArrayList<>();
     private static AtomicInteger numShardsReady = new AtomicInteger(0);
