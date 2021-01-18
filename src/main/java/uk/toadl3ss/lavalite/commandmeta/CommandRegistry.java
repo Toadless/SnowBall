@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class CommandRegistry {
     // ################################################################################
@@ -21,5 +22,11 @@ public class CommandRegistry {
     }
     public static Command getCommand(String name) {
         return registry.get(name);
+    }
+    public static int getSize() {
+        return registry.size();
+    }
+    public static Set<String> getRegisteredCommandsAndAliases() {
+        return registry.keySet();
     }
 }

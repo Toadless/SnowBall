@@ -16,28 +16,12 @@ public class CommandInitializer {
     // ##                     Initializing Commands
     // ################################################################################
     public static void initCommands() {
-        // ##############################
-        // #      Util Commands
-        // ##############################
+
         CommandRegistry.registerCommand("help", new HelpCommand());
         CommandRegistry.registerCommand("invite", new InviteCommand());
-        // ##############################
-        // #      Owner Commands
-        // ##############################
-        CommandRegistry.registerCommand("eval", new EvalCommand());
-        CommandRegistry.registerCommand("exit", new ExitCommand());
-        CommandRegistry.registerCommand("revive", new ReviveCommand());
-
-        // ##############################
-        // #      Maintenance
-        // ##############################
         CommandRegistry.registerCommand("version", new VersionCommand());
         CommandRegistry.registerCommand("stats", new StatsCommand());
         CommandRegistry.registerCommand("shards", new ShardsCommand());
-
-        // ##############################
-        // #      Music
-        // ##############################
         CommandRegistry.registerCommand("play", new PlayCommand());
         CommandRegistry.registerCommand("join", new JoinCommand());
         CommandRegistry.registerAlias("join", "summon");
@@ -52,5 +36,9 @@ public class CommandInitializer {
         CommandRegistry.registerCommand("skip", new SkipCommand());
         CommandRegistry.registerAlias("skip", "next");
         CommandRegistry.registerCommand("stop", new StopCommand());
+
+        CommandRegistry.registerCommand("eval", new EvalCommand());
+        CommandRegistry.registerCommand("exit", new ExitCommand());
+        CommandRegistry.registerCommand("revive", new ReviveCommand());
     }
 }

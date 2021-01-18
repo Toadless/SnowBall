@@ -15,7 +15,6 @@ import uk.toadl3ss.lavalite.utils.Vanity;
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 
 public class Lavalite {
     // ################################################################################
@@ -38,9 +37,9 @@ public class Lavalite {
         logger.info("Starting lavalite v" + version + ".");
         Constants.Init();
         CommandInitializer.initCommands();
+        CommandRegistry.logger.info("Registered {} commands", CommandRegistry.getSize());
         new LavaliteBot();
         SetActivity.SetActivity(jda);
-
     }
 
     public static void shutdown(int code) {
@@ -61,8 +60,8 @@ public class Lavalite {
         uk.toadl3ss.lavalite.utils.Logger.warn("Reviving shard" + " " + sId + ".");
     }
 
-    public static int getAllGuilds() {
-        int shardCache = getJda().getShardsTotal();
+    public static long getAllGuilds() {
+        long shardCache = getJda().getGuildCache().size();
         return shardCache;
     }
 
@@ -71,8 +70,8 @@ public class Lavalite {
         return size;
     }
 
-    public static int getAllShards() {
-        int size = getJda().getShardsTotal();
+    public static long getAllShards() {
+        long size = getJda().getShardCache().size();
         return size;
     }
 }

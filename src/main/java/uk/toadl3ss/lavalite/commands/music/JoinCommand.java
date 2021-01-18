@@ -7,8 +7,9 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 
-public class JoinCommand extends Command {
+public class JoinCommand extends Command implements ICommandMusic {
     @Override
     public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();

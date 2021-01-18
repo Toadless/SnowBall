@@ -3,9 +3,10 @@ package uk.toadl3ss.lavalite.commands.admin;
 import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.commandmeta.abs.ICommandOwnerRestricted;
 import uk.toadl3ss.lavalite.data.Constants;
 
-public class EvalCommand extends Command {
+public class EvalCommand extends Command implements ICommandOwnerRestricted {
     private GroovyShell engine;
     private final String imports;
     public EvalCommand() {
@@ -26,9 +27,6 @@ public class EvalCommand extends Command {
 
     @Override
     public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
-        if (!event.getMember().getId().equals(Constants.ownerid)) {
-            return;
-        }
         if (args.length < 2) {
             event.getChannel().sendMessage("You need to provide code to evaluate.").queue();
             return;

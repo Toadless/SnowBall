@@ -5,10 +5,11 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.player.GuildMusicManager;
 import uk.toadl3ss.lavalite.player.PlayerManager;
 
-public class StopCommand extends Command {
+public class StopCommand extends Command implements ICommandMusic {
     @Override
     public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();

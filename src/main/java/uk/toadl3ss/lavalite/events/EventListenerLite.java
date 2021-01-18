@@ -16,8 +16,8 @@ public class EventListenerLite extends ListenerAdapter {
         if (event.getAuthor().equals(event.getJDA().getSelfUser())) {
             return;
         }
-        if (event.getMessage().getContentRaw().startsWith(Constants.prefix)) {
-            CommandManager.executeCommand(args, event, Constants.prefix);
+        if (event.getMessage().getContentRaw().startsWith(Constants.GUILD_PREFIX)) {
+            CommandManager.executeCommand(args, event, Constants.GUILD_PREFIX);
             return;
         }
         // If the prefix is @<bot> <command>.

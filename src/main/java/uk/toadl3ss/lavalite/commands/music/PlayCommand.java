@@ -7,10 +7,11 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.player.PlayerManager;
 import uk.toadl3ss.lavalite.utils.isUrl;
 
-public class PlayCommand extends Command {
+public class PlayCommand extends Command implements ICommandMusic {
     @Override
     public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
         String songName = event.getMessage().getContentRaw().replaceFirst("^" + prefix + "play" + " ", "");

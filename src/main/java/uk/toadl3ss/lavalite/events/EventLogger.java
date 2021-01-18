@@ -43,7 +43,7 @@ public class EventLogger extends ListenerAdapter {
         );
         try {
             String defaultMessage = Config.INS.getJoin();
-            defaultMessage = defaultMessage.replace("{prefix}", Constants.prefix);
+            defaultMessage = defaultMessage.replace("{prefix}", Constants.GUILD_PREFIX);
             defaultMessage = defaultMessage.replace("{guildName}", event.getGuild().getName());
             TextChannel systemChannel = event.getGuild().getDefaultChannel();
             if (systemChannel == null) {
