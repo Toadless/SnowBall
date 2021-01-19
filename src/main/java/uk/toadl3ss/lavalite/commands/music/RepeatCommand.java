@@ -38,4 +38,9 @@ public class RepeatCommand extends Command implements ICommandMusic {
         musicManager.scheduler.repeating = newRepeating;
         channel.sendMessageFormat("The player has been set to **%s**.", newRepeating ? "repeating" : "not repeating").queue();
     }
+
+    @Override
+    public String getHelp() {
+        return "Loops the current song";
+    }
 }

@@ -13,4 +13,9 @@ public class ExitCommand extends Command implements ICommandOwnerRestricted {
         event.getChannel().sendMessage("Exiting...").complete();
         Launcher.shutdown(ExitCodes.EXIT_CODE_NORMAL);
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

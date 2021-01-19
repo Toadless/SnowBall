@@ -19,4 +19,9 @@ public class ShardsCommand extends Command implements ICommandMaintenance {
         str = str + "```";
         event.getChannel().sendMessage(str).queue();
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

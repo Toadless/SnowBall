@@ -50,4 +50,9 @@ public class PlayCommand extends Command implements ICommandMusic {
                 .loadAndPlay(channel, song, event);
         return;
     }
+
+    @Override
+    public String getHelp() {
+        return "Plays the provided song";
+    }
 }

@@ -31,4 +31,9 @@ public class JoinCommand extends Command implements ICommandMusic {
         audioManager.openAudioConnection(memberChannel);
         channel.sendMessage("Connecting to " + memberChannel.getName() + "!").queue();
     }
+
+    @Override
+    public String getHelp() {
+        return "Joins the voice channel";
+    }
 }

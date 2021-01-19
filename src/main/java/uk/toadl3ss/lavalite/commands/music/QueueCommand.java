@@ -79,4 +79,9 @@ public class QueueCommand extends Command implements ICommandMusic {
         }
         channel.sendMessage(embed.build()).queue();
     }
+
+    @Override
+    public String getHelp() {
+        return "Displays the players queue";
+    }
 }

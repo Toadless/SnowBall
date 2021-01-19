@@ -44,4 +44,9 @@ public class SkipCommand extends Command implements ICommandMusic {
         musicManager.scheduler.nextTrack();
         channel.sendMessage("The player has skipped to the next song.").queue();
     }
+
+    @Override
+    public String getHelp() {
+        return "Skips to the next song in the queue";
+    }
 }

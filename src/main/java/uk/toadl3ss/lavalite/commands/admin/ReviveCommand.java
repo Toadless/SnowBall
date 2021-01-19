@@ -17,4 +17,9 @@ public class ReviveCommand extends Command implements ICommandOwnerRestricted {
         event.getChannel().sendMessage("Reviving shard" + " " + shardId).queue();
         Launcher.getInstance(shardId).revive();
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

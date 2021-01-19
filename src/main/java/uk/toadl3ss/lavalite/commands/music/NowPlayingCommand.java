@@ -47,4 +47,9 @@ public class NowPlayingCommand extends Command implements ICommandMusic {
         final AudioTrackInfo info = track.getInfo();
         channel.sendMessage("Now playing" + " **" + info.title + "** " + "by" + " __" + info.author + "__" + "!").queue();
     }
+
+    @Override
+    public String getHelp() {
+        return "Displays the currently playing song";
+    }
 }

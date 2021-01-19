@@ -12,4 +12,9 @@ public class TestCommand extends Command implements ICommandOwnerRestricted {
         CommandManager.logger.info("Test command executed.");
         event.getChannel().sendMessage("Test").queue();
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

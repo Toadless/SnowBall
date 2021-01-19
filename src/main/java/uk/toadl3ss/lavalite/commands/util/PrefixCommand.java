@@ -20,4 +20,9 @@ public class PrefixCommand extends Command implements ICommandAdminRestricted {
         GuildRegistry.setPrefix(guildId, args[1]);
         event.getChannel().sendMessageFormat("Set the guilds prefix to: `%s`", args[1]).queue();
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

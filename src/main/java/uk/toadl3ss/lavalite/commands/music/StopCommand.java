@@ -39,4 +39,9 @@ public class StopCommand extends Command implements ICommandMusic {
         musicManager.scheduler.queue.clear();
         channel.sendMessage("The player has stopped.").queue();
     }
+
+    @Override
+    public String getHelp() {
+        return "Stops the player";
+    }
 }

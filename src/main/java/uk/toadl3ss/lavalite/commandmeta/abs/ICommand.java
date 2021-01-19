@@ -10,4 +10,6 @@ public interface ICommand {
      * @param prefix The prefix that the user provides
      */
     public abstract void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix);
+
+    public abstract String getHelp();
 }

@@ -49,4 +49,9 @@ public class VolumeCommand extends Command implements ICommandMusic {
             CommandManager.logger.info("NumberFormatException has been thrown");
         }
     }
+
+    @Override
+    public String getHelp() {
+        return "Sets the players volume";
+    }
 }

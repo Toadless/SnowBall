@@ -38,4 +38,9 @@ public class StatsCommand extends Command implements ICommandMaintenance {
 
         event.getChannel().sendMessage(str).queue();
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

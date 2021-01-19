@@ -50,4 +50,9 @@ public class EvalCommand extends Command implements ICommandOwnerRestricted {
             event.getChannel().sendMessage(e.getMessage()).queue();
         }
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

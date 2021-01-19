@@ -42,4 +42,9 @@ public class LeaveCommand extends Command implements ICommandMusic {
         musicManager.audioPlayer.stopTrack();
         channel.sendMessage("Ive left the voice channel!").queue();
     }
+
+    @Override
+    public String getHelp() {
+        return "Leaves the voice channel";
+    }
 }

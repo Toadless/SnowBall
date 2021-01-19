@@ -11,4 +11,9 @@ public class VersionCommand extends Command implements ICommandMaintenance {
     public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
         event.getChannel().sendMessage("v" + Launcher.version).queue();
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }

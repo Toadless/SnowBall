@@ -14,4 +14,9 @@ public class InviteCommand extends Command implements ICommandUtil {
         String str = "https://discord.com/api/oauth2/authorize?client_id=" + event.getJDA().getSelfUser().getId() + "&permissions=267911025&scope=bot";
         event.getChannel().sendMessageFormat("My invite: %s", str).queue();
     }
+
+    @Override
+    public String getHelp() {
+        return null;
+    }
 }
