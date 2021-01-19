@@ -2,42 +2,6 @@
 
 # Lavalite
 
----
-
-## Features
-- Easy Setup
-- Fully customisable
-
-## Setup
-The setup guide is on the wiki.
-
-## Commands
-
-### Music
-- Play
-- Join
-- Leave
-- NowPlaying
-- Queue
-- Repeat / Loop
-- Skip
-- Stop
-
-### Admin
-- Eval
-- Exit
-- Revive
-
-### Maintenance
-- Shards
-- Stats
-- Version
-
-### Util
-- Help
-- Invite
-
-
 
 ## Bot configuration
 Download binaries from the github releases page.
@@ -45,3 +9,5 @@ Download binaries from the github releases page.
 Put an `application.yml` file in your working directory. [Example](https://github.com/Toadless/Lavalite/blob/master/config/templates/example.application.yml)
 
 Run with `java -jar Lavalite.jar`
+
+The setup guide is on the wiki.
