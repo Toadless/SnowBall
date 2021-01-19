@@ -1,10 +1,9 @@
 package uk.toadl3ss.lavalite.commands.admin;
 
 import groovy.lang.GroovyShell;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandOwnerRestricted;
-import uk.toadl3ss.lavalite.data.Constants;
 
 public class EvalCommand extends Command implements ICommandOwnerRestricted {
     private GroovyShell engine;
@@ -26,7 +25,7 @@ public class EvalCommand extends Command implements ICommandOwnerRestricted {
     }
 
     @Override
-    public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
+    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
         if (args.length < 2) {
             event.getChannel().sendMessage("You need to provide code to evaluate.").queue();
             return;

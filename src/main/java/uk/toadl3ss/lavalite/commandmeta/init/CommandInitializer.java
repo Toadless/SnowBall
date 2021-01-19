@@ -11,6 +11,7 @@ import uk.toadl3ss.lavalite.commands.maintenance.VersionCommand;
 import uk.toadl3ss.lavalite.commands.music.*;
 import uk.toadl3ss.lavalite.commands.util.HelpCommand;
 import uk.toadl3ss.lavalite.commands.util.InviteCommand;
+import uk.toadl3ss.lavalite.commands.util.PrefixCommand;
 
 public class CommandInitializer {
     // ################################################################################
@@ -44,5 +45,8 @@ public class CommandInitializer {
         CommandRegistry.registerCommand("eval", new EvalCommand());
         CommandRegistry.registerCommand("exit", new ExitCommand());
         CommandRegistry.registerCommand("revive", new ReviveCommand());
+
+        CommandRegistry.registerCommand("prefix", new PrefixCommand());
+        CommandRegistry.registerAlias("prefix", "setprefix");
     }
 }

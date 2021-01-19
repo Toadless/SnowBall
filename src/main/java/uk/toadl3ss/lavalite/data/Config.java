@@ -23,6 +23,9 @@ public class Config {
     private Boolean Invite;
     private String Join;
     private int numShards;
+    private Boolean database;
+    private String mongoUri;
+    private String mongoName;
 
     private Config(String file) {
         config = new File(file);
@@ -50,6 +53,9 @@ public class Config {
         this.Invite = config.getBoolean("config.invite");
         this.Join = config.getString("config.join");
         this.numShards = config.getInt("config.shardCount");
+        this.database = config.getBoolean("config.database");
+        this.mongoUri = config.getString("credentials.mongoDBUri");
+        this.mongoName = config.getString("credentials.mongoDBName");
     }
 
     //Fetching the bots token
@@ -95,5 +101,20 @@ public class Config {
     //Fetching the amount of shards
     public int getNumShards() {
         return numShards;
+    }
+
+    //Fetching the database status
+    public Boolean getDatabase() {
+        return database;
+    }
+
+    //Fetching the database uri
+    public String getMongoUri() {
+        return mongoUri;
+    }
+
+    //Fetching the database name
+    public String getMongoName() {
+        return mongoName;
     }
 }

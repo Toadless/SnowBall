@@ -10,34 +10,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.events.EventLogger;
+import uk.toadl3ss.lavalite.events.ShardListener;
 
 public class Lavalite extends Launcher {
     private static final Logger log = LoggerFactory.getLogger(Lavalite.class);
     private final int shardId;
     public Lavalite(int shardId, EventListener listener) {
         this.shardId = shardId;
+        shardListener = new ShardListener();
+
         log.info("Building shard " + shardId);
         try {
             boolean success = false;
             while (!success) {
-                Launcher.builder = JDABuilder.createDefault(
-                        Config.INS.getToken(),
-                        GatewayIntent.GUILD_MESSAGES,
-                        GatewayIntent.GUILD_VOICE_STATES,
-                        GatewayIntent.GUILD_EMOJIS
-                );
-                Launcher.builder.disableCache(
-                        CacheFlag.MEMBER_OVERRIDES
-                );
-                Launcher.builder.enableCache(
-                        CacheFlag.VOICE_STATE
-                );
-                Launcher.builder.setActivity(Activity.playing("v" + Launcher.version + " " + "Starting"));
-                Launcher.builder.setBulkDeleteSplittingEnabled(false);
-                Launcher.builder.setCompression(Compression.NONE);
-                Launcher.builder.addEventListeners(new EventLogger());
+                JDABuilder builder = JDABuilder.createDefault(Config.INS.getToken())
+                        .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,GatewayIntent.GUILD_EMOJIS)
+                        .disableCache(CacheFlag.MEMBER_OVERRIDES)
+                        .enableCache(CacheFlag.VOICE_STATE)
+                        .setActivity(Activity.playing("v" + Launcher.version + " " + "Starting"))
+                        .setBulkDeleteSplittingEnabled(false)
+                        .setCompression(Compression.NONE);
                 if(listener != null) {
                     builder.addEventListeners(listener);
+                    builder.addEventListeners(new EventLogger());
+                    builder.addEventListeners(shardListener);
                 } else {
                     log.warn("Starting a shard without an event listener!");
                 }

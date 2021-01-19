@@ -10,7 +10,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.utils.FormatTime;
 
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(TextChannel channel, String trackUrl, MessageReceivedEvent event) {
+    public void loadAndPlay(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event) {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
@@ -89,7 +89,7 @@ public class PlayerManager {
         return INSTANCE;
     }
 
-    public static void sendAddedEmbed(AudioTrack track, TextChannel channel, MessageReceivedEvent event) {
+    public static void sendAddedEmbed(AudioTrack track, TextChannel channel, GuildMessageReceivedEvent event) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setAuthor("Added to queue", track.getInfo().uri, event.getAuthor().getAvatarUrl());
         embed.setDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")");

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.player.GuildMusicManager;
@@ -12,7 +13,7 @@ import uk.toadl3ss.lavalite.player.PlayerManager;
 
 public class SkipCommand extends Command implements ICommandMusic {
     @Override
-    public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
+    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();

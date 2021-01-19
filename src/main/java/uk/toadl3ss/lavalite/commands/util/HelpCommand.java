@@ -2,12 +2,13 @@ package uk.toadl3ss.lavalite.commands.util;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandUtil;
 
 public class HelpCommand extends Command implements ICommandUtil {
     @Override
-    public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
+    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setTitle("Help Page");
         embedBuilder.addField("Join", "Joins your voice channel", false);

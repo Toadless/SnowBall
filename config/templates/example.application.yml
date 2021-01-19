@@ -36,6 +36,7 @@ config:
   shardCount:               1                          # The number of shards this bot supports. Leave at 1 unless you know what you are doing.
   invite:               false                      # The bot invite command, this will display the bots invite link. Keep this false if the bot will be private
   join: "**Thank you for adding me!** :white_check_mark: \n `-` My prefix is: ` {prefix} `"     # The message that gets sent when the bot gets added. Placeholders {prefix}, {guildName} and \n for a new line
+  database:             false                      # Only enable this if you have set a database url in the credentials tab
 
 
 ################################################################
@@ -48,3 +49,9 @@ credentials:
   # How to get the key: https://discord.com/developers/docs/intro#bots-and-apps
   # Add your discord API key between the quotation marks
   discordBotToken: ""
+  # To have a database you need to provide a connection uri
+  # How to get the uri: https://www.mongodb.com/
+  # Add your connection uri key between the quotation marks
+  mongoDBUri:      ""
+  # This name can be anything you like
+  mongoDBName:     "lavalite"

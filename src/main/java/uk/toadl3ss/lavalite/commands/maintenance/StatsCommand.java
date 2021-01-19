@@ -2,13 +2,14 @@ package uk.toadl3ss.lavalite.commands.maintenance;
 
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMaintenance;
 import uk.toadl3ss.lavalite.main.Launcher;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 
 public class StatsCommand extends Command implements ICommandMaintenance {
     @Override
-    public void onInvoke(String[] args, MessageReceivedEvent event, String prefix) {
+    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
         long totalSecs = (System.currentTimeMillis() - Launcher.START_TIME) / 1000;
 
         String str;
