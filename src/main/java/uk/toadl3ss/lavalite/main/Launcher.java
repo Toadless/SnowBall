@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Launcher {
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
-    public static String version = "3.0.0";
+    public static String version = "3.1.0";
     public static EventListenerLite listenerBot;
     private static final ArrayList<Launcher> shards = new ArrayList<>();
     private static AtomicInteger numShardsReady = new AtomicInteger(0);
