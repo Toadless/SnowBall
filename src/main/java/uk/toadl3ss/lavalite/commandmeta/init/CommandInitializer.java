@@ -1,17 +1,19 @@
 package uk.toadl3ss.lavalite.commandmeta.init;
 
+import uk.toadl3ss.lavalite.command.music.control.*;
+import uk.toadl3ss.lavalite.command.music.info.NowPlayingCommand;
+import uk.toadl3ss.lavalite.command.music.info.QueueCommand;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
-import uk.toadl3ss.lavalite.commands.admin.EvalCommand;
-import uk.toadl3ss.lavalite.commands.admin.ExitCommand;
-import uk.toadl3ss.lavalite.commands.admin.ReviveCommand;
-import uk.toadl3ss.lavalite.commands.admin.TestCommand;
-import uk.toadl3ss.lavalite.commands.maintenance.ShardsCommand;
-import uk.toadl3ss.lavalite.commands.maintenance.StatsCommand;
-import uk.toadl3ss.lavalite.commands.maintenance.VersionCommand;
-import uk.toadl3ss.lavalite.commands.music.*;
-import uk.toadl3ss.lavalite.commands.util.HelpCommand;
-import uk.toadl3ss.lavalite.commands.util.InviteCommand;
-import uk.toadl3ss.lavalite.commands.util.PrefixCommand;
+import uk.toadl3ss.lavalite.command.admin.EvalCommand;
+import uk.toadl3ss.lavalite.command.admin.ExitCommand;
+import uk.toadl3ss.lavalite.command.admin.ReviveCommand;
+import uk.toadl3ss.lavalite.command.admin.TestCommand;
+import uk.toadl3ss.lavalite.command.maintenance.ShardsCommand;
+import uk.toadl3ss.lavalite.command.maintenance.StatsCommand;
+import uk.toadl3ss.lavalite.command.maintenance.VersionCommand;
+import uk.toadl3ss.lavalite.command.util.HelpCommand;
+import uk.toadl3ss.lavalite.command.util.InviteCommand;
+import uk.toadl3ss.lavalite.command.util.PrefixCommand;
 
 public class CommandInitializer {
     // ################################################################################
@@ -41,6 +43,9 @@ public class CommandInitializer {
         CommandRegistry.registerCommand("stop", new StopCommand());
         CommandRegistry.registerCommand("setvolume", new VolumeCommand());
         CommandRegistry.registerAlias("setvolume", "volume");
+        CommandRegistry.registerCommand("shuffle", new ShuffleCommand());
+        CommandRegistry.registerCommand("destroy", new DestroyCommand());
+        CommandRegistry.registerCommand("pause", new PauseCommand());
 
         CommandRegistry.registerCommand("eval", new EvalCommand());
         CommandRegistry.registerCommand("exit", new ExitCommand());

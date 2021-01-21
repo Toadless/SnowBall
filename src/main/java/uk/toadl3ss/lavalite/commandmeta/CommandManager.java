@@ -1,12 +1,14 @@
 package uk.toadl3ss.lavalite.commandmeta;
 
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandAdminRestricted;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandOwnerRestricted;
+import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.commandmeta.abs.ICommandRestricted;
 import uk.toadl3ss.lavalite.data.Constants;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 import java.util.ArrayList;
 
@@ -21,14 +23,27 @@ public class CommandManager {
         if (cmd == null) {
             return;
         }
-        if (cmd instanceof ICommandOwnerRestricted) {
-            if (!event.getMember().getId().equals(Constants.ownerid)) {
-                return;
+        if (cmd instanceof ICommandRestricted) {
+            if (((ICommandRestricted) cmd).getMinimumPerms().equals(PermissionLevel.BOT_ADMIN)) {
+                if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                    event.getChannel().sendMessage("You dont have permission to do this.").queue();
+                    return;
+                }
+            }
+            if (((ICommandRestricted) cmd).getMinimumPerms().equals(PermissionLevel.SERVER_ADMIN)) {
+                if (!event.getMember().getId().equals(Constants.ownerid)) {
+                    return;
+                }
             }
         }
-        if (cmd instanceof ICommandAdminRestricted) {
-            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                event.getChannel().sendMessage("You dont have permission to do this.").queue();
+        if (cmd instanceof ICommandMusic) {
+            Member member = event.getGuild().getSelfMember();
+            if (!member.hasPermission(Permission.VOICE_CONNECT)) {
+                event.getChannel().sendMessage("Cannot join voice channel. Error: `Missing permissions`.").queue();
+                return;
+            }
+            if (!member.hasPermission(Permission.VOICE_SPEAK)) {
+                event.getChannel().sendMessage("Will not join channel with out permission: `VOICE_SPEAK`!").queue();
                 return;
             }
         }

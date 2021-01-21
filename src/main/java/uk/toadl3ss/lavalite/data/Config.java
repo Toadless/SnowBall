@@ -3,7 +3,7 @@ package uk.toadl3ss.lavalite.data;
 import org.simpleyaml.configuration.file.FileConfiguration;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
-import uk.toadl3ss.lavalite.utils.Logger;
+import uk.toadl3ss.lavalite.util.Logger;
 
 import java.io.File;
 import java.io.IOException;

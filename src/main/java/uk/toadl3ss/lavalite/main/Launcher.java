@@ -1,7 +1,5 @@
 package uk.toadl3ss.lavalite.main;
 
-import com.mongodb.Block;
-import com.mongodb.client.FindIterable;
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDAInfo;
@@ -9,18 +7,17 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.toadl3ss.lavalite.agents.ShardAgent;
+import uk.toadl3ss.lavalite.agent.ShardAgent;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.commandmeta.init.CommandInitializer;
 import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.data.database.DatabaseManager;
-import uk.toadl3ss.lavalite.events.EventListenerLite;
-import uk.toadl3ss.lavalite.events.ShardListener;
-import uk.toadl3ss.lavalite.utils.SetActivity;
+import uk.toadl3ss.lavalite.event.EventListenerLite;
+import uk.toadl3ss.lavalite.event.ShardListener;
+import uk.toadl3ss.lavalite.util.SetActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -135,7 +132,7 @@ public class Launcher {
     private static void initBotShards(EventListener listener) {
         for(int i = 0; i < Config.INS.getNumShards(); i++){
             try {
-                shards.add(i, new Lavalite(i, listener));
+                shards.add(i, new BotController(i, listener));
             } catch (Exception e) {
                 logger.error("Caught an exception while starting shard " + i + "!", e);
                 numShardsReady.getAndIncrement();
@@ -165,7 +162,7 @@ public class Launcher {
     }
 
     public static void shutdown(int code) {
-        uk.toadl3ss.lavalite.utils.Logger.info("Shutting down with exit code " + code);
+        uk.toadl3ss.lavalite.util.Logger.info("Shutting down with exit code " + code);
         CommandRegistry.registry.clear();
         CommandRegistry.logger.info("Clearing all command registry");
         shutdownCode = code;
@@ -184,7 +181,7 @@ public class Launcher {
         int sId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
 
         for(Launcher lch : shards) {
-            if(((Lavalite) lch).getShardId() == sId) {
+            if(((BotController) lch).getShardId() == sId) {
                 return lch;
             }
         }
@@ -203,8 +200,8 @@ public class Launcher {
 
     public void revive() {
         jda.shutdown();
-        uk.toadl3ss.lavalite.utils.Logger.info("Reviving a shard");
-        shards.set(getShardInfo().getShardId(), new Lavalite(getShardInfo().getShardId(), listenerBot));
+        uk.toadl3ss.lavalite.util.Logger.info("Reviving a shard");
+        shards.set(getShardInfo().getShardId(), new BotController(getShardInfo().getShardId(), listenerBot));
     }
 
     public static List<Launcher> getShards() {
