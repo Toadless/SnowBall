@@ -4,7 +4,7 @@ import com.mongodb.client.FindIterable;
 import org.bson.Document;
 
 import uk.toadl3ss.lavalite.data.Constants;
-import uk.toadl3ss.lavalite.data.database.Managers.GuildDataManager;
+import uk.toadl3ss.lavalite.data.database.managers.GuildDataManager;
 import uk.toadl3ss.lavalite.main.Launcher;
 
 import java.util.HashMap;

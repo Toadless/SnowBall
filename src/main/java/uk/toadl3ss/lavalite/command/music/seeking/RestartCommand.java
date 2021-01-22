@@ -1,7 +1,6 @@
 package uk.toadl3ss.lavalite.command.music.seeking;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -42,7 +41,7 @@ public class RestartCommand extends Command implements ICommandMusic {
             return;
         }
         musicManager.scheduler.player.getPlayingTrack().setPosition(0);
-        channel.sendMessage("Restarting the current song.").queue();
+        channel.sendMessage("Restarting the song: `" + musicManager.scheduler.player.getPlayingTrack().getInfo().title + "`.").queue();
     }
 
     @Override

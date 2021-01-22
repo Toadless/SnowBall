@@ -10,7 +10,7 @@ import uk.toadl3ss.lavalite.util.ExitCodes;
 public class ExitCommand extends Command implements ICommandRestricted {
     @Override
     public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
-        event.getChannel().sendMessage("Exiting...").complete();
+        event.getChannel().sendMessage("This will **shut down the whole bot**.").complete();
         Launcher.shutdown(ExitCodes.EXIT_CODE_NORMAL);
     }
 

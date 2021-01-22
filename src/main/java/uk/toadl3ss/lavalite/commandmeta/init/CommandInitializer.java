@@ -1,9 +1,11 @@
 package uk.toadl3ss.lavalite.commandmeta.init;
 
 import uk.toadl3ss.lavalite.command.music.control.*;
+import uk.toadl3ss.lavalite.command.music.info.InfoCommand;
 import uk.toadl3ss.lavalite.command.music.info.NowPlayingCommand;
 import uk.toadl3ss.lavalite.command.music.info.QueueCommand;
 import uk.toadl3ss.lavalite.command.music.seeking.RestartCommand;
+import uk.toadl3ss.lavalite.command.util.HelpCommand;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.command.admin.EvalCommand;
 import uk.toadl3ss.lavalite.command.admin.ExitCommand;
@@ -12,7 +14,7 @@ import uk.toadl3ss.lavalite.command.admin.TestCommand;
 import uk.toadl3ss.lavalite.command.maintenance.ShardsCommand;
 import uk.toadl3ss.lavalite.command.maintenance.StatsCommand;
 import uk.toadl3ss.lavalite.command.maintenance.VersionCommand;
-import uk.toadl3ss.lavalite.command.util.HelpCommand;
+import uk.toadl3ss.lavalite.command.util.CommandsCommand;
 import uk.toadl3ss.lavalite.command.util.InviteCommand;
 import uk.toadl3ss.lavalite.command.util.PrefixCommand;
 
@@ -22,6 +24,7 @@ public class CommandInitializer {
     // ################################################################################
     public static void initCommands() {
         CommandRegistry.registerCommand("test", new TestCommand());
+        CommandRegistry.registerCommand("commands", new CommandsCommand());
         CommandRegistry.registerCommand("help", new HelpCommand());
         CommandRegistry.registerCommand("invite", new InviteCommand());
         CommandRegistry.registerCommand("version", new VersionCommand());
@@ -47,6 +50,7 @@ public class CommandInitializer {
         CommandRegistry.registerCommand("destroy", new DestroyCommand());
         CommandRegistry.registerCommand("pause", new PauseCommand());
         CommandRegistry.registerCommand("restart", new RestartCommand());
+        CommandRegistry.registerCommand("info", new InfoCommand());
 
         CommandRegistry.registerCommand("eval", new EvalCommand());
         CommandRegistry.registerCommand("exit", new ExitCommand());
