@@ -3,6 +3,7 @@ package uk.toadl3ss.lavalite.commandmeta.init;
 import uk.toadl3ss.lavalite.command.music.control.*;
 import uk.toadl3ss.lavalite.command.music.info.NowPlayingCommand;
 import uk.toadl3ss.lavalite.command.music.info.QueueCommand;
+import uk.toadl3ss.lavalite.command.music.seeking.RestartCommand;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.command.admin.EvalCommand;
 import uk.toadl3ss.lavalite.command.admin.ExitCommand;
@@ -20,7 +21,6 @@ public class CommandInitializer {
     // ##                     Initializing Commands
     // ################################################################################
     public static void initCommands() {
-
         CommandRegistry.registerCommand("test", new TestCommand());
         CommandRegistry.registerCommand("help", new HelpCommand());
         CommandRegistry.registerCommand("invite", new InviteCommand());
@@ -46,6 +46,7 @@ public class CommandInitializer {
         CommandRegistry.registerCommand("shuffle", new ShuffleCommand());
         CommandRegistry.registerCommand("destroy", new DestroyCommand());
         CommandRegistry.registerCommand("pause", new PauseCommand());
+        CommandRegistry.registerCommand("restart", new RestartCommand());
 
         CommandRegistry.registerCommand("eval", new EvalCommand());
         CommandRegistry.registerCommand("exit", new ExitCommand());
