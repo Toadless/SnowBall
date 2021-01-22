@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.agent.ShardAgent;
+import uk.toadl3ss.lavalite.agent.VoiceChannelCleanupAgent;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.commandmeta.init.CommandInitializer;
 import uk.toadl3ss.lavalite.data.Config;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Launcher {
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
-    public static String version = "3.1.0";
+    public static String version = "3.2.0";
     public static EventListenerLite listenerBot;
     private static final ArrayList<Launcher> shards = new ArrayList<>();
     private static AtomicInteger numShardsReady = new AtomicInteger(0);
@@ -124,9 +125,15 @@ public class Launcher {
         initBotShards(listenerBot);
         SetActivity.SetActivity(jda);
 
+        VoiceChannelCleanupAgent voiceChannelCleanupAgent = new VoiceChannelCleanupAgent();
+        voiceChannelCleanupAgent.setDaemon(true);
+        voiceChannelCleanupAgent.start();
+
         ShardAgent shardAgent = new ShardAgent();
         shardAgent.setDaemon(true);
         shardAgent.start();
+
+        logger.info("\tActive Threads:\t" + java.lang.Thread.activeCount());
     }
 
     private static void initBotShards(EventListener listener) {

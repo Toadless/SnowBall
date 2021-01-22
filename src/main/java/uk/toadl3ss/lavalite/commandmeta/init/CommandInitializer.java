@@ -1,22 +1,16 @@
 package uk.toadl3ss.lavalite.commandmeta.init;
 
+import uk.toadl3ss.lavalite.command.admin.*;
 import uk.toadl3ss.lavalite.command.music.control.*;
 import uk.toadl3ss.lavalite.command.music.info.InfoCommand;
 import uk.toadl3ss.lavalite.command.music.info.NowPlayingCommand;
 import uk.toadl3ss.lavalite.command.music.info.QueueCommand;
 import uk.toadl3ss.lavalite.command.music.seeking.RestartCommand;
-import uk.toadl3ss.lavalite.command.util.HelpCommand;
+import uk.toadl3ss.lavalite.command.util.*;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
-import uk.toadl3ss.lavalite.command.admin.EvalCommand;
-import uk.toadl3ss.lavalite.command.admin.ExitCommand;
-import uk.toadl3ss.lavalite.command.admin.ReviveCommand;
-import uk.toadl3ss.lavalite.command.admin.TestCommand;
 import uk.toadl3ss.lavalite.command.maintenance.ShardsCommand;
 import uk.toadl3ss.lavalite.command.maintenance.StatsCommand;
 import uk.toadl3ss.lavalite.command.maintenance.VersionCommand;
-import uk.toadl3ss.lavalite.command.util.CommandsCommand;
-import uk.toadl3ss.lavalite.command.util.InviteCommand;
-import uk.toadl3ss.lavalite.command.util.PrefixCommand;
 
 public class CommandInitializer {
     // ################################################################################
@@ -30,6 +24,7 @@ public class CommandInitializer {
         CommandRegistry.registerCommand("version", new VersionCommand());
         CommandRegistry.registerCommand("stats", new StatsCommand());
         CommandRegistry.registerCommand("shards", new ShardsCommand());
+        CommandRegistry.registerCommand("ping", new PingCommand());
         CommandRegistry.registerCommand("play", new PlayCommand());
         CommandRegistry.registerCommand("join", new JoinCommand());
         CommandRegistry.registerAlias("join", "summon");
@@ -55,6 +50,7 @@ public class CommandInitializer {
         CommandRegistry.registerCommand("eval", new EvalCommand());
         CommandRegistry.registerCommand("exit", new ExitCommand());
         CommandRegistry.registerCommand("revive", new ReviveCommand());
+        CommandRegistry.registerCommand("registry", new RegistryCommand());
 
         CommandRegistry.registerCommand("prefix", new PrefixCommand());
         CommandRegistry.registerAlias("prefix", "setprefix");
