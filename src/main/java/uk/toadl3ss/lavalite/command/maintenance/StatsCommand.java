@@ -2,13 +2,20 @@ package uk.toadl3ss.lavalite.command.maintenance;
 
 import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMaintenance;
 import uk.toadl3ss.lavalite.main.Launcher;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class StatsCommand extends Command implements ICommandMaintenance {
+    public StatsCommand()
+    {
+        super("stats", null, PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         long totalSecs = (System.currentTimeMillis() - Launcher.START_TIME) / 1000;
 
         String str;
@@ -36,10 +43,5 @@ public class StatsCommand extends Command implements ICommandMaintenance {
         str = str + "```";
 
         event.getChannel().sendMessage(str).queue();
-    }
-
-    @Override
-    public String getHelp() {
-        return null;
     }
 }

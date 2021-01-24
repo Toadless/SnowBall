@@ -23,6 +23,8 @@ public class Config {
     private Boolean Invite;
     private String Join;
     private int numShards;
+    private int shardStart;
+    private int maxShards;
     private Boolean database;
     private String mongoUri;
     private String mongoName;
@@ -56,6 +58,8 @@ public class Config {
         this.database = config.getBoolean("config.database");
         this.mongoUri = config.getString("credentials.mongoDBUri");
         this.mongoName = config.getString("credentials.mongoDBName");
+        this.shardStart = config.getInt("config.shardStart");
+        this.maxShards = config.getInt("config.maxShards");
     }
 
     //Fetching the bots token
@@ -116,5 +120,15 @@ public class Config {
     //Fetching the database name
     public String getMongoName() {
         return mongoName;
+    }
+
+    //Fetching the shard start
+    public int getShardStart() {
+        return shardStart;
+    }
+
+    //Fetching the max shards
+    public int getMaxShards() {
+        return maxShards;
     }
 }

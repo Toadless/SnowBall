@@ -1,12 +1,19 @@
 package uk.toadl3ss.lavalite.command.util;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class PingCommand extends Command implements ICommandMusic {
+    public PingCommand()
+    {
+        super("ping", null, PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         event.getJDA().getRestPing().queue(aLong -> {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("```md\n");
@@ -26,10 +33,5 @@ public class PingCommand extends Command implements ICommandMusic {
             stringBuilder.append("```");
             event.getChannel().sendMessage(stringBuilder.toString()).queue();
         });
-    }
-
-    @Override
-    public String getHelp() {
-        return null;
     }
 }

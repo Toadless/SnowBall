@@ -5,17 +5,24 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandUtil;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class CommandsCommand extends Command implements ICommandUtil {
+    public CommandsCommand()
+    {
+        super("commands", null, PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         StringBuilder helpString = new StringBuilder();
         helpString.append("```md\n");
         String title = "< {name} Music Commands >\n";
@@ -45,9 +52,5 @@ public class CommandsCommand extends Command implements ICommandUtil {
                 .queue(null, new ErrorHandler().ignore(ErrorResponse.UNKNOWN_MESSAGE).handle(ErrorResponse.CANNOT_SEND_TO_USER, (e) -> {
                     event.getChannel().sendMessage(helpString.toString()).queue();
                 }));
-    }
-    @Override
-    public String getHelp() {
-        return null;
     }
 }

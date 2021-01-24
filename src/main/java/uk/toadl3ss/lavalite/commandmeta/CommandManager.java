@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandRestricted;
 import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
@@ -23,19 +22,21 @@ public class CommandManager {
         if (cmd == null) {
             return;
         }
-        if (cmd instanceof ICommandRestricted) {
-            if (((ICommandRestricted) cmd).getMinimumPerms().equals(PermissionLevel.BOT_ADMIN)) {
-                if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
-                    event.getChannel().sendMessage("You dont have permission to do this.").queue();
-                    return;
-                }
-            }
-            if (((ICommandRestricted) cmd).getMinimumPerms().equals(PermissionLevel.SERVER_ADMIN)) {
-                if (!event.getMember().getId().equals(Constants.ownerid)) {
-                    return;
-                }
+
+        // Permission checks
+        if (cmd.getPermissionNode().equals(PermissionLevel.BOT_ADMIN)) {
+            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+                event.getChannel().sendMessage("You dont have permission to do this.").queue();
+                return;
             }
         }
+        if (cmd.getPermissionNode().equals(PermissionLevel.SERVER_ADMIN)) {
+            if (!event.getMember().getId().equals(Constants.ownerid)) {
+                return;
+            }
+        }
+
+        // Music perm checks
         if (cmd instanceof ICommandMusic) {
             Member member = event.getGuild().getSelfMember();
             if (!member.hasPermission(Permission.VOICE_CONNECT)) {
@@ -47,8 +48,10 @@ public class CommandManager {
                 return;
             }
         }
+
+
         String[] arguments = commandToArguments(event.getMessage().getContentRaw());
-        cmd.onInvoke(arguments, event, prefix);
+        cmd.run(arguments, event, prefix);
     }
 
     private static String[] commandToArguments(String cmd) {

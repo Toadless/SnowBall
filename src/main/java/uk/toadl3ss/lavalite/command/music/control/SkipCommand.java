@@ -5,14 +5,21 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class SkipCommand extends Command implements ICommandMusic {
+    public SkipCommand()
+    {
+        super("skip", "Skips to the next song", PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -42,10 +49,5 @@ public class SkipCommand extends Command implements ICommandMusic {
         }
         musicManager.scheduler.nextTrack();
         channel.sendMessage("The player has skipped to the next song.").queue();
-    }
-
-    @Override
-    public String getHelp() {
-        return "Skips to the next song in the queue";
     }
 }

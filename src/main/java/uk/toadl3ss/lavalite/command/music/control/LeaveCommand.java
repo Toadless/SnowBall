@@ -5,14 +5,21 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class LeaveCommand extends Command implements ICommandMusic {
+    public LeaveCommand()
+    {
+        super("leave", "Disconnects from the voice channel", PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -40,10 +47,5 @@ public class LeaveCommand extends Command implements ICommandMusic {
         musicManager.scheduler.queue.clear();
         musicManager.audioPlayer.stopTrack();
         channel.sendMessage("Ive left the voice channel!").queue();
-    }
-
-    @Override
-    public String getHelp() {
-        return "Leaves the voice channel";
     }
 }

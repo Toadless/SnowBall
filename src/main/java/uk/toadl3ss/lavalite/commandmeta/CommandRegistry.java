@@ -12,9 +12,9 @@ public class CommandRegistry {
     // ################################################################################
     public static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandRegistry.class);
     public static HashMap<String, Command> registry = new HashMap<>();
-    public static void registerCommand(String name, Command command) {
-        logger.info("Registered the command" + " " + name + ".");
-        registry.put(name, command);
+    public static void registerCommand(Command command) {
+        logger.info("Registered the command" + " " + command.getName() + ".");
+        registry.put(command.getName(), command);
     }
     public static void registerAlias(String command, String alias) {
         logger.info("Registered the alias" + " " + alias + ".");

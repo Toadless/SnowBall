@@ -38,7 +38,7 @@ public class BotController extends Launcher {
                     log.warn("Starting a shard without an event listener!");
                 }
                 if (Config.INS.getNumShards() > 1) {
-                    builder.useSharding(shardId, Config.INS.getNumShards());
+                    builder.useSharding(shardId, Config.INS.getMaxShards());
                 }
                 jda = builder.build();
                 success = true;

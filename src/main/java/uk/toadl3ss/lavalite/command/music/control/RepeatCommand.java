@@ -4,14 +4,21 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class RepeatCommand extends Command implements ICommandMusic {
+    public RepeatCommand()
+    {
+        super("repeat", "Loops the player", PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -36,10 +43,5 @@ public class RepeatCommand extends Command implements ICommandMusic {
         final boolean newRepeating = !musicManager.scheduler.repeating;
         musicManager.scheduler.repeating = newRepeating;
         channel.sendMessageFormat(":repeat: **%s!**", newRepeating ? "Enabled" : "Disabled").queue();
-    }
-
-    @Override
-    public String getHelp() {
-        return "Loops the current song";
     }
 }

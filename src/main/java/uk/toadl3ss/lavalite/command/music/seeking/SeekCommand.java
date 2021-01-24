@@ -1,23 +1,23 @@
-package uk.toadl3ss.lavalite.command.music.info;
+package uk.toadl3ss.lavalite.command.music.seeking;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
+import uk.toadl3ss.lavalite.commandmeta.CommandManager;
+import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
+import uk.toadl3ss.lavalite.util.FormatTime;
 
-public class NowPlayingCommand extends Command implements ICommandMusic {
-    public NowPlayingCommand()
+public class SeekCommand extends Command implements ICommandMusic {
+    public SeekCommand()
     {
-        super("nowplaying", "Displays the currently playing song", PermissionLevel.DEFAULT);
+        super("seek", "Seeks to a provided position in the track", PermissionLevel.DEFAULT);
     }
 
     @Override
@@ -45,12 +45,24 @@ public class NowPlayingCommand extends Command implements ICommandMusic {
 
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
-        final AudioTrack track = audioPlayer.getPlayingTrack();
         if (audioPlayer.getPlayingTrack() == null) {
             channel.sendMessage("No current playing song.").queue();
             return;
         }
-        final AudioTrackInfo info = track.getInfo();
-        channel.sendMessage("Now playing" + " **" + info.title + "** " + "by" + " __" + info.author + "__" + "!").queue();
+        if (args.length < 2) {
+            event.getChannel().sendMessage("Please provide a position to seek to.").queue();
+            return;
+        }
+        try {
+            if (musicManager.scheduler.player.getPlayingTrack().getDuration() < Long.parseLong(args[1])) {
+                event.getChannel().sendMessage("The tracks duration is less than: `" + FormatTime.formatTime(Long.parseLong(args[1])) + "`.").queue();
+                return;
+            }
+            musicManager.scheduler.player.getPlayingTrack().setPosition(Long.parseLong(args[1]));
+            event.getChannel().sendMessage("The tracks position has been set to: `" + FormatTime.formatTime(Long.parseLong(args[1])) + "`.").queue();
+        } catch (NumberFormatException e) {
+            event.getChannel().sendMessage("Please provide a valid number.").queue();
+            CommandManager.logger.info("NumberFormatException has been thrown");
+        }
     }
 }

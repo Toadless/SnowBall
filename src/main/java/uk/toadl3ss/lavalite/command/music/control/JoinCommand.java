@@ -6,12 +6,19 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class JoinCommand extends Command implements ICommandMusic {
+    public JoinCommand()
+    {
+        super("join", "Joins your voice channel", PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -29,10 +36,5 @@ public class JoinCommand extends Command implements ICommandMusic {
         final VoiceChannel memberChannel = memberVoiceState.getChannel();
         audioManager.openAudioConnection(memberChannel);
         channel.sendMessage("Connecting to " + memberChannel.getName() + "!").queue();
-    }
-
-    @Override
-    public String getHelp() {
-        return "Joins the voice channel";
     }
 }

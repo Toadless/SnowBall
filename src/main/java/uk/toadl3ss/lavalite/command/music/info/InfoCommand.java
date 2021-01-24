@@ -5,15 +5,22 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.perms.PermissionLevel;
 import uk.toadl3ss.lavalite.util.FormatTime;
 
 public class InfoCommand extends Command implements ICommandMusic {
+    public InfoCommand()
+    {
+        super("info", "Displays info about the guilds player", PermissionLevel.DEFAULT);
+    }
+
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -61,12 +68,11 @@ public class InfoCommand extends Command implements ICommandMusic {
         stringBuilder.append("# ");
         stringBuilder.append(musicManager.audioPlayer.getVolume());
         stringBuilder.append("\n");
+        stringBuilder.append("Paused:\n");
+        stringBuilder.append("# ");
+        stringBuilder.append(musicManager.scheduler.player.isPaused());
+        stringBuilder.append("\n");
         stringBuilder.append("```");
         channel.sendMessage(stringBuilder.toString()).queue();
-    }
-
-    @Override
-    public String getHelp() {
-        return "Reply's with useful information about the guilds music manager";
     }
 }

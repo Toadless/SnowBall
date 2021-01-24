@@ -2,14 +2,15 @@ package uk.toadl3ss.lavalite.command.admin;
 
 import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandRestricted;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
-public class EvalCommand extends Command implements ICommandRestricted {
+public class EvalCommand extends Command {
     private GroovyShell engine;
     private final String imports;
     public EvalCommand() {
+        super("eval", null, PermissionLevel.BOT_ADMIN);
         this.engine = new GroovyShell();
         this.imports = "import java.io.*\n" +
                 "import java.lang.*\n" +
@@ -26,7 +27,7 @@ public class EvalCommand extends Command implements ICommandRestricted {
     }
 
     @Override
-    public void onInvoke(String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
         if (args.length < 2) {
             event.getChannel().sendMessage("You need to provide code to evaluate.").queue();
             return;
@@ -50,15 +51,5 @@ public class EvalCommand extends Command implements ICommandRestricted {
         catch (Exception e) {
             event.getChannel().sendMessage(e.getMessage()).queue();
         }
-    }
-
-    @Override
-    public String getHelp() {
-        return null;
-    }
-
-    @Override
-    public PermissionLevel getMinimumPerms() {
-        return PermissionLevel.BOT_ADMIN;
     }
 }

@@ -1,8 +1,10 @@
 package uk.toadl3ss.lavalite.event;
 
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.main.Launcher;
 
 import java.util.HashMap;

@@ -137,7 +137,7 @@ public class Launcher {
     }
 
     private static void initBotShards(EventListener listener) {
-        for(int i = 0; i < Config.INS.getNumShards(); i++){
+        for(int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++){
             try {
                 shards.add(i, new BotController(i, listener));
             } catch (Exception e) {
