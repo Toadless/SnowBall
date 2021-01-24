@@ -10,6 +10,7 @@ import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.entities.exception.CommandException;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
+import uk.toadl3ss.lavalite.util.DiscordUtil;
 
 import java.util.ArrayList;
 
@@ -31,16 +32,16 @@ public class CommandManager
         // Permission checks
         if (cmd.getPermissionNode().equals(PermissionLevel.BOT_ADMIN))
         {
-            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER))
-            {
+            if (!DiscordUtil.isOwner(event.getMember().getUser())) {
                 event.getChannel().sendMessage("You dont have permission to do this.").queue();
                 return;
             }
         }
         if (cmd.getPermissionNode().equals(PermissionLevel.SERVER_ADMIN))
         {
-            if (!event.getMember().getId().equals(Constants.ownerid))
+            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER))
             {
+                event.getChannel().sendMessage("You dont have permission to do this.").queue();
                 return;
             }
         }

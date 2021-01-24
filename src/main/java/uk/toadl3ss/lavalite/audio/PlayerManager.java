@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.entities.database.GuildRegistry;
 import uk.toadl3ss.lavalite.main.Launcher;
+import uk.toadl3ss.lavalite.util.DiscordUtil;
 import uk.toadl3ss.lavalite.util.FormatTime;
 
 import java.util.HashMap;
@@ -117,6 +118,7 @@ public class PlayerManager
         embed.setDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")");
         embed.addField("**Channel**", track.getInfo().author, true);
         embed.addField("**Song Duration**", FormatTime.formatTime(track.getDuration()), true);
+        embed.setColor(DiscordUtil.getEmbedColor());
         channel.sendMessage(embed.build()).queue();
     }
 }

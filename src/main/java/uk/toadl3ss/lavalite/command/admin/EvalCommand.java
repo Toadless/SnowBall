@@ -1,11 +1,13 @@
 package uk.toadl3ss.lavalite.command.admin;
 
 import groovy.lang.GroovyShell;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
+import uk.toadl3ss.lavalite.util.DiscordUtil;
 
 public class EvalCommand extends Command
 {
@@ -52,7 +54,15 @@ public class EvalCommand extends Command
             Object out = engine.evaluate(script);
 
             event.getChannel().sendTyping().queue();
-            event.getChannel().sendMessage(out == null ? "Executed without error" : out.toString()).queue();
+
+            String output = out == null ? "Executed without error" : out.toString();
+
+            EmbedBuilder embedBuilder = new EmbedBuilder()
+                    .setColor(DiscordUtil.getEmbedColor())
+                    .setTitle("Eval")
+                    .addField("**Input**", "```java\n" + messageArgs + "\n```", false)
+                    .addField("**Output**", "```java\n" + output + "```", false);
+            event.getChannel().sendMessage(embedBuilder.build()).queue();
         }
         catch (Exception e)
         {
