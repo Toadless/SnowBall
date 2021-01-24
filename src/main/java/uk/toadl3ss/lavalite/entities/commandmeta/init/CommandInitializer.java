@@ -49,6 +49,7 @@ public class CommandInitializer
         CommandRegistry.registerCommand(new ReviveCommand());
         CommandRegistry.registerCommand(new RegistryCommand());
         CommandRegistry.registerCommand(new PrefixCommand());
+        CommandRegistry.registerCommand(new SoundCloud());
 
         /* Registering every alias */
         CommandRegistry.registerAlias("prefix", "setprefix");
@@ -60,5 +61,6 @@ public class CommandInitializer
         CommandRegistry.registerAlias("join", "summon");
         CommandRegistry.registerAlias("join", "connect");
         CommandRegistry.registerAlias("pause", "resume");
+        CommandRegistry.registerAlias("soundcloud", "sc");
     }
 }

@@ -68,7 +68,8 @@ public class PlayerManager
                 { // Adding a single song from search result
                     sendAddedEmbed(tracks.get(0), channel, event);
                     musicManager.scheduler.queue(tracks.get(0));
-                } else
+                }
+                else
                     { // Adding a whole playlist
                     channel.sendMessage("Adding to queue: `")
                             .append(String.valueOf(tracks.size()))
@@ -88,7 +89,8 @@ public class PlayerManager
             @Override
             public void noMatches()
             {
-                if (Launcher.DATABASE_ENABLED) {
+                if (Launcher.DATABASE_ENABLED)
+                {
                     channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(GuildRegistry.getPrefix(Long.parseLong(event.getGuild().getId())) + "play", "") + "`").queue();
                     return;
                 }
@@ -105,7 +107,8 @@ public class PlayerManager
 
     public static PlayerManager getInstance()
     {
-        if (INSTANCE == null) {
+        if (INSTANCE == null)
+        {
             INSTANCE = new PlayerManager();
         }
         return INSTANCE;
