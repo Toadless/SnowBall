@@ -48,17 +48,8 @@ public class SoundCloud extends Command
             final VoiceChannel memberChannel = memberVoiceState.getChannel();
             audioManager.openAudioConnection(memberChannel);
         }
-        String song = args[1];
-        if (!isUrl.isUrl(song))
-        {
-            if (songName == null)
-            {
-                channel.sendMessage("Please provide a query.").queue();
-                return;
-            }
-            song = "scsearch:" + songName;
-            channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
-        }
+        String song = "scsearch:" + songName;
+        channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         PlayerManager.getInstance()
                 .loadAndPlay(channel, song, event);
         return;

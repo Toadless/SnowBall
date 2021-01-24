@@ -62,5 +62,6 @@ public class CommandInitializer
         CommandRegistry.registerAlias("join", "connect");
         CommandRegistry.registerAlias("pause", "resume");
         CommandRegistry.registerAlias("soundcloud", "sc");
+        CommandRegistry.registerAlias("play", "p");
     }
 }

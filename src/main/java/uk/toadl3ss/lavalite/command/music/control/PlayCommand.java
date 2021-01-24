@@ -26,6 +26,7 @@ public class PlayCommand extends Command implements ICommandMusic
     public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
     {
         String songName = event.getMessage().getContentRaw().replaceFirst("^" + prefix + "play" + " ", "");
+        songName = songName.replaceFirst("^" + prefix + "p" + " ", "");
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
