@@ -8,17 +8,17 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 import uk.toadl3ss.lavalite.util.FormatTime;
 
 public class InfoCommand extends Command implements ICommandMusic
 {
     public InfoCommand()
     {
-        super("info", "Displays info about the guilds player", PermissionLevel.DEFAULT, CommandType.PRODUCTION);
+        super("info", "Displays info about the guilds player");
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

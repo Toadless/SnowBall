@@ -11,11 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.agent.ShardAgent;
 import uk.toadl3ss.lavalite.agent.VoiceChannelCleanupAgent;
+import uk.toadl3ss.lavalite.entities.cache.GuildCache;
 import uk.toadl3ss.lavalite.entities.commandmeta.CommandRegistry;
 import uk.toadl3ss.lavalite.entities.commandmeta.init.CommandInitializer;
 import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.entities.database.DatabaseManager;
+import uk.toadl3ss.lavalite.entities.database.GuildRegistry;
 import uk.toadl3ss.lavalite.event.EventListenerLite;
 import uk.toadl3ss.lavalite.event.ShardListener;
 import uk.toadl3ss.lavalite.util.SetActivity;
@@ -191,6 +193,8 @@ public class Launcher
         uk.toadl3ss.lavalite.util.Logger.info("Shutting down with exit code " + code);
         CommandRegistry.registry.clear();
         CommandRegistry.logger.info("Clearing all command registry");
+        GuildCache.cache.clear();
+        GuildRegistry.guildRegistry.clear();
         shutdownCode = code;
         for(Launcher lch : shards) {
             lch.getJda().shutdown();

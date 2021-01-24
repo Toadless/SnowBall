@@ -9,16 +9,16 @@ import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
 import uk.toadl3ss.lavalite.entities.commandmeta.CommandManager;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 import uk.toadl3ss.lavalite.util.FormatTime;
 
 public class SeekCommand extends Command implements ICommandMusic {
     public SeekCommand()
     {
-        super("seek", "Seeks to a provided position in the track", PermissionLevel.DEFAULT, CommandType.PRODUCTION);
+        super("seek", "Seeks to a provided position in the track");
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

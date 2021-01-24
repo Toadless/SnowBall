@@ -9,12 +9,11 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,8 @@ import static uk.toadl3ss.lavalite.util.FormatTime.formatTime;
 public class QueueCommand extends Command implements ICommandMusic {
     public QueueCommand()
     {
-        super("queue", "Displays the guilds queue", PermissionLevel.DEFAULT, CommandType.PRODUCTION);
+        super("queue", "Displays the guilds queue");
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

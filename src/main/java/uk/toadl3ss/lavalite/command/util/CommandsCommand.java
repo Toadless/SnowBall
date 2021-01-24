@@ -7,10 +7,9 @@ import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.entities.commandmeta.CommandRegistry;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandUtil;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,8 @@ public class CommandsCommand extends Command implements ICommandUtil
 {
     public CommandsCommand()
     {
-        super("commands", null, PermissionLevel.DEFAULT, CommandType.PRODUCTION);
+        super("commands", null);
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

@@ -2,17 +2,17 @@ package uk.toadl3ss.lavalite.command.util;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.database.GuildRegistry;
 import uk.toadl3ss.lavalite.main.Launcher;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class PrefixCommand extends Command
 {
     public PrefixCommand()
     {
-        super("prefix", null, PermissionLevel.SERVER_ADMIN, CommandType.PRODUCTION);
+        super("prefix", null);
+        addFlag(CommandFlags.SERVER_ADMIN_ONLY);
     }
 
     @Override

@@ -2,8 +2,7 @@ package uk.toadl3ss.lavalite.entities.commandmeta.abs;
 
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 
 import javax.annotation.Nonnull;
 
@@ -11,15 +10,13 @@ public abstract class Command
 {
     private final String name;
     private final String help;
-    private final PermissionLevel permissionNode;
-    private final CommandType commandType;
+    private CommandFlags flag;
 
-    public Command(@NonNull String name, @NonNull String help, @NonNull PermissionLevel permissionNode, CommandType commandType)
+    public Command(@NonNull String name, @NonNull String help)
     {
         this.name = name;
         this.help = help;
-        this.permissionNode = permissionNode;
-        this.commandType = commandType;
+        this.flag = null;
     }
 
     /* Returns the commands name */
@@ -35,17 +32,15 @@ public abstract class Command
         return help;
     }
 
-    /* Returns the commands PermissionNode */
-    @NonNull
-    public PermissionLevel getPermissionNode()
+    public void addFlag(CommandFlags flag)
     {
-        return permissionNode;
+        this.flag = flag;
     }
 
-    @NonNull
-    public CommandType getCommandType()
+    @Nonnull
+    public CommandFlags getFlag()
     {
-        return commandType;
+        return flag;
     }
 
     /* The abstract method to run the command */

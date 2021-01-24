@@ -2,16 +2,16 @@ package uk.toadl3ss.lavalite.command.admin;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.main.Launcher;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class ReviveCommand extends Command
 {
     public ReviveCommand()
     {
-        super("revive", null, PermissionLevel.BOT_ADMIN, CommandType.PRODUCTION);
+        super("revive", null);
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

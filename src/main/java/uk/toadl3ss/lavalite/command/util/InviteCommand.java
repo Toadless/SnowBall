@@ -2,18 +2,18 @@ package uk.toadl3ss.lavalite.command.util;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandUtil;
 import uk.toadl3ss.lavalite.data.Constants;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class InviteCommand extends Command implements ICommandUtil
 {
 
     public InviteCommand()
     {
-        super("invite", null, PermissionLevel.DEFAULT, CommandType.PRODUCTION);
+        super("invite", null);
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
-import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.entities.exception.CommandException;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 import uk.toadl3ss.lavalite.util.DiscordUtil;
 
 import java.util.ArrayList;
@@ -29,29 +27,26 @@ public class CommandManager
             return;
         }
 
-        // Permission checks
-        if (cmd.getPermissionNode().equals(PermissionLevel.BOT_ADMIN))
+        // Check command type
+        if (cmd.getFlag().equals(CommandFlags.DEVELOPER_ONLY))
         {
-            if (!DiscordUtil.isOwner(event.getMember().getUser())) {
-                event.getChannel().sendMessage("You dont have permission to do this.").queue();
-                return;
+            if (!DiscordUtil.isOwner(event.getMember().getUser()))
+            {
+                event.getChannel().sendMessage("You cannot run a dev command since you dont have permission.").queue();
+                throw new CommandException("No permission for a dev command.");
             }
         }
-        if (cmd.getPermissionNode().equals(PermissionLevel.SERVER_ADMIN))
+        if (cmd.getFlag().equals(CommandFlags.SERVER_ADMIN_ONLY))
         {
             if (!event.getMember().hasPermission(Permission.MANAGE_SERVER))
             {
-                event.getChannel().sendMessage("You dont have permission to do this.").queue();
+                event.getChannel().sendMessage("You do not have to required permission to perform this action.").queue();
                 return;
             }
         }
-
-        // Check command type
-        if (cmd.getCommandType().equals(CommandType.DEV)) {
-            if (!Config.INS.getDevelopment()) {
-                event.getChannel().sendMessage("You cannot run a dev command on this build.").queue();
-                throw new CommandException("Dev commands are disabled.");
-            }
+        if (cmd.getFlag().equals(CommandFlags.DISABLED)) {
+            event.getChannel().sendMessage("You cannot run this command since it has been disabled.").queue();
+            throw new CommandException("This command is disabled.");
         }
 
         // Music perm checks

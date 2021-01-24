@@ -6,18 +6,18 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 public class LeaveCommand extends Command implements ICommandMusic
 {
     public LeaveCommand()
     {
-        super("leave", "Disconnects from the voice channel", PermissionLevel.DEFAULT, CommandType.PRODUCTION);
+        super("leave", "Disconnects from the voice channel");
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

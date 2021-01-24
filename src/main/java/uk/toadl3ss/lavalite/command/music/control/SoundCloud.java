@@ -8,15 +8,14 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
-import uk.toadl3ss.lavalite.util.isUrl;
 
 public class SoundCloud extends Command
 {
     public SoundCloud() {
-        super("soundcloud", "Plays music from soundcloud", PermissionLevel.DEFAULT, CommandType.PRODUCTION);
+        super("soundcloud", "Plays music from soundcloud");
+        addFlag(CommandFlags.DEFAULT);
     }
 
     @Override

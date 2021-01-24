@@ -4,9 +4,8 @@ import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
 import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.perms.PermissionLevel;
 import uk.toadl3ss.lavalite.util.DiscordUtil;
 
 public class EvalCommand extends Command
@@ -15,7 +14,8 @@ public class EvalCommand extends Command
     private final String imports;
     public EvalCommand()
     {
-        super("eval", null, PermissionLevel.BOT_ADMIN, CommandType.PRODUCTION);
+        super("eval", null);
+        addFlag(CommandFlags.DEVELOPER_ONLY);
         this.engine = new GroovyShell();
         this.imports = "import java.io.*\n" +
                 "import java.lang.*\n" +

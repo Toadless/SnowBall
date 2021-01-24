@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class GuildRegistry
 {
-    private static HashMap<Long, String> guildRegistry = new HashMap<>();
+    public static HashMap<Long, String> guildRegistry = new HashMap<>();
     public static void registerGuild(long id, String prefix)
     {
         guildRegistry.put(id, prefix);
