@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.entities.database.GuildRegistry;
+import uk.toadl3ss.lavalite.entities.exception.MusicException;
 import uk.toadl3ss.lavalite.main.Launcher;
 import uk.toadl3ss.lavalite.util.DiscordUtil;
 import uk.toadl3ss.lavalite.util.FormatTime;
@@ -101,6 +102,7 @@ public class PlayerManager
             public void loadFailed(FriendlyException exception)
             {
                 channel.sendMessage(":x: Failed to load the provided song. Please try again").queue();
+                throw new MusicException("Failed to load a song");
             }
         });
     }
