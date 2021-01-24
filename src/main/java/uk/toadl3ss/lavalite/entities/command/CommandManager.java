@@ -1,13 +1,13 @@
-package uk.toadl3ss.lavalite.entities.commandmeta;
+package uk.toadl3ss.lavalite.entities.command;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.LoggerFactory;
-import uk.toadl3ss.lavalite.data.Config;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
+import uk.toadl3ss.lavalite.entities.command.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.entities.exception.CommandException;
+import uk.toadl3ss.lavalite.entities.exception.CommandFlagException;
 import uk.toadl3ss.lavalite.util.DiscordUtil;
 
 import java.util.ArrayList;
@@ -27,6 +27,11 @@ public class CommandManager
             return;
         }
 
+        if (cmd.getFlag() == null) {
+            event.getChannel().sendMessage("You cannot run this command since it has not been flagged.").queue();
+            throw new CommandFlagException("The command: " + cmd.getName() + " has not been flagged.");
+        }
+
         // Check command type
         if (cmd.getFlag().equals(CommandFlags.DEVELOPER_ONLY))
         {
@@ -38,7 +43,7 @@ public class CommandManager
         }
         if (cmd.getFlag().equals(CommandFlags.SERVER_ADMIN_ONLY))
         {
-            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER))
+            if (!DiscordUtil.isServerAdmin(event.getMember()))
             {
                 event.getChannel().sendMessage("You do not have to required permission to perform this action.").queue();
                 return;

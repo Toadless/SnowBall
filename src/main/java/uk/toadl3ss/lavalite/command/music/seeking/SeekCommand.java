@@ -8,13 +8,14 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandManager;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.entities.command.CommandManager;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
+import uk.toadl3ss.lavalite.entities.exception.CommandErrorException;
 import uk.toadl3ss.lavalite.util.FormatTime;
 
-public class SeekCommand extends Command implements ICommandMusic {
+public class SeekCommand extends Command
+{
     public SeekCommand()
     {
         super("seek", "Seeks to a provided position in the track");
@@ -73,6 +74,7 @@ public class SeekCommand extends Command implements ICommandMusic {
         {
             event.getChannel().sendMessage("Please provide a valid number.").queue();
             CommandManager.logger.info("NumberFormatException has been thrown");
+            throw new CommandErrorException("NumberFormatException has been thrown");
         }
     }
 }

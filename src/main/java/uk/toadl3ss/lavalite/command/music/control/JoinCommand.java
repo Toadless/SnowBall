@@ -7,9 +7,9 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
+import uk.toadl3ss.lavalite.entities.command.abs.ICommandMusic;
 
 public class JoinCommand extends Command implements ICommandMusic
 {

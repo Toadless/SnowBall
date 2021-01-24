@@ -1,4 +1,4 @@
-package uk.toadl3ss.lavalite.entities.commandmeta.init;
+package uk.toadl3ss.lavalite.entities.command.init;
 
 import uk.toadl3ss.lavalite.command.admin.*;
 import uk.toadl3ss.lavalite.command.music.control.*;
@@ -8,7 +8,7 @@ import uk.toadl3ss.lavalite.command.music.info.QueueCommand;
 import uk.toadl3ss.lavalite.command.music.seeking.RestartCommand;
 import uk.toadl3ss.lavalite.command.music.seeking.SeekCommand;
 import uk.toadl3ss.lavalite.command.util.*;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandRegistry;
+import uk.toadl3ss.lavalite.entities.command.CommandRegistry;
 import uk.toadl3ss.lavalite.command.maintenance.ShardsCommand;
 import uk.toadl3ss.lavalite.command.maintenance.StatsCommand;
 import uk.toadl3ss.lavalite.command.maintenance.VersionCommand;

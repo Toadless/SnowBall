@@ -2,11 +2,10 @@ package uk.toadl3ss.lavalite.command.util;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
 
-public class PingCommand extends Command implements ICommandMusic
+public class PingCommand extends Command
 {
     public PingCommand()
     {

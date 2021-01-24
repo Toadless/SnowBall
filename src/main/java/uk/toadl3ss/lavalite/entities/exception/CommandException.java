@@ -1,6 +1,6 @@
 package uk.toadl3ss.lavalite.entities.exception;
 
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
 
 public class CommandException extends RuntimeException
 {

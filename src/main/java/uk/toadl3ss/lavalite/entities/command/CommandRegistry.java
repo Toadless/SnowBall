@@ -1,7 +1,7 @@
-package uk.toadl3ss.lavalite.entities.commandmeta;
+package uk.toadl3ss.lavalite.entities.command;
 
 import org.slf4j.LoggerFactory;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
 
 import java.util.HashMap;
 import java.util.Set;

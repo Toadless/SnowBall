@@ -4,8 +4,8 @@ import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
 import uk.toadl3ss.lavalite.util.DiscordUtil;
 
 public class EvalCommand extends Command

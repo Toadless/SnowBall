@@ -1,7 +1,7 @@
 package uk.toadl3ss.lavalite.event;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandManager;
+import uk.toadl3ss.lavalite.entities.command.CommandManager;
 import uk.toadl3ss.lavalite.data.Constants;
 import uk.toadl3ss.lavalite.entities.cache.GuildCache;
 import uk.toadl3ss.lavalite.entities.database.GuildRegistry;

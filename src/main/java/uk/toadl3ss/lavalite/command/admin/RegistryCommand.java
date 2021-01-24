@@ -2,10 +2,10 @@ package uk.toadl3ss.lavalite.command.admin;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandRegistry;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.entities.commandmeta.init.CommandInitializer;
+import uk.toadl3ss.lavalite.entities.command.CommandRegistry;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
+import uk.toadl3ss.lavalite.entities.command.init.CommandInitializer;
 import uk.toadl3ss.lavalite.data.Config;
 
 public class RegistryCommand extends Command

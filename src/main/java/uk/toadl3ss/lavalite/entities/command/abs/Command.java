@@ -1,17 +1,26 @@
-package uk.toadl3ss.lavalite.entities.commandmeta.abs;
+package uk.toadl3ss.lavalite.entities.command.abs;
 
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A class representing a command for use in the {@link uk.toadl3ss.lavalite.entities.command.CommandManager CommandManager}.
+ *
+ */
 public abstract class Command
 {
     private final String name;
     private final String help;
     private CommandFlags flag;
 
+    /**
+     *
+     * @param name The commands name
+     * @param help The commands help page
+     */
     public Command(@NonNull String name, @NonNull String help)
     {
         this.name = name;
@@ -32,17 +41,23 @@ public abstract class Command
         return help;
     }
 
+    /* Sets the command flag */
     public void addFlag(CommandFlags flag)
     {
         this.flag = flag;
     }
 
-    @Nonnull
+    /* Returns the command flag */
     public CommandFlags getFlag()
     {
         return flag;
     }
 
-    /* The abstract method to run the command */
+    /**
+     *
+     * @param args The commands arguments
+     * @param event The event
+     * @param prefix The prefix
+     */
     public abstract void run(@Nonnull String[] args, @NonNull GuildMessageReceivedEvent event, @NonNull String prefix);
 }

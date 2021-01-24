@@ -9,11 +9,11 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
+import uk.toadl3ss.lavalite.util.DiscordUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,8 @@ import java.util.Queue;
 
 import static uk.toadl3ss.lavalite.util.FormatTime.formatTime;
 
-public class QueueCommand extends Command implements ICommandMusic {
+public class QueueCommand extends Command
+{
     public QueueCommand()
     {
         super("queue", "Displays the guilds queue");
@@ -72,6 +73,7 @@ public class QueueCommand extends Command implements ICommandMusic {
         final List<AudioTrack> trackList = new ArrayList<>(queue);
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Queue");
+        embed.setColor(DiscordUtil.getEmbedColor());
         final AudioTrack currentTrack = audioPlayer.getPlayingTrack();
         final AudioTrackInfo currentTrackInfo = currentTrack.getInfo();
         embed.addField("**Now Playing**", "\u200b", false);

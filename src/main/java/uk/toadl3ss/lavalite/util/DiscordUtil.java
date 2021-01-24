@@ -1,5 +1,7 @@
 package uk.toadl3ss.lavalite.util;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,18 @@ public class DiscordUtil
         String userId = user.getId();
         String ownerId = getOwnerId();
         if (userId.equals(ownerId))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static Boolean isServerAdmin(Member member)
+    {
+        if (member.hasPermission(Permission.MANAGE_SERVER))
         {
             return true;
         }

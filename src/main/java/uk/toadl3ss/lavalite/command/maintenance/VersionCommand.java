@@ -2,11 +2,11 @@ package uk.toadl3ss.lavalite.command.maintenance;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMaintenance;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.main.Launcher;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-public class VersionCommand extends Command implements ICommandMaintenance
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
+
+public class VersionCommand extends Command
 {
     public VersionCommand()
     {

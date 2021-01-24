@@ -6,16 +6,15 @@ import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandRegistry;
-import uk.toadl3ss.lavalite.entities.commandmeta.CommandFlags;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandUtil;
+import uk.toadl3ss.lavalite.entities.command.CommandRegistry;
+import uk.toadl3ss.lavalite.entities.command.CommandFlags;
+import uk.toadl3ss.lavalite.entities.command.abs.Command;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CommandsCommand extends Command implements ICommandUtil
+public class CommandsCommand extends Command
 {
     public CommandsCommand()
     {
