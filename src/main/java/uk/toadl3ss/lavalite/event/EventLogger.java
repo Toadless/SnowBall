@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.data.Constants;
 
-public class EventLogger extends ListenerAdapter {
+public class EventLogger extends ListenerAdapter
+{
     public static JDA jda;
     public static final Logger log = LoggerFactory.getLogger(EventLogger.class);
 
@@ -20,11 +21,15 @@ public class EventLogger extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildJoin(GuildJoinEvent event) {
-        send(
+    public void onGuildJoin(GuildJoinEvent event)
+    {
+        send
+                (
                 "✅ Joined guild `" + event.getGuild() + "`. Users: `" + event.getGuild().getMembers().size() + "`."
-        );
-        try {
+                )
+        ;
+        try
+        {
             String defaultMessage = Config.INS.getJoin();
             defaultMessage = defaultMessage.replace("{prefix}", Constants.GUILD_PREFIX);
             defaultMessage = defaultMessage.replace("{guildName}", event.getGuild().getName());
@@ -34,15 +39,19 @@ public class EventLogger extends ListenerAdapter {
                 return;
             }
             systemChannel.sendMessage(defaultMessage).queue();
-        } catch (PermissionException e) {
+        } catch (PermissionException e)
+        {
             log.info("Unable to send welcome message. Insufficient permissions.");
         }
     }
 
     @Override
-    public void onGuildLeave(GuildLeaveEvent event) {
-        send(
+    public void onGuildLeave(GuildLeaveEvent event)
+    {
+        send
+                (
                 "❌ Left guild `" + event.getGuild() + "`. Users: `" + event.getGuild().getMembers().size() + "`."
-        );
+                )
+        ;
     }
 }

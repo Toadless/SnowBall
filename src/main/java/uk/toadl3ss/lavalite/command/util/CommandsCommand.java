@@ -6,23 +6,26 @@ import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
-import uk.toadl3ss.lavalite.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandUtil;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandRegistry;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandUtil;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class CommandsCommand extends Command implements ICommandUtil {
+public class CommandsCommand extends Command implements ICommandUtil
+{
     public CommandsCommand()
     {
-        super("commands", null, PermissionLevel.DEFAULT);
+        super("commands", null, PermissionLevel.DEFAULT, CommandType.PRODUCTION);
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    {
         StringBuilder helpString = new StringBuilder();
         helpString.append("```md\n");
         String title = "< {name} Music Commands >\n";
@@ -30,7 +33,8 @@ public class CommandsCommand extends Command implements ICommandUtil {
         helpString.append(title);
 
         List<String> helpList = new ArrayList<>();
-        CommandRegistry.registry.forEach(((s, command) -> {
+        CommandRegistry.registry.forEach(((s, command) ->
+        {
             String help = command.getHelp();
             if (helpList.contains(help)) {
                 return;
@@ -49,7 +53,8 @@ public class CommandsCommand extends Command implements ICommandUtil {
         privateChannel
                 .flatMap(channel -> channel.sendMessage(helpString))
                 .flatMap(channel -> event.getChannel().sendMessage(event.getMember().getUser().getName() + ": Documentation has been sent to your DMs!"))
-                .queue(null, new ErrorHandler().ignore(ErrorResponse.UNKNOWN_MESSAGE).handle(ErrorResponse.CANNOT_SEND_TO_USER, (e) -> {
+                .queue(null, new ErrorHandler().ignore(ErrorResponse.UNKNOWN_MESSAGE).handle(ErrorResponse.CANNOT_SEND_TO_USER, (e) ->
+                {
                     event.getChannel().sendMessage(helpString.toString()).queue();
                 }));
     }

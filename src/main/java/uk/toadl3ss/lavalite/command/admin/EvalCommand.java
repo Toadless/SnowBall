@@ -3,14 +3,17 @@ package uk.toadl3ss.lavalite.command.admin;
 import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
-import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
-public class EvalCommand extends Command {
+public class EvalCommand extends Command
+{
     private GroovyShell engine;
     private final String imports;
-    public EvalCommand() {
-        super("eval", null, PermissionLevel.BOT_ADMIN);
+    public EvalCommand()
+    {
+        super("eval", null, PermissionLevel.BOT_ADMIN, CommandType.PRODUCTION);
         this.engine = new GroovyShell();
         this.imports = "import java.io.*\n" +
                 "import java.lang.*\n" +
@@ -27,13 +30,16 @@ public class EvalCommand extends Command {
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
-        if (args.length < 2) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    {
+        if (args.length < 2)
+        {
             event.getChannel().sendMessage("You need to provide code to evaluate.").queue();
             return;
         }
         String messageArgs = event.getMessage().getContentRaw().replaceFirst("^" + prefix + "eval" + " ", "");
-        try {
+        try
+        {
             engine.setProperty("args", messageArgs);
             engine.setProperty("event", event);
             engine.setProperty("message", event.getMessage());
@@ -48,7 +54,8 @@ public class EvalCommand extends Command {
             event.getChannel().sendTyping().queue();
             event.getChannel().sendMessage(out == null ? "Executed without error" : out.toString()).queue();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             event.getChannel().sendMessage(e.getMessage()).queue();
         }
     }

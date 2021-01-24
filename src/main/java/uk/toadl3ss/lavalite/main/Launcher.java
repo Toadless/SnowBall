@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.agent.ShardAgent;
 import uk.toadl3ss.lavalite.agent.VoiceChannelCleanupAgent;
-import uk.toadl3ss.lavalite.commandmeta.CommandRegistry;
-import uk.toadl3ss.lavalite.commandmeta.init.CommandInitializer;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandRegistry;
+import uk.toadl3ss.lavalite.entities.commandmeta.init.CommandInitializer;
 import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.data.Constants;
-import uk.toadl3ss.lavalite.data.database.DatabaseManager;
+import uk.toadl3ss.lavalite.entities.database.DatabaseManager;
 import uk.toadl3ss.lavalite.event.EventListenerLite;
 import uk.toadl3ss.lavalite.event.ShardListener;
 import uk.toadl3ss.lavalite.util.SetActivity;
@@ -24,9 +24,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Launcher {
+public class Launcher
+{
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
-    public static String version = "3.2.0";
+    public static String version = "3.3.0";
     public static EventListenerLite listenerBot;
     private static final ArrayList<Launcher> shards = new ArrayList<>();
     private static AtomicInteger numShardsReady = new AtomicInteger(0);
@@ -40,7 +41,8 @@ public class Launcher {
     static JDA jda;
     ShardListener shardListener = null;
     private static DatabaseManager databaseManager;
-    private static String getVersionInfo() {
+    private static String getVersionInfo()
+    {
         String indentation = "\t";
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss z");
         String startTime = format.format(new Date());
@@ -57,7 +59,8 @@ public class Launcher {
                 .append("\n")
                 .toString()
         ;
-        if (vanity) {
+        if (vanity)
+        {
             versionInfo =
                     getVanity() +
                     "\n" +
@@ -67,7 +70,8 @@ public class Launcher {
         }
         return versionInfo;
     }
-    private static String getVanity() {
+    private static String getVanity()
+    {
         String red = "[31m";
         String green = "[32m";
         String defaultC = "[0m";
@@ -84,13 +88,16 @@ public class Launcher {
         vanity = vanity.replace("d", defaultC);
         return vanity;
     }
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         Config.init("application.yml");
-        if (Config.INS.getDevelopment()) {
+        if (Config.INS.getDevelopment())
+        {
             version = version + " " + "DEV";
         }
         if (args.length > 0 &&
-                (args[0].equals("-v".toLowerCase()) || args[0].equals("--version".toLowerCase(Locale.ROOT)))) {
+                (args[0].equals("-v".toLowerCase()) || args[0].equals("--version".toLowerCase(Locale.ROOT))))
+        {
             vanity = false;
             logger.info(getVersionInfo());
             return;
@@ -108,12 +115,15 @@ public class Launcher {
 
         DATABASE_ENABLED = Config.INS.getDatabase();
 
-        if (DATABASE_ENABLED) {
-            if (Config.INS.getMongoUri() == null || Config.INS.getMongoUri().equals("")) {
+        if (DATABASE_ENABLED)
+        {
+            if (Config.INS.getMongoUri() == null || Config.INS.getMongoUri().equals(""))
+            {
                 DATABASE_ENABLED = false;
                 return;
             }
-            if (Config.INS.getMongoName() == null || Config.INS.getMongoName().equals("")) {
+            if (Config.INS.getMongoName() == null || Config.INS.getMongoName().equals(""))
+            {
                 DATABASE_ENABLED = false;
                 return;
             }
@@ -137,16 +147,21 @@ public class Launcher {
     }
 
     private static void initBotShards(EventListener listener) {
-        for(int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++){
-            try {
+        for(int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++)
+        {
+            try
+            {
                 shards.add(i, new BotController(i, listener));
-            } catch (Exception e) {
+            } catch (Exception e)
+            {
                 logger.error("Caught an exception while starting shard " + i + "!", e);
                 numShardsReady.getAndIncrement();
             }
-            try {
+            try
+            {
                 Thread.sleep(SHARD_CREATION_SLEEP_INTERVAL);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException e)
+            {
                 throw new RuntimeException("Got interrupted while setting up bot shards!", e);
             }
         }
@@ -154,8 +169,10 @@ public class Launcher {
         logger.info("Lavalite ready in {}ms", System.currentTimeMillis() - START_TIME);
     }
 
-    public void onInit(ReadyEvent readyEvent) {
-        if (!hasReadiedOnce) {
+    public void onInit(ReadyEvent readyEvent)
+    {
+        if (!hasReadiedOnce)
+        {
             numShardsReady.incrementAndGet();
             hasReadiedOnce = false;
         }
@@ -163,12 +180,14 @@ public class Launcher {
         logger.info("Received ready event for " + Launcher.getInstance(readyEvent.getJDA()).getShardInfo().getShardString());
 
         int ready = numShardsReady.get();
-        if (ready == Config.INS.getNumShards()) {
+        if (ready == Config.INS.getNumShards())
+        {
             logger.info("All " + ready + " shards are ready.");
         }
     }
 
-    public static void shutdown(int code) {
+    public static void shutdown(int code)
+    {
         uk.toadl3ss.lavalite.util.Logger.info("Shutting down with exit code " + code);
         CommandRegistry.registry.clear();
         CommandRegistry.logger.info("Clearing all command registry");
@@ -180,14 +199,17 @@ public class Launcher {
         System.exit(code);
     }
 
-    public static JDA getJda() {
+    public static JDA getJda()
+    {
         return jda;
     }
 
-    public static Launcher getInstance(JDA jda) {
+    public static Launcher getInstance(JDA jda)
+    {
         int sId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
 
-        for(Launcher lch : shards) {
+        for(Launcher lch : shards)
+        {
             if(((BotController) lch).getShardId() == sId) {
                 return lch;
             }
@@ -196,26 +218,31 @@ public class Launcher {
         throw new IllegalStateException("Attempted to get instance for JDA shard that is not indexed");
     }
 
-    public static Launcher getInstance(int id) {
+    public static Launcher getInstance(int id)
+    {
         return shards.get(id);
     }
 
-    public JDA.ShardInfo getShardInfo() {
+    public JDA.ShardInfo getShardInfo()
+    {
         int sId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
         return new JDA.ShardInfo(sId, Config.INS.getNumShards());
     }
 
-    public void revive() {
+    public void revive()
+    {
         jda.shutdown();
         uk.toadl3ss.lavalite.util.Logger.info("Reviving a shard");
         shards.set(getShardInfo().getShardId(), new BotController(getShardInfo().getShardId(), listenerBot));
     }
 
-    public static List<Launcher> getShards() {
+    public static List<Launcher> getShards()
+    {
         return shards;
     }
 
-    public static List<Guild> getAllGuilds() {
+    public static List<Guild> getAllGuilds()
+    {
         ArrayList<Guild> list = new ArrayList<>();
 
         for (Launcher lch : shards) {
@@ -225,11 +252,13 @@ public class Launcher {
         return list;
     }
 
-    public static Map<String, User> getAllUsersAsMap() {
+    public static Map<String, User> getAllUsersAsMap()
+    {
         HashMap<String, User> map = new HashMap<>();
 
         for (Launcher lch : shards) {
-            for (User usr : lch.getJda().getUsers()) {
+            for (User usr : lch.getJda().getUsers())
+            {
                 map.put(usr.getId(), usr);
             }
         }
@@ -237,16 +266,19 @@ public class Launcher {
         return map;
     }
 
-    public static long getAllShards() {
+    public static long getAllShards()
+    {
         long size = getJda().getShardInfo().getShardTotal();
         return size;
     }
 
-    public ShardListener getShardListener() {
+    public ShardListener getShardListener()
+    {
         return shardListener;
     }
 
-    public static DatabaseManager getDatabaseManager() {
+    public static DatabaseManager getDatabaseManager()
+    {
         return databaseManager;
     }
 }

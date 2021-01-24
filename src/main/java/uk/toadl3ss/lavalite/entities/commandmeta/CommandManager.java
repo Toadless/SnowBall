@@ -1,49 +1,69 @@
-package uk.toadl3ss.lavalite.commandmeta;
+package uk.toadl3ss.lavalite.entities.commandmeta;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.slf4j.LoggerFactory;
-import uk.toadl3ss.lavalite.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.data.Config;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.data.Constants;
+import uk.toadl3ss.lavalite.entities.exception.CommandException;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
 import java.util.ArrayList;
 
-public class CommandManager {
+public class CommandManager
+{
     // ################################################################################
     // ##                     Command Manager
     // ################################################################################
     public static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandManager.class);
-    public static void executeCommand(String args[], GuildMessageReceivedEvent event, String prefix) {
+    public static void executeCommand(String args[], GuildMessageReceivedEvent event, String prefix)
+    {
         String command = args[0].replaceFirst("^" + prefix, "");
         Command cmd = CommandRegistry.getCommand(command);
-        if (cmd == null) {
+        if (cmd == null)
+        {
             return;
         }
 
         // Permission checks
-        if (cmd.getPermissionNode().equals(PermissionLevel.BOT_ADMIN)) {
-            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER)) {
+        if (cmd.getPermissionNode().equals(PermissionLevel.BOT_ADMIN))
+        {
+            if (!event.getMember().hasPermission(Permission.MANAGE_SERVER))
+            {
                 event.getChannel().sendMessage("You dont have permission to do this.").queue();
                 return;
             }
         }
-        if (cmd.getPermissionNode().equals(PermissionLevel.SERVER_ADMIN)) {
-            if (!event.getMember().getId().equals(Constants.ownerid)) {
+        if (cmd.getPermissionNode().equals(PermissionLevel.SERVER_ADMIN))
+        {
+            if (!event.getMember().getId().equals(Constants.ownerid))
+            {
                 return;
             }
         }
 
+        // Check command type
+        if (cmd.getCommandType().equals(CommandType.DEV)) {
+            if (!Config.INS.getDevelopment()) {
+                event.getChannel().sendMessage("You cannot run a dev command on this build.").queue();
+                throw new CommandException("Dev commands are disabled.");
+            }
+        }
+
         // Music perm checks
-        if (cmd instanceof ICommandMusic) {
+        if (cmd instanceof ICommandMusic)
+        {
             Member member = event.getGuild().getSelfMember();
-            if (!member.hasPermission(Permission.VOICE_CONNECT)) {
+            if (!member.hasPermission(Permission.VOICE_CONNECT))
+            {
                 event.getChannel().sendMessage("Cannot join voice channel. Error: `Missing permissions`.").queue();
                 return;
             }
-            if (!member.hasPermission(Permission.VOICE_SPEAK)) {
+            if (!member.hasPermission(Permission.VOICE_SPEAK))
+            {
                 event.getChannel().sendMessage("Will not join channel with out permission: `VOICE_SPEAK`!").queue();
                 return;
             }
@@ -54,23 +74,28 @@ public class CommandManager {
         cmd.run(arguments, event, prefix);
     }
 
-    private static String[] commandToArguments(String cmd) {
+    private static String[] commandToArguments(String cmd)
+    {
         ArrayList<String> a = new ArrayList<>();
         int argi = 0;
         boolean isInQuote = false;
 
         for (Character ch : cmd.toCharArray()) {
-            if (Character.isWhitespace(ch) && !isInQuote) {
+            if (Character.isWhitespace(ch) && !isInQuote)
+            {
                 String arg = null;
                 try {
                     arg = a.get(argi);
-                } catch (IndexOutOfBoundsException e) {
+                } catch (IndexOutOfBoundsException e)
+                {
                 }
-                if (arg != null) {
+                if (arg != null)
+                {
                     argi++;
                 }
 
-            } else if (ch.equals('"')) {
+            } else if (ch.equals('"'))
+            {
                 isInQuote = !isInQuote;
             } else {
                 a = writeToArg(a, argi, ch);
@@ -87,11 +112,13 @@ public class CommandManager {
         return newA;
     }
 
-    private static ArrayList<String> writeToArg(ArrayList<String> a, int argi, char ch) {
+    private static ArrayList<String> writeToArg(ArrayList<String> a, int argi, char ch)
+    {
         String arg = null;
         try {
             arg = a.get(argi);
-        } catch (IndexOutOfBoundsException ignored) {
+        } catch (IndexOutOfBoundsException ignored)
+        {
         }
         if (arg == null) {
             a.add(argi, String.valueOf(ch));

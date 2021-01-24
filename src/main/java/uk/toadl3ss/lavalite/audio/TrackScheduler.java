@@ -12,7 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class TrackScheduler extends AudioEventAdapter {
+public class TrackScheduler extends AudioEventAdapter
+{
     // ################################################################################
     // ##                     Track Scheduler
     // ################################################################################
@@ -20,29 +21,37 @@ public class TrackScheduler extends AudioEventAdapter {
     public final Queue<AudioTrack> queue;
     public boolean repeating = false;
 
-    public TrackScheduler(AudioPlayer player) {
+    public TrackScheduler(AudioPlayer player)
+    {
         this.player = player;
         this.queue = new LinkedList<>();
     }
 
-    public void queue(AudioTrack track) {
-        if(!this.player.startTrack(track, true)) {
+    public void queue(AudioTrack track)
+    {
+        if(!this.player.startTrack(track, true))
+        {
             this.queue.offer(track);
         }
     }
 
-    public void nextTrack() {
+    public void nextTrack()
+    {
         this.player.startTrack(this.queue.poll(), false);
     }
 
-    public void shuffle() {
+    public void shuffle()
+    {
         Collections.shuffle((List<?>) queue);
     }
 
     @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (endReason.mayStartNext) {
-            if (this.repeating) {
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason)
+    {
+        if (endReason.mayStartNext)
+        {
+            if (this.repeating)
+            {
                 this.player.startTrack(track.makeClone(), false);
                 return;
             }

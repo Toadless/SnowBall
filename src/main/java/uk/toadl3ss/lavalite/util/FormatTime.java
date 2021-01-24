@@ -2,8 +2,10 @@ package uk.toadl3ss.lavalite.util;
 
 import java.util.concurrent.TimeUnit;
 
-public class FormatTime {
-    public static String formatTime(long timeInMillis) {
+public class FormatTime
+{
+    public static String formatTime(long timeInMillis)
+    {
         final long hours = timeInMillis / TimeUnit.HOURS.toMillis(1);
         final long minutes = timeInMillis / TimeUnit.MINUTES.toMillis(1);
         final long seconds = timeInMillis % TimeUnit.MINUTES.toMillis(1) / TimeUnit.SECONDS.toMillis(1);

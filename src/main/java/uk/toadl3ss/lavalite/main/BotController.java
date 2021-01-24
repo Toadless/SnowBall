@@ -12,17 +12,20 @@ import uk.toadl3ss.lavalite.data.Config;
 import uk.toadl3ss.lavalite.event.EventLogger;
 import uk.toadl3ss.lavalite.event.ShardListener;
 
-public class BotController extends Launcher {
+public class BotController extends Launcher
+{
     private static final Logger log = LoggerFactory.getLogger(BotController.class);
     private final int shardId;
-    public BotController(int shardId, EventListener listener) {
+    public BotController(int shardId, EventListener listener)
+    {
         this.shardId = shardId;
         shardListener = new ShardListener();
 
         log.info("Building shard " + shardId);
         try {
             boolean success = false;
-            while (!success) {
+            while (!success)
+            {
                 JDABuilder builder = JDABuilder.createDefault(Config.INS.getToken())
                         .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,GatewayIntent.GUILD_EMOJIS)
                         .disableCache(CacheFlag.MEMBER_OVERRIDES)
@@ -30,24 +33,29 @@ public class BotController extends Launcher {
                         .setActivity(Activity.playing("v" + Launcher.version + " " + "Starting"))
                         .setBulkDeleteSplittingEnabled(false)
                         .setCompression(Compression.NONE);
-                if(listener != null) {
+                if(listener != null)
+                {
                     builder.addEventListeners(listener);
                     builder.addEventListeners(new EventLogger());
                     builder.addEventListeners(shardListener);
-                } else {
+                } else
+                    {
                     log.warn("Starting a shard without an event listener!");
                 }
-                if (Config.INS.getNumShards() > 1) {
+                if (Config.INS.getNumShards() > 1)
+                {
                     builder.useSharding(shardId, Config.INS.getMaxShards());
                 }
                 jda = builder.build();
                 success = true;
             }
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             throw new RuntimeException("Failed to start JDA shard " + shardId, e);
         }
     }
-    int getShardId() {
+    int getShardId()
+    {
         return shardId;
     }
 }

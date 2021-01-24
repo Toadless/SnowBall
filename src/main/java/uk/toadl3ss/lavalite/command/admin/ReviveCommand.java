@@ -2,20 +2,23 @@ package uk.toadl3ss.lavalite.command.admin;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
 import uk.toadl3ss.lavalite.main.Launcher;
-import uk.toadl3ss.lavalite.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
 
-public class ReviveCommand extends Command {
+public class ReviveCommand extends Command
+{
     public ReviveCommand()
     {
-        super("revive", null, PermissionLevel.BOT_ADMIN);
+        super("revive", null, PermissionLevel.BOT_ADMIN, CommandType.PRODUCTION);
     }
 
     @Override
     public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
     {
-        if (args.length < 2) {
+        if (args.length < 2)
+        {
             event.getChannel().sendMessage("Please provide a shard id to revive.").queue();
             return;
         }

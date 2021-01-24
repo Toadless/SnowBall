@@ -8,7 +8,8 @@ import uk.toadl3ss.lavalite.util.Logger;
 import java.io.File;
 import java.io.IOException;
 
-public class Config {
+public class Config
+{
     // ################################################################################
     // ##                     Login / credentials
     // ################################################################################
@@ -29,20 +30,25 @@ public class Config {
     private String mongoUri;
     private String mongoName;
 
-    private Config(String file) {
+    private Config(String file)
+    {
         config = new File(file);
         initConfig();
     }
 
-    public static void init(String file) {
+    public static void init(String file)
+    {
         INS = new Config(file);
     }
 
-    private void initConfig() {
+    private void initConfig()
+    {
         FileConfiguration config = new YamlConfiguration();
-        try {
+        try
+        {
             config.load(this.config);
-        } catch (InvalidConfigurationException | IOException e) {
+        } catch (InvalidConfigurationException | IOException e)
+        {
             Logger.error("Invalid application.yml");
             return;
         }
@@ -63,72 +69,86 @@ public class Config {
     }
 
     //Fetching the bots token
-    public String getToken() {
+    public String getToken()
+    {
         return Token;
     }
 
     //Fetching the default prefix
-    public String getPrefix() {
+    public String getPrefix()
+    {
         return Prefix;
     }
 
     //Fetching development state
-    public Boolean getDevelopment() {
+    public Boolean getDevelopment()
+    {
         return Development;
     }
 
     //Fetching the bots owner id
-    public String getOwnerID() {
+    public String getOwnerID()
+    {
         return OwnerID;
     }
 
     //Fetching the status
-    public String getGame() {
+    public String getGame()
+    {
         return Game;
     }
 
     //Fetching the status
-    public String getStatus() {
+    public String getStatus()
+    {
         return Status;
     }
 
     //Fetching the invite command status
-    public Boolean getInvite() {
+    public Boolean getInvite()
+    {
         return Invite;
     }
 
     //Fetching the default guild join message
-    public String getJoin() {
+    public String getJoin()
+    {
         return Join;
     }
 
     //Fetching the amount of shards
-    public int getNumShards() {
+    public int getNumShards()
+    {
         return numShards;
     }
 
     //Fetching the database status
-    public Boolean getDatabase() {
+    public Boolean getDatabase()
+    {
         return database;
     }
 
     //Fetching the database uri
-    public String getMongoUri() {
+    public String getMongoUri()
+    {
         return mongoUri;
     }
 
     //Fetching the database name
-    public String getMongoName() {
+    public String getMongoName()
+    {
         return mongoName;
     }
 
     //Fetching the shard start
-    public int getShardStart() {
+    public int getShardStart()
+    {
         return shardStart;
     }
 
     //Fetching the max shards
-    public int getMaxShards() {
+    public int getMaxShards()
+    {
         return maxShards;
     }
 }

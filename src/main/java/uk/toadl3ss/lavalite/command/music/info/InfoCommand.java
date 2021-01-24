@@ -8,19 +8,22 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
-import uk.toadl3ss.lavalite.commandmeta.abs.Command;
-import uk.toadl3ss.lavalite.commandmeta.abs.ICommandMusic;
+import uk.toadl3ss.lavalite.entities.commandmeta.CommandType;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.Command;
+import uk.toadl3ss.lavalite.entities.commandmeta.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.perms.PermissionLevel;
 import uk.toadl3ss.lavalite.util.FormatTime;
 
-public class InfoCommand extends Command implements ICommandMusic {
+public class InfoCommand extends Command implements ICommandMusic
+{
     public InfoCommand()
     {
-        super("info", "Displays info about the guilds player", PermissionLevel.DEFAULT);
+        super("info", "Displays info about the guilds player", PermissionLevel.DEFAULT, CommandType.PRODUCTION);
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix) {
+    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    {
         final TextChannel channel = (TextChannel) event.getChannel();
         final Member self = event.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -28,14 +31,16 @@ public class InfoCommand extends Command implements ICommandMusic {
         final Member member = event.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if (!selfVoiceState.inVoiceChannel()) {
+        if (!selfVoiceState.inVoiceChannel())
+        {
             channel.sendMessage("I need to be in a voice channel to display the guilds play information.").queue();
             return;
         }
 
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
-        if (audioPlayer.getPlayingTrack() == null) {
+        if (audioPlayer.getPlayingTrack() == null)
+        {
             channel.sendMessage("I have no current song playing. No info to show.").queue();
             return;
         }
