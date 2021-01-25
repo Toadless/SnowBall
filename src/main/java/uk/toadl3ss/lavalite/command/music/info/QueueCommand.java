@@ -66,7 +66,7 @@ public class QueueCommand extends Command
         final Queue<AudioTrack> queue = musicManager.scheduler.queue;
         if (queue.isEmpty())
         {
-            channel.sendMessage("The queue is empty.");
+            channel.sendMessage("The queue is empty.").queue();
             return;
         }
         final int trackCount = Math.min(queue.size(), 20);

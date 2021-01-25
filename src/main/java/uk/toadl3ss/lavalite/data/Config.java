@@ -8,6 +8,9 @@ import uk.toadl3ss.lavalite.util.Logger;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * A class that pulls the config from the "application.yml" file
+ */
 public class Config
 {
     // ################################################################################
@@ -30,12 +33,20 @@ public class Config
     private String mongoUri;
     private String mongoName;
 
+    /**
+     *
+     * @param file The config files name
+     */
     private Config(String file)
     {
         config = new File(file);
         initConfig();
     }
 
+    /**
+     *
+     * @param file The config files name
+     */
     public static void init(String file)
     {
         INS = new Config(file);
@@ -68,85 +79,127 @@ public class Config
         this.maxShards = config.getInt("config.maxShards");
     }
 
-    //Fetching the bots token
+    /**
+     *
+     * @return The token to the discord api login with
+     */
     public String getToken()
     {
         return Token;
     }
 
-    //Fetching the default prefix
+    /**
+     *
+     * @return The bots default prefix
+     */
     public String getPrefix()
     {
         return Prefix;
     }
 
-    //Fetching development state
+    /**
+     *
+     * @return If the bot is in development mode
+     */
     public Boolean getDevelopment()
     {
         return Development;
     }
 
-    //Fetching the bots owner id
+    /**
+     *
+     * @return The discord bots owner id
+     */
     public String getOwnerID()
     {
         return OwnerID;
     }
 
-    //Fetching the status
+    /**
+     *
+     * @return The discord bots status
+     */
     public String getGame()
     {
         return Game;
     }
 
-    //Fetching the status
+    /**
+     *
+     * @return The discord bots status type
+     */
     public String getStatus()
     {
         return Status;
     }
 
-    //Fetching the invite command status
+    /**
+     *
+     * @return The guild invite message
+     */
     public Boolean getInvite()
     {
         return Invite;
     }
 
-    //Fetching the default guild join message
+    /**
+     *
+     * @return The guild join message
+     */
     public String getJoin()
     {
         return Join;
     }
 
-    //Fetching the amount of shards
+    /**
+     *
+     * @return The number of shards that will be built
+     */
     public int getNumShards()
     {
         return numShards;
     }
 
-    //Fetching the database status
+    /**
+     *
+     * @return The database name
+     */
     public Boolean getDatabase()
     {
         return database;
     }
 
-    //Fetching the database uri
+    /**
+     *
+     * @return The mongodb connection uri
+     */
     public String getMongoUri()
     {
         return mongoUri;
     }
 
-    //Fetching the database name
+    /**
+     *
+     * @return The mongodb database name
+     */
     public String getMongoName()
     {
         return mongoName;
     }
 
-    //Fetching the shard start
+    /**
+     *
+     * @return The shard builder staring point
+     */
     public int getShardStart()
     {
         return shardStart;
     }
 
-    //Fetching the max shards
+    /**
+     *
+     * @return The max amount of shards
+     */
     public int getMaxShards()
     {
         return maxShards;
