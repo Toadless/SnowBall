@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.entities.command.abs.Command;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
@@ -20,13 +21,13 @@ public class StopCommand extends Command implements ICommandMusic
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    public void run(@NotNull CommandEvent ctx)
     {
-        final TextChannel channel = (TextChannel) event.getChannel();
-        final Member self = event.getGuild().getSelfMember();
+        final TextChannel channel = (TextChannel) ctx.getChannel();
+        final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        final Member member = event.getMember();
+        final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel())
@@ -46,7 +47,7 @@ public class StopCommand extends Command implements ICommandMusic
             return;
         }
 
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
         musicManager.scheduler.player.stopTrack();
         musicManager.scheduler.queue.clear();
         channel.sendMessage("The player has stopped.").queue();

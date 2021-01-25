@@ -2,8 +2,8 @@ package uk.toadl3ss.lavalite.command.admin;
 
 import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.entities.command.abs.Command;
 import uk.toadl3ss.lavalite.util.DiscordUtil;
@@ -32,28 +32,28 @@ public class EvalCommand extends Command
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    public void run(@NotNull CommandEvent ctx)
     {
-        if (args.length < 2)
+        if (ctx.getArgs().length < 2)
         {
-            event.getChannel().sendMessage("You need to provide code to evaluate.").queue();
+            ctx.getChannel().sendMessage("You need to provide code to evaluate.").queue();
             return;
         }
-        String messageArgs = event.getMessage().getContentRaw().replaceFirst("^" + prefix + "eval" + " ", "");
+        String messageArgs = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "eval" + " ", "");
         try
         {
             engine.setProperty("args", messageArgs);
-            engine.setProperty("event", event);
-            engine.setProperty("message", event.getMessage());
-            engine.setProperty("channel", event.getChannel());
-            engine.setProperty("jda", event.getJDA());
-            engine.setProperty("guild", event.getGuild());
-            engine.setProperty("member", event.getMember());
+            engine.setProperty("event", ctx.getEvent());
+            engine.setProperty("message", ctx.getMessage());
+            engine.setProperty("channel", ctx.getChannel());
+            engine.setProperty("jda", ctx.getJDA());
+            engine.setProperty("guild", ctx.getGuild());
+            engine.setProperty("member", ctx.getMember());
 
-            String script = imports + event.getMessage().getContentRaw().split("\\s+", 2)[1];
+            String script = imports + ctx.getMessage().getContentRaw().split("\\s+", 2)[1];
             Object out = engine.evaluate(script);
 
-            event.getChannel().sendTyping().queue();
+            ctx.getChannel().sendTyping().queue();
 
             String output = out == null ? "Executed without error" : out.toString();
 
@@ -62,11 +62,11 @@ public class EvalCommand extends Command
                     .setTitle("Eval")
                     .addField("**Input**", "```java\n" + messageArgs + "\n```", false)
                     .addField("**Output**", "```java\n" + output + "```", false);
-            event.getChannel().sendMessage(embedBuilder.build()).queue();
+            ctx.getChannel().sendMessage(embedBuilder.build()).queue();
         }
         catch (Exception e)
         {
-            event.getChannel().sendMessage(e.getMessage()).queue();
+            ctx.getChannel().sendMessage(e.getMessage()).queue();
         }
     }
 }

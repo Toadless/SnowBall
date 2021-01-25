@@ -4,19 +4,21 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
 import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.entities.command.abs.Command;
+import uk.toadl3ss.lavalite.entities.command.abs.ICommandMusic;
 import uk.toadl3ss.lavalite.util.FormatTime;
 
-public class InfoCommand extends Command
+public class DurationCommand extends Command implements ICommandMusic
 {
-    public InfoCommand()
+    public DurationCommand()
     {
-        super("info", "Displays info about the guilds player");
+        super("duration", "Displays the current songs duration");
         addFlag(CommandFlags.DEFAULT);
     }
 
@@ -32,7 +34,7 @@ public class InfoCommand extends Command
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel to display the guilds play information.").queue();
+            channel.sendMessage("I need to be in a voice channel to display the guilds song position.").queue();
             return;
         }
 
@@ -47,15 +49,7 @@ public class InfoCommand extends Command
         stringBuilder.append("```md\n");
         stringBuilder.append("< ");
         stringBuilder.append(ctx.getGuild().getName());
-        stringBuilder.append(" Music Info >\n");
-        stringBuilder.append("Current Song:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.audioPlayer.getPlayingTrack().getInfo().title);
-        stringBuilder.append("\n");
-        stringBuilder.append("Queue size:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.scheduler.queue.size());
-        stringBuilder.append("\n");
+        stringBuilder.append(" Song Duration >\n");
         stringBuilder.append("Current Track Position:\n");
         stringBuilder.append("# ");
         stringBuilder.append(FormatTime.formatTime(musicManager.audioPlayer.getPlayingTrack().getPosition()));
@@ -63,18 +57,6 @@ public class InfoCommand extends Command
         stringBuilder.append("Duration Left:\n");
         stringBuilder.append("# ");
         stringBuilder.append(FormatTime.formatTime(musicManager.audioPlayer.getPlayingTrack().getDuration() - musicManager.audioPlayer.getPlayingTrack().getPosition()));
-        stringBuilder.append("\n");
-        stringBuilder.append("Looping:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.scheduler.repeating);
-        stringBuilder.append("\n");
-        stringBuilder.append("Volume:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.audioPlayer.getVolume());
-        stringBuilder.append("\n");
-        stringBuilder.append("Paused:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.scheduler.player.isPaused());
         stringBuilder.append("\n");
         stringBuilder.append("```");
         channel.sendMessage(stringBuilder.toString()).queue();

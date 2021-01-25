@@ -7,8 +7,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.entities.command.abs.Command;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
@@ -30,13 +30,13 @@ public class QueueCommand extends Command
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    public void run(@NotNull CommandEvent ctx)
     {
-        final TextChannel channel = (TextChannel) event.getChannel();
-        final Member self = event.getGuild().getSelfMember();
+        final TextChannel channel = (TextChannel) ctx.getChannel();
+        final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        final Member member = event.getMember();
+        final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel())
@@ -56,7 +56,7 @@ public class QueueCommand extends Command
             return;
         }
 
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         if (audioPlayer.getPlayingTrack() == null)
         {
@@ -76,11 +76,11 @@ public class QueueCommand extends Command
         embed.setColor(DiscordUtil.getEmbedColor());
         final AudioTrack currentTrack = audioPlayer.getPlayingTrack();
         final AudioTrackInfo currentTrackInfo = currentTrack.getInfo();
-        embed.addField("**Now Playing**", "\u200b", false);
+        embed.addField("**Now Playing**", "\u200C", false);
         String currentTrackField = ("by" + " " + currentTrackInfo.author + " `[" + formatTime(currentTrackInfo.length) + "]`");
         embed.addField(currentTrackInfo.title, currentTrackField, false);
-        embed.addField("\u200b", "\u200b", false);
-        embed.addField("**Up Next:**", "\u200b", false);
+        embed.addField("\u200C", "\u200C", false);
+        embed.addField("**Up Next:**", "\u200C", false);
         for(int i = 0; i < trackCount; i++) {
             final AudioTrack track = trackList.get(i);
             final AudioTrackInfo info = track.getInfo();
@@ -90,7 +90,7 @@ public class QueueCommand extends Command
         }
         if (trackList.size() > trackCount) {
             embed.addBlankField(false);
-            embed.addField("\u200b", "And" + " `" + String.valueOf(trackList.size() - trackCount) + "` " + "more...", false);
+            embed.addField("\u200C", "And" + " `" + String.valueOf(trackList.size() - trackCount) + "` " + "more...", false);
         }
         channel.sendMessage(embed.build()).queue();
     }

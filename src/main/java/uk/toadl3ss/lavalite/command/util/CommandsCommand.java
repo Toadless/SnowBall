@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.jetbrains.annotations.NotNull;
+import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandRegistry;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.entities.command.abs.Command;
@@ -23,12 +24,12 @@ public class CommandsCommand extends Command
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    public void run(@NotNull CommandEvent ctx)
     {
         StringBuilder helpString = new StringBuilder();
         helpString.append("```md\n");
         String title = "< {name} Music Commands >\n";
-        title = title.replace("{name}", event.getJDA().getSelfUser().getName());
+        title = title.replace("{name}", ctx.getJDA().getSelfUser().getName());
         helpString.append(title);
 
         List<String> helpList = new ArrayList<>();
@@ -41,20 +42,20 @@ public class CommandsCommand extends Command
             if (help == null) {
                 return;
             }
-            helpString.append(prefix + s + "\n");
+            helpString.append(ctx.getPrefix() + s + "\n");
             helpString.append("#" + help + "\n");
             helpList.add(help);
         }));
 
         helpString.append("\n```");
 
-        RestAction<PrivateChannel> privateChannel = event.getMember().getUser().openPrivateChannel();
+        RestAction<PrivateChannel> privateChannel = ctx.getMember().getUser().openPrivateChannel();
         privateChannel
                 .flatMap(channel -> channel.sendMessage(helpString))
-                .flatMap(channel -> event.getChannel().sendMessage(event.getMember().getUser().getName() + ": Documentation has been sent to your DMs!"))
+                .flatMap(channel -> ctx.getChannel().sendMessage(ctx.getMember().getUser().getName() + ": Documentation has been sent to your DMs!"))
                 .queue(null, new ErrorHandler().ignore(ErrorResponse.UNKNOWN_MESSAGE).handle(ErrorResponse.CANNOT_SEND_TO_USER, (e) ->
                 {
-                    event.getChannel().sendMessage(helpString.toString()).queue();
+                    ctx.getChannel().sendMessage(helpString.toString()).queue();
                 }));
     }
 }

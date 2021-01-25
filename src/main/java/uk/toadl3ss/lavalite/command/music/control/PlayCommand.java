@@ -4,15 +4,15 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
+import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.entities.command.abs.Command;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
 import uk.toadl3ss.lavalite.entities.command.abs.ICommandMusic;
-import uk.toadl3ss.lavalite.util.isUrl;
+import uk.toadl3ss.lavalite.util.IsUrl;
 
 public class PlayCommand extends Command implements ICommandMusic
 {
@@ -23,15 +23,15 @@ public class PlayCommand extends Command implements ICommandMusic
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    public void run(@NotNull CommandEvent ctx)
     {
-        String songName = event.getMessage().getContentRaw().replaceFirst("^" + prefix + "play" + " ", "");
-        songName = songName.replaceFirst("^" + prefix + "p" + " ", "");
-        final TextChannel channel = (TextChannel) event.getChannel();
-        final Member self = event.getGuild().getSelfMember();
+        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "play" + " ", "");
+        songName = songName.replaceFirst("^" + ctx.getPrefix() + "p" + " ", "");
+        final TextChannel channel = (TextChannel) ctx.getChannel();
+        final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        final Member member = event.getMember();
+        final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel()) {
@@ -39,9 +39,9 @@ public class PlayCommand extends Command implements ICommandMusic
             return;
         }
 
-        if (args.length < 2)
+        if (ctx.getArgs().length < 2)
         {
-            final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
+            final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
             if (musicManager.audioPlayer.getPlayingTrack() != null)
             {
                 boolean paused = musicManager.scheduler.player.isPaused();
@@ -57,12 +57,12 @@ public class PlayCommand extends Command implements ICommandMusic
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            final AudioManager audioManager = event.getGuild().getAudioManager();
+            final AudioManager audioManager = ctx.getGuild().getAudioManager();
             final VoiceChannel memberChannel = memberVoiceState.getChannel();
             audioManager.openAudioConnection(memberChannel);
         }
-        String song = args[1];
-        if (!isUrl.isUrl(song))
+        String song = ctx.getArgs()[1];
+        if (!IsUrl.isUrl(song))
         {
             if (songName == null)
             {
@@ -73,7 +73,7 @@ public class PlayCommand extends Command implements ICommandMusic
             channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         }
         PlayerManager.getInstance()
-                .loadAndPlay(channel, song, event);
+                .loadAndPlay(channel, song, ctx.getEvent());
         return;
     }
 }

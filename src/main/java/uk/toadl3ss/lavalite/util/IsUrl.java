@@ -1,6 +1,7 @@
 package uk.toadl3ss.lavalite.util;
 
-public class isUrl {
+public class IsUrl
+{
     public static boolean isUrl(String url)
     {
         boolean success;

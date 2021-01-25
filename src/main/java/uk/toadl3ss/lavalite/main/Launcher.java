@@ -145,7 +145,7 @@ public class Launcher
         shardAgent.setDaemon(true);
         shardAgent.start();
 
-        logger.info("\tActive Threads:\t" + java.lang.Thread.activeCount());
+        logger.info("Active Threads:\t" + java.lang.Thread.activeCount());
     }
 
     private static void initBotShards(EventListener listener) {

@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.jetbrains.annotations.NotNull;
+import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 import uk.toadl3ss.lavalite.entities.command.abs.Command;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
@@ -21,13 +22,13 @@ public class LeaveCommand extends Command implements ICommandMusic
     }
 
     @Override
-    public void run(@NotNull String[] args, GuildMessageReceivedEvent event, String prefix)
+    public void run(@NotNull CommandEvent ctx)
     {
-        final TextChannel channel = (TextChannel) event.getChannel();
-        final Member self = event.getGuild().getSelfMember();
+        final TextChannel channel = (TextChannel) ctx.getChannel();
+        final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        final Member member = event.getMember();
+        final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
         if (!memberVoiceState.inVoiceChannel())
@@ -47,8 +48,8 @@ public class LeaveCommand extends Command implements ICommandMusic
             return;
         }
 
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(event.getGuild());
-        AudioManager audioManager = event.getGuild().getAudioManager();
+        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
+        AudioManager audioManager = ctx.getGuild().getAudioManager();
         audioManager.closeAudioConnection();
         musicManager.scheduler.queue.clear();
         musicManager.audioPlayer.stopTrack();

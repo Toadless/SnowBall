@@ -70,9 +70,10 @@ public class CommandManager
             }
         }
 
-
         String[] arguments = commandToArguments(event.getMessage().getContentRaw());
-        cmd.run(arguments, event, prefix);
+        CommandEvent ctx = new CommandEvent(event, arguments, prefix);
+
+        cmd.run(ctx);
     }
 
     private static String[] commandToArguments(String cmd)

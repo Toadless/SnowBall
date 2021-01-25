@@ -1,7 +1,7 @@
 package uk.toadl3ss.lavalite.entities.command.abs;
 
 import com.mongodb.lang.NonNull;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import uk.toadl3ss.lavalite.entities.command.CommandEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandFlags;
 
 import javax.annotation.Nonnull;
@@ -55,9 +55,7 @@ public abstract class Command
 
     /**
      *
-     * @param args The commands arguments
-     * @param event The event
-     * @param prefix The prefix
+     * @param ctx The {@link uk.toadl3ss.lavalite.entities.command.CommandEvent event} to use.
      */
-    public abstract void run(@Nonnull String[] args, @NonNull GuildMessageReceivedEvent event, @NonNull String prefix);
+    public abstract void run(@Nonnull CommandEvent ctx);
 }

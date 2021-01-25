@@ -2,6 +2,7 @@ package uk.toadl3ss.lavalite.entities.command.init;
 
 import uk.toadl3ss.lavalite.command.admin.*;
 import uk.toadl3ss.lavalite.command.music.control.*;
+import uk.toadl3ss.lavalite.command.music.info.DurationCommand;
 import uk.toadl3ss.lavalite.command.music.info.InfoCommand;
 import uk.toadl3ss.lavalite.command.music.info.NowPlayingCommand;
 import uk.toadl3ss.lavalite.command.music.info.QueueCommand;
@@ -50,6 +51,7 @@ public class CommandInitializer
         CommandRegistry.registerCommand(new RegistryCommand());
         CommandRegistry.registerCommand(new PrefixCommand());
         CommandRegistry.registerCommand(new SoundCloud());
+        CommandRegistry.registerCommand(new DurationCommand());
 
         /* Registering every alias */
         CommandRegistry.registerAlias("prefix", "setprefix");
@@ -63,5 +65,7 @@ public class CommandInitializer
         CommandRegistry.registerAlias("pause", "resume");
         CommandRegistry.registerAlias("soundcloud", "sc");
         CommandRegistry.registerAlias("play", "p");
+        CommandRegistry.registerAlias("duration", "position");
+        CommandRegistry.registerAlias("volume", "vol");
     }
 }
