@@ -5,7 +5,6 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +14,10 @@ public class DatabaseManager
     private final MongoClient SYNC_CLIENT;
     private String databaseName;
 
+    /**
+     *
+     * @param connectionString The mongodb connection uri
+     */
     public DatabaseManager(String connectionString)
     {
         MongoClientSettings.Builder builder = MongoClientSettings.builder();
@@ -25,24 +28,28 @@ public class DatabaseManager
         LOGGER.info("Logged into database.");
     }
 
+    /**
+     *
+     * @return The {@link uk.toadl3ss.lavalite.entities.database.DatabaseManager database}.
+     */
     public MongoDatabase getDatabase()
     {
         return SYNC_CLIENT.getDatabase(databaseName);
     }
 
+    /**
+     *
+     * @param task The {@link uk.toadl3ss.lavalite.entities.database.IMongoTask task} to run.
+     */
     public void runTask(IMongoTask task)
     {
         task.run(SYNC_CLIENT.getDatabase(databaseName));
     }
 
-    public void insertDocument(String collection, Document document)
-    {
-        runTask(db ->
-        {
-            db.getCollection(collection).insertOne(document);
-        });
-    }
-
+    /**
+     *
+     * @param database The {@link uk.toadl3ss.lavalite.entities.database.DatabaseManager database} to set.
+     */
     public void setDatabaseName(String database)
     {
         this.databaseName = database;

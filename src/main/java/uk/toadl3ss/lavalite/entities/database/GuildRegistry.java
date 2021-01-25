@@ -12,11 +12,19 @@ import java.util.Objects;
 
 public class GuildRegistry
 {
+    /**
+     *  The cache where we store the all of the guilds prefixes.
+     */
     public static HashMap<Long, String> guildRegistry = new HashMap<>();
     public static void registerGuild(long id, String prefix)
     {
         guildRegistry.put(id, prefix);
     }
+
+    /**
+     *
+     * @param id The {@link net.dv8tion.jda.api.entities.Guild guild} id.
+     */
     public static void createGuild(long id)
     {
         guildRegistry.put(id, Constants.GUILD_PREFIX);
@@ -24,6 +32,12 @@ public class GuildRegistry
         guild.append("prefix", Constants.GUILD_PREFIX);
         GuildDataManager.insert(guild);
     }
+
+    /**
+     *
+     * @param id The {@link net.dv8tion.jda.api.entities.Guild guild} id.
+     * @return The {@link net.dv8tion.jda.api.entities.Guild guild} prefix.
+     */
     public static String getPrefix(long id)
     {
         String prefix = guildRegistry.get(id);
@@ -42,6 +56,12 @@ public class GuildRegistry
         registerGuild(id, prefix);
         return prefix;
     }
+
+    /**
+     *
+     * @param id The {@link net.dv8tion.jda.api.entities.Guild guild} id.
+     * @param prefix The {@link net.dv8tion.jda.api.entities.Guild guild} new prefix.
+     */
     public static void setPrefix(long id, String prefix)
     {
         Document newGuildDocument = new Document("id", id);

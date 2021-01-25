@@ -9,6 +9,10 @@ public class GuildDataManager
 {
     public static String COLLECTION = "guilds";
 
+    /**
+     *
+     * @param object The new object to insert
+     */
     public static void insert(Document object) {
         Launcher.getDatabaseManager().runTask(database ->
         {
@@ -16,6 +20,11 @@ public class GuildDataManager
         });
     }
 
+    /**
+     *
+     * @param id The guilds id
+     * @param object The object
+     */
     public static void replace(long id, Document object)
     {
         Launcher.getDatabaseManager().runTask(database ->

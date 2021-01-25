@@ -10,6 +10,11 @@ public class GuildCache
     // so if a guilds fails to get cached it isn't a major issue
     // it just uses up more bandwidth.
     public static HashMap<Long, Guild> cache = new HashMap<>();
+
+    /**
+     *
+     * @param guild The {@link net.dv8tion.jda.api.entities.Guild guild} add.
+     */
     public static void addGuild(Guild guild)
     {
         cache.put(guild.getIdLong(), guild);
