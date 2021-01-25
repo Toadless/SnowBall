@@ -2,6 +2,8 @@
 
 # Lavalite
 
+The officially hosted version of this project you can add [here](https://top.gg/bot/790642084016291892) (Melody)
+
 
 ## Bot configuration
 Download binaries from the github releases page.
