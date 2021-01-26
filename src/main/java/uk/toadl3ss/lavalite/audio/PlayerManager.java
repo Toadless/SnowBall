@@ -49,6 +49,12 @@ public class PlayerManager
         });
     }
 
+    /**
+     *
+     * @param channel The channel that the message took place in
+     * @param trackUrl The track url that has been provided
+     * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
+     */
     public void loadAndPlay(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event)
     {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
@@ -116,6 +122,12 @@ public class PlayerManager
         return INSTANCE;
     }
 
+    /**
+     *
+     * @param track The audio track
+     * @param channel The text channel to send the embed to
+     * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
+     */
     public static void sendAddedEmbed(AudioTrack track, TextChannel channel, GuildMessageReceivedEvent event)
     {
         EmbedBuilder embed = new EmbedBuilder();

@@ -12,7 +12,7 @@ public class ReviveCommand extends Command
     public ReviveCommand()
     {
         super("revive", null);
-        addFlag(CommandFlags.DEFAULT);
+        addFlag(CommandFlags.DEVELOPER_ONLY);
     }
 
     @Override

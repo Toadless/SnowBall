@@ -13,7 +13,7 @@ public class ExitCommand extends Command
     public ExitCommand()
     {
         super("exit", null);
-        addFlag(CommandFlags.DEFAULT);
+        addFlag(CommandFlags.DEVELOPER_ONLY);
     }
 
     @Override
