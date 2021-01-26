@@ -3,7 +3,6 @@ package uk.toadl3ss.lavalite.event;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import uk.toadl3ss.lavalite.entities.command.CommandManager;
 import uk.toadl3ss.lavalite.data.Constants;
-import uk.toadl3ss.lavalite.entities.cache.GuildCache;
 import uk.toadl3ss.lavalite.entities.database.GuildRegistry;
 import uk.toadl3ss.lavalite.main.Launcher;
 
@@ -15,10 +14,6 @@ public class EventListenerLite extends AbstractEventListener
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event)
     {
-        if (!GuildCache.cache.containsValue(event.getGuild().getId()))
-        {
-            GuildCache.addGuild(event.getGuild());
-        }
         if (event.getMessage().isWebhookMessage())
         {
             return;

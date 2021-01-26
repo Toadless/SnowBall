@@ -1,12 +1,13 @@
 package uk.toadl3ss.lavalite.agent;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.toadl3ss.lavalite.audio.GuildMusicManager;
 import uk.toadl3ss.lavalite.audio.PlayerManager;
-import uk.toadl3ss.lavalite.entities.cache.GuildCache;
+import uk.toadl3ss.lavalite.main.Launcher;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,7 +27,6 @@ public class VoiceChannelCleanupAgent extends Thread
                 sleep(INTERVAL_MILLIS);
             } catch (Exception e)
             {
-                log.error("Caught an exception while trying cleanup voice channels!", e);
                 try
                 {
                     sleep(1000);
@@ -39,8 +39,8 @@ public class VoiceChannelCleanupAgent extends Thread
     }
     private static void cleanup()
     {
-        GuildCache.cache.forEach(((aLong, guild) ->
-        {
+        JDA jda = Launcher.getJda();
+        jda.getGuilds().forEach((guild -> {
             GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
             VoiceChannel vc = guild.getAudioManager().getConnectedChannel();
             if (vc == null)

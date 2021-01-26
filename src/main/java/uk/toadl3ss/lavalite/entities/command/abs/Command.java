@@ -28,26 +28,38 @@ public abstract class Command
         this.flag = null;
     }
 
-    /* Returns the commands name */
+    /**
+     *
+     * @return The command name
+     */
     @NonNull
     public String getName()
     {
         return name;
     }
 
-    /* Returns the commands help */
+    /**
+     *
+     * @return Returns the string for the help page
+     */
     public String getHelp()
     {
         return help;
     }
 
-    /* Sets the command flag */
+    /**
+     *
+     * @param flag The {@link uk.toadl3ss.lavalite.entities.command.CommandFlags flag} to use.
+     */
     public void addFlag(CommandFlags flag)
     {
         this.flag = flag;
     }
 
-    /* Returns the command flag */
+    /**
+     *
+     * @return The {@link uk.toadl3ss.lavalite.entities.command.CommandFlags flag} to use.
+     */
     public CommandFlags getFlag()
     {
         return flag;
