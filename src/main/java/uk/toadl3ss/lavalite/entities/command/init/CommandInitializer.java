@@ -1,6 +1,7 @@
 package uk.toadl3ss.lavalite.entities.command.init;
 
 import uk.toadl3ss.lavalite.command.admin.*;
+import uk.toadl3ss.lavalite.command.fun.JokeCommand;
 import uk.toadl3ss.lavalite.command.music.control.*;
 import uk.toadl3ss.lavalite.command.music.info.DurationCommand;
 import uk.toadl3ss.lavalite.command.music.info.InfoCommand;
@@ -52,6 +53,7 @@ public class CommandInitializer
         CommandRegistry.registerCommand(new PrefixCommand());
         CommandRegistry.registerCommand(new SoundCloud());
         CommandRegistry.registerCommand(new DurationCommand());
+        CommandRegistry.registerCommand(new JokeCommand());
 
         /* Registering every alias */
         CommandRegistry.registerAlias("prefix", "setprefix");

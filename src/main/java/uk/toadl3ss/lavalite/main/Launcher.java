@@ -20,6 +20,7 @@ import uk.toadl3ss.lavalite.entities.database.DatabaseManager;
 import uk.toadl3ss.lavalite.entities.database.GuildRegistry;
 import uk.toadl3ss.lavalite.event.EventListenerLite;
 import uk.toadl3ss.lavalite.event.ShardListener;
+import uk.toadl3ss.lavalite.util.Http;
 import uk.toadl3ss.lavalite.util.SetActivity;
 
 import java.text.SimpleDateFormat;
@@ -106,6 +107,7 @@ public class Launcher
         }
         logger.info(getVersionInfo());
         logger.info("Starting lavalite v" + version + ".");
+
         listenerBot = new EventListenerLite();
 
         Constants.Init();
