@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
 import net.toaddev.lavalite.entities.command.CommandManager;
+import net.toaddev.lavalite.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.agent.ShardAgent;
@@ -21,7 +22,17 @@ import net.toaddev.lavalite.entities.database.GuildRegistry;
 import net.toaddev.lavalite.event.EventListenerLite;
 import net.toaddev.lavalite.event.ShardListener;
 import net.toaddev.lavalite.util.SetActivity;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Launcher
 {
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
-    public static String version = "4.0.0";
+    public static String version;
     public static EventListenerLite listenerBot;
     private static final ArrayList<Launcher> shards = new ArrayList<>();
     private static AtomicInteger numShardsReady = new AtomicInteger(0);
@@ -91,8 +102,12 @@ public class Launcher
         vanity = vanity.replace("d", defaultC);
         return vanity;
     }
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException
     {
+        String xml = FileUtil.getResourceFileContents("lavalite/lavalite.xml");
+        Document xmlDoc = FileUtil.convertStringToXMLDocument(xml);
+        version = xmlDoc.getElementsByTagName("Version").item(0).getFirstChild().getNodeValue();
+
         Config.init("application.yml");
         if (Config.INS.getDevelopment())
         {
@@ -116,7 +131,6 @@ public class Launcher
 
         logger.info("Loaded commands, registry size is " + CommandRegistry.getSize());
 
-
         DATABASE_ENABLED = Config.INS.getDatabase();
 
         if (DATABASE_ENABLED)
@@ -135,22 +149,33 @@ public class Launcher
             databaseManager.setDatabaseName(Config.INS.getMongoName());
         }
 
-        /* Init JDA */
-        initBotShards(listenerBot);
-        SetActivity.SetActivity(jda);
+        Boolean bot = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Bot").item(0).getFirstChild().getNodeValue());
 
-        VoiceChannelCleanupAgent voiceChannelCleanupAgent = new VoiceChannelCleanupAgent();
-        voiceChannelCleanupAgent.setDaemon(true);
-        voiceChannelCleanupAgent.start();
+        if (bot)
+        {
+            /* Init JDA */
+            initBotShards(listenerBot);
+            SetActivity.SetActivity(jda);
+        }
 
-        ShardAgent shardAgent = new ShardAgent();
-        shardAgent.setDaemon(true);
-        shardAgent.start();
+        Boolean agents = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Agents").item(0).getFirstChild().getNodeValue());
+
+        if (agents)
+        {
+            VoiceChannelCleanupAgent voiceChannelCleanupAgent = new VoiceChannelCleanupAgent();
+            voiceChannelCleanupAgent.setDaemon(true);
+            voiceChannelCleanupAgent.start();
+
+            ShardAgent shardAgent = new ShardAgent();
+            shardAgent.setDaemon(true);
+            shardAgent.start();
+        }
 
         logger.info("Active Threads:\t" + java.lang.Thread.activeCount());
     }
 
-    private static void initBotShards(EventListener listener) {
+    private static void initBotShards(EventListener listener)
+    {
         for(int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++)
         {
             try
