@@ -1,6 +1,5 @@
 package net.toaddev.lavalite.entities.command;
 
-import net.toaddev.lavalite.entities.command.abs.Command;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
@@ -8,9 +7,6 @@ import java.util.Set;
 
 public class CommandRegistry
 {
-    // ################################################################################
-    // ##                     Command Registry
-    // ################################################################################
     public static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandRegistry.class);
     public static HashMap<String, Command> registry = new HashMap<>();
     public static void registerCommand(Command command)

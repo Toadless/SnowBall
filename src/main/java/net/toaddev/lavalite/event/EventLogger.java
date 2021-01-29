@@ -50,7 +50,7 @@ public class EventLogger extends ListenerAdapter
     {
         send
                 (
-                "❌ Left guild `" + event.getGuild() + "`. Users: `" + event.getGuild().getMembers().size() + "`."
+                "Left guild `" + event.getGuild() + "`. Users: `" + event.getGuild().getMembers().size() + "`."
                 )
         ;
     }

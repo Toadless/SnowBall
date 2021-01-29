@@ -14,50 +14,58 @@ public class EventListenerLite extends AbstractEventListener
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event)
     {
+        String mention = "<@!" + event.getJDA().getSelfUser().getId() + ">";
+
+        String[] args = event.getMessage().getContentRaw().split(" ");
+
+        long guildId = Long.parseLong(event.getGuild().getId());
+
         if (event.getMessage().isWebhookMessage())
         {
             return;
         }
-        if (event.getAuthor().equals(event.getJDA().getSelfUser()))
+        else if (event.getAuthor().equals(event.getJDA().getSelfUser()))
         {
             return;
         }
-        if (event.getMember().getUser().isBot())
+        else if (event.getMember().getUser().isBot())
         {
             return;
         }
-        if (Launcher.DATABASE_ENABLED)
+        else if (Launcher.DATABASE_ENABLED)
         {
-            String[] args = event.getMessage().getContentRaw().split(" ");
-            Long guildId = Long.parseLong(event.getGuild().getId());
             String guildPrefix = GuildRegistry.getPrefix(guildId);
             if (event.getMessage().getContentRaw().startsWith(guildPrefix))
             {
-                CommandManager.executeCommand(args, event, guildPrefix);
+                this.executeCommand(args, event, guildPrefix);
                 return;
             }
-            // If the prefix is @<bot> <command>.
-            String mention = "<@!" + event.getJDA().getSelfUser().getId() + ">";
-            if (event.getMessage().getContentRaw().startsWith(mention))
+            else if (event.getMessage().getContentRaw().startsWith(mention))
             {
-                CommandManager.executeCommand(args, event, mention);
+                this.executeCommand(args, event, guildPrefix);
                 return;
             }
             return;
         }
-        String[] args = event.getMessage().getContentRaw().split(" ");
-        if (event.getMessage().getContentRaw().startsWith(Constants.GUILD_PREFIX))
+        else if (event.getMessage().getContentRaw().startsWith(Constants.GUILD_PREFIX))
         {
-            CommandManager.executeCommand(args, event, Constants.GUILD_PREFIX);
+            this.executeCommand(args, event, Constants.GUILD_PREFIX);
             return;
         }
-        // If the prefix is @<bot> <command>.
-        String mention = "<@!" + event.getJDA().getSelfUser().getId() + ">";
-        if (event.getMessage().getContentRaw().startsWith(mention))
+        else if (event.getMessage().getContentRaw().startsWith(mention))
         {
-            CommandManager.executeCommand(args, event, mention);
+            this.executeCommand(args, event, Constants.GUILD_PREFIX);
             return;
         }
         return;
+    }
+
+    public void executeCommand(String[] args, GuildMessageReceivedEvent event, String prefix)
+    {
+        String[] a = args;
+        GuildMessageReceivedEvent e = event;
+        String p = prefix;
+        CommandManager manager = Launcher.getCommandManager();
+        manager.handleCommand(a, e, p);
     }
 }

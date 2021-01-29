@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
+import net.toaddev.lavalite.entities.command.CommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.agent.ShardAgent;
@@ -41,6 +42,7 @@ public class Launcher
     public static boolean DATABASE_ENABLED = false;
     static JDA jda;
     ShardListener shardListener = null;
+    static CommandManager commandManager;
     private static DatabaseManager databaseManager;
     private static String getVersionInfo()
     {
@@ -110,7 +112,7 @@ public class Launcher
 
         Constants.Init();
 
-        CommandInitializer.initCommands();
+        commandManager = new CommandManager();
 
         logger.info("Loaded commands, registry size is " + CommandRegistry.getSize());
 
@@ -283,5 +285,10 @@ public class Launcher
     public static DatabaseManager getDatabaseManager()
     {
         return databaseManager;
+    }
+
+    public static CommandManager getCommandManager()
+    {
+        return commandManager;
     }
 }

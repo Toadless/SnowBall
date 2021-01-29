@@ -2,14 +2,15 @@ package net.toaddev.lavalite.entities.command;
 
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.lavalite.entities.database.GuildRegistry;
 import net.toaddev.lavalite.event.EventListenerLite;
 import net.toaddev.lavalite.util.DiscordUtil;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  *  A class representing an event for a {@link CommandManager command}.
@@ -127,5 +128,38 @@ public class CommandEvent
     public Boolean isDeveloper()
     {
         return DiscordUtil.isOwner(getMember().getUser());
+    }
+
+    /**
+     *
+     * @return If the {@link #getMember()} is a server admin.
+     */
+    public Boolean isServerAdmin()
+    {
+        return DiscordUtil.isServerAdmin(getMember());
+    }
+
+    /**
+     * Checks whether the {@link net.dv8tion.jda.api.entities.Member self member} has all the needed permissions for execution.
+     *
+     * @param permissions The {@link net.dv8tion.jda.api.Permission permissions} to check.
+     * @return Whether the {@link net.dv8tion.jda.api.entities.Member author} has the requred permissions.
+     */
+    @Nonnull
+    public Boolean selfPermissionCheck(List<Permission> permissions)
+    {
+        return event.getGuild().getSelfMember().hasPermission(permissions);
+    }
+
+    /**
+     * Checks whether the author has all the needed permissions for execution.
+     *
+     * @param permissions The {@link net.dv8tion.jda.api.Permission permissions} to check.
+     * @return Whether the {@link net.dv8tion.jda.api.entities.Member author} has the {@link Command#getMemberRequiredPermissions() permissions}.
+     */
+    @Nonnull
+    public Boolean memberPermissionCheck(List<Permission> permissions)
+    {
+        return (event.getMember() != null && event.getMember().hasPermission((GuildChannel) event.getChannel(), permissions));
     }
 }

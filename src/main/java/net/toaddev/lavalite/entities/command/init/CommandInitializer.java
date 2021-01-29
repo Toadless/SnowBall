@@ -7,70 +7,65 @@ import net.toaddev.lavalite.command.music.info.InfoCommand;
 import net.toaddev.lavalite.command.music.seeking.SeekCommand;
 import net.toaddev.lavalite.command.util.*;
 import net.toaddev.lavalite.entities.command.CommandRegistry;
-import uk.toadl3ss.lavalite.command.admin.*;
 import net.toaddev.lavalite.command.fun.JokeCommand;
-import uk.toadl3ss.lavalite.command.music.control.*;
 import net.toaddev.lavalite.command.music.info.NowPlayingCommand;
 import net.toaddev.lavalite.command.music.info.QueueCommand;
 import net.toaddev.lavalite.command.music.seeking.RestartCommand;
-import uk.toadl3ss.lavalite.command.util.*;
 import net.toaddev.lavalite.command.maintenance.ShardsCommand;
 import net.toaddev.lavalite.command.maintenance.StatsCommand;
 import net.toaddev.lavalite.command.maintenance.VersionCommand;
 
+import static net.toaddev.lavalite.entities.command.CommandRegistry.registerAlias;
+import static net.toaddev.lavalite.entities.command.CommandRegistry.registerCommand;
+
 public class CommandInitializer
 {
-    // ################################################################################
-    // ##                     Initializing Commands
-    // ################################################################################
     public static void initCommands()
     {
-        /* Registering commands */
-        CommandRegistry.registerCommand(new TestCommand());
-        CommandRegistry.registerCommand(new CommandsCommand());
-        CommandRegistry.registerCommand(new HelpCommand());
-        CommandRegistry.registerCommand(new InviteCommand());
-        CommandRegistry.registerCommand(new VersionCommand());
-        CommandRegistry.registerCommand(new StatsCommand());
-        CommandRegistry.registerCommand(new ShardsCommand());
-        CommandRegistry.registerCommand(new PingCommand());
-        CommandRegistry.registerCommand(new PlayCommand());
-        CommandRegistry.registerCommand(new JoinCommand());
-        CommandRegistry.registerCommand(new LeaveCommand());
-        CommandRegistry.registerCommand(new NowPlayingCommand());
-        CommandRegistry.registerCommand(new QueueCommand());
-        CommandRegistry.registerCommand(new RepeatCommand());
-        CommandRegistry.registerCommand(new SkipCommand());
-        CommandRegistry.registerCommand(new StopCommand());
-        CommandRegistry.registerCommand(new VolumeCommand());
-        CommandRegistry.registerCommand(new ShuffleCommand());
-        CommandRegistry.registerCommand(new DestroyCommand());
-        CommandRegistry.registerCommand(new PauseCommand());
-        CommandRegistry.registerCommand(new RestartCommand());
-        CommandRegistry.registerCommand(new InfoCommand());
-        CommandRegistry.registerCommand(new SeekCommand());
-        CommandRegistry.registerCommand(new EvalCommand());
-        CommandRegistry.registerCommand(new ExitCommand());
-        CommandRegistry.registerCommand(new ReviveCommand());
-        CommandRegistry.registerCommand(new RegistryCommand());
-        CommandRegistry.registerCommand(new PrefixCommand());
-        CommandRegistry.registerCommand(new SoundCloud());
-        CommandRegistry.registerCommand(new DurationCommand());
-        CommandRegistry.registerCommand(new JokeCommand());
+        registerCommand(new TestCommand());
+        registerCommand(new CommandsCommand());
+        registerCommand(new HelpCommand());
+        registerCommand(new InviteCommand());
+        registerCommand(new VersionCommand());
+        registerCommand(new StatsCommand());
+        registerCommand(new ShardsCommand());
+        registerCommand(new PingCommand());
+        registerCommand(new PlayCommand());
+        registerCommand(new JoinCommand());
+        registerCommand(new LeaveCommand());
+        registerCommand(new NowPlayingCommand());
+        registerCommand(new QueueCommand());
+        registerCommand(new RepeatCommand());
+        registerCommand(new SkipCommand());
+        registerCommand(new StopCommand());
+        registerCommand(new VolumeCommand());
+        registerCommand(new ShuffleCommand());
+        registerCommand(new DestroyCommand());
+        registerCommand(new PauseCommand());
+        registerCommand(new RestartCommand());
+        registerCommand(new InfoCommand());
+        registerCommand(new SeekCommand());
+        registerCommand(new EvalCommand());
+        registerCommand(new ExitCommand());
+        registerCommand(new ReviveCommand());
+        registerCommand(new RegistryCommand());
+        registerCommand(new PrefixCommand());
+        registerCommand(new SoundCloud());
+        registerCommand(new DurationCommand());
+        registerCommand(new JokeCommand());
 
-        /* Registering every alias */
-        CommandRegistry.registerAlias("prefix", "setprefix");
-        CommandRegistry.registerAlias("setvolume", "volume");
-        CommandRegistry.registerAlias("skip", "next");
-        CommandRegistry.registerAlias("repeat", "loop");
-        CommandRegistry.registerAlias("nowplaying", "np");
-        CommandRegistry.registerAlias("leave", "disconnect");
-        CommandRegistry.registerAlias("join", "summon");
-        CommandRegistry.registerAlias("join", "connect");
-        CommandRegistry.registerAlias("pause", "resume");
-        CommandRegistry.registerAlias("soundcloud", "sc");
-        CommandRegistry.registerAlias("play", "p");
-        CommandRegistry.registerAlias("duration", "position");
-        CommandRegistry.registerAlias("volume", "vol");
+        registerAlias("prefix", "setprefix");
+        registerAlias("setvolume", "volume");
+        registerAlias("skip", "next");
+        registerAlias("repeat", "loop");
+        registerAlias("nowplaying", "np");
+        registerAlias("leave", "disconnect");
+        registerAlias("join", "summon");
+        registerAlias("join", "connect");
+        registerAlias("pause", "resume");
+        registerAlias("soundcloud", "sc");
+        registerAlias("play", "p");
+        registerAlias("duration", "position");
+        registerAlias("volume", "vol");
     }
 }
