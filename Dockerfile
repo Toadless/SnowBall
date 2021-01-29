@@ -1,4 +1,4 @@
-FROM openjdk:14-jdk
+FROM openjdk:15-jdk
 MAINTAINER Toadless
 COPY application.yml /production/application.yml
 COPY Lavalite.jar /production/Lavalite.jar
