@@ -31,10 +31,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.audio.PlayerManager;
-import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.exception.CommandErrorException;
-import net.toaddev.lavalite.entities.exception.CommandException;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 
@@ -62,41 +60,45 @@ public class VolumeCommand extends Command
             channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
             return;
         }
-
-        if (!selfVoiceState.inVoiceChannel())
+        else if (!selfVoiceState.inVoiceChannel())
         {
             channel.sendMessage("I need to be in a voice channel for this to work.").queue();
             return;
         }
-        if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
+        else if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
         {
             channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
             return;
         }
-        if (ctx.getArgs().length < 2)
+        else if (ctx.getArgs().length < 2)
         {
-            channel.sendMessage("You need to provide a volume to set").queue();
-            throw new CommandException("Not enough args provided");
+            channel.sendMessage("You need to provide a volume to set between `0 - 200`.").queue();
+            return;
         }
-        try
+        else
         {
-            int volume = Integer.parseInt(ctx.getArgs()[1]);
-            if (volume <= -1){
-                channel.sendMessage("Please provide a valid volume to set").queue();
-                return;
+            try
+            {
+                int volume = Integer.parseInt(ctx.getArgs()[1]);
+                if (volume <= -1)
+                {
+                    channel.sendMessage("Please provide a valid volume to set between `0 - 200`.").queue();
+                    return;
+                }
+                if (volume > 200)
+                {
+                    channel.sendMessage("Please provide a valid volume to set between `0 - 200`.").queue();
+                    return;
+                }
+                final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
+                final AudioPlayer audioPlayer = musicManager.audioPlayer;
+                audioPlayer.setVolume(volume);
+                channel.sendMessageFormat("Set the volume to: %s", volume).queue();
+            } catch (NumberFormatException e)
+            {
+                ctx.getChannel().sendMessage("Please provide a valid number.").queue();
+                throw new CommandErrorException("NumberFormatException has been thrown");
             }
-            if (volume > 200){
-                channel.sendMessage("Please provide a valid volume to set").queue();
-                return;
-            }
-            final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
-            final AudioPlayer audioPlayer = musicManager.audioPlayer;
-            audioPlayer.setVolume(volume);
-            channel.sendMessageFormat("Set the volume to: %s", volume).queue();
-        } catch (NumberFormatException e)
-        {
-            ctx.getChannel().sendMessage("Please provide a valid number.").queue();
-            throw new CommandErrorException("NumberFormatException has been thrown");
         }
     }
 }

@@ -42,17 +42,25 @@ public class PrefixCommand extends Command
     @Override
     public void run(@NotNull CommandEvent ctx)
     {
+        long guildId = Long.parseLong(ctx.getGuild().getId());
         if (!Launcher.DATABASE_ENABLED)
         {
             return;
         }
-        long guildId = Long.parseLong(ctx.getGuild().getId());
-        if (ctx.getArgs().length < 2)
+        else if (ctx.getArgs().length < 2)
         {
             ctx.getChannel().sendMessageFormat("Your prefix is: `%s`", GuildRegistry.getPrefix(guildId)).queue();
             return;
         }
-        GuildRegistry.setPrefix(guildId, ctx.getArgs()[1]);
-        ctx.getChannel().sendMessageFormat("Set the guilds prefix to: `%s`", ctx.getArgs()[1]).queue();
+        else if (ctx.getArgs()[1].length() > 5)
+        {
+            ctx.getChannel().sendMessage("The max amount of characters you can have in a prefix is `5`.").queue();
+            return;
+        }
+        else
+        {
+            GuildRegistry.setPrefix(guildId, ctx.getArgs()[1]);
+            ctx.getChannel().sendMessageFormat("Set the guilds prefix to: `%s`", ctx.getArgs()[1]).queue();
+        }
     }
 }

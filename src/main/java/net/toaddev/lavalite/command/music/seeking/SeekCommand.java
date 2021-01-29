@@ -88,13 +88,15 @@ public class SeekCommand extends Command
         }
         try
         {
-            if (musicManager.scheduler.player.getPlayingTrack().getDuration() < Long.parseLong(ctx.getArgs()[1]))
+            int amount = Integer.parseInt(ctx.getArgs()[1]);
+            amount = (amount * 1000);
+            if (musicManager.scheduler.player.getPlayingTrack().getDuration() < Long.parseLong(String.valueOf(amount)))
             {
-                ctx.getChannel().sendMessage("The tracks duration is less than: `" + FormatTime.formatTime(Long.parseLong(ctx.getArgs()[1])) + "`.").queue();
+                ctx.getChannel().sendMessage("The tracks duration is less than: `" + FormatTime.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
                 return;
             }
-            musicManager.scheduler.player.getPlayingTrack().setPosition(Long.parseLong(ctx.getArgs()[1]));
-            ctx.getChannel().sendMessage("The tracks position has been set to: `" + FormatTime.formatTime(Long.parseLong(ctx.getArgs()[1])) + "`.").queue();
+            musicManager.scheduler.player.getPlayingTrack().setPosition(Long.parseLong(String.valueOf(amount)));
+            ctx.getChannel().sendMessage("The tracks position has been set to: `" + FormatTime.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
         } catch (NumberFormatException e)
         {
             ctx.getChannel().sendMessage("Please provide a valid number.").queue();
