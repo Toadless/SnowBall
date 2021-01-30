@@ -95,4 +95,9 @@ public class FileUtil
         }
         return null;
     }
+
+    public static String getXmlVal(Document xmlDoc, String xmlVal)
+    {
+        return xmlDoc.getElementsByTagName(xmlVal).item(0).getFirstChild().getNodeValue();
+    }
 }

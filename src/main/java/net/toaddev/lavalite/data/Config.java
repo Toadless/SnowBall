@@ -24,6 +24,7 @@
 
 package net.toaddev.lavalite.data;
 
+import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.FileUtil;
 import net.toaddev.lavalite.util.Logger;
 import org.simpleyaml.configuration.file.FileConfiguration;
@@ -35,7 +36,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A class that pulls the config from the "example.application.yml" file
+ * A class that pulls the config from the config yml file
  */
 public class Config
 {
@@ -89,16 +90,16 @@ public class Config
         {
             if (!this.config.exists())
             {
-                String appConfig = FileUtil.getResourceFileContents("lavalite/example.application.yml");
+                String appConfig = FileUtil.getResourceFileContents(Launcher.getExampleConfigFile());
                 this.config.createNewFile();
                 FileWriter fileWriter = new FileWriter(this.config.getName());
                 fileWriter.write(appConfig);
                 fileWriter.close();
-                Logger.warn("Application.yml file created. Please insert your bot token.");
+                Logger.warn("Config file created. Please insert your bot token.");
                 System.exit(0);
                 return;
             }
-            Logger.error("Invalid example.application.yml");
+            Logger.error("Invalid config file.");
             return;
         }
         this.Token = config.getString("credentials.discordBotToken");

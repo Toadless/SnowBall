@@ -28,4 +28,7 @@
         <Bot>true</Bot>
         <Agents>true</Agents>
     </Options>
+
+    <ConfigFile>application</ConfigFile>
+    <ExampleConfigFile>lavalite/example.application.yml</ExampleConfigFile>
 </LavaLite>

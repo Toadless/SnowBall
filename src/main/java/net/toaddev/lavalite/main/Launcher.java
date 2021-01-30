@@ -68,6 +68,7 @@ public class Launcher
     private static boolean vanity = true;
     private boolean hasReadiedOnce = false;
     public static boolean DATABASE_ENABLED = false;
+    private static String exampleConfigFile;
     static JDA jda;
     ShardListener shardListener = null;
     static CommandManager commandManager;
@@ -124,9 +125,14 @@ public class Launcher
         String xml = FileUtil.getResourceFileContents("lavalite/lavalite.xml");
         Document xmlDoc = FileUtil.convertStringToXMLDocument(xml);
 
-        version = xmlDoc.getElementsByTagName("Version").item(0).getFirstChild().getNodeValue();
+        version = FileUtil.getXmlVal(xmlDoc, "Version");
+        String configFile = FileUtil.getXmlVal(xmlDoc, "ConfigFile") + ".yml";
+        boolean bot = Boolean.parseBoolean(FileUtil.getXmlVal(xmlDoc, "Bot"));
+        boolean agents = Boolean.parseBoolean(FileUtil.getXmlVal(xmlDoc, "Agents"));
+        exampleConfigFile = FileUtil.getXmlVal(xmlDoc, "ExampleConfigFile");
 
-        Config.init("application.yml");
+        Config.init(configFile);
+
         if (Config.INS.getDevelopment())
         {
             version = version + " " + "DEV";
@@ -167,16 +173,12 @@ public class Launcher
             databaseManager.setDatabaseName(Config.INS.getMongoName());
         }
 
-        boolean bot = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Bot").item(0).getFirstChild().getNodeValue());
-
         if (bot)
         {
             /* Init JDA */
             initBotShards(listenerBot);
             SetActivity.SetActivity(jda);
         }
-
-        boolean agents = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Agents").item(0).getFirstChild().getNodeValue());
 
         if (agents)
         {
@@ -333,5 +335,10 @@ public class Launcher
     public static CommandManager getCommandManager()
     {
         return commandManager;
+    }
+
+    public static String getExampleConfigFile()
+    {
+        return exampleConfigFile;
     }
 }
