@@ -22,29 +22,97 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.entities.command.init;
+package net.toaddev.lavalite.modules;
 
 import net.toaddev.lavalite.command.admin.*;
-import net.toaddev.lavalite.command.music.control.*;
-import net.toaddev.lavalite.command.music.info.DurationCommand;
-import net.toaddev.lavalite.command.music.info.InfoCommand;
-import net.toaddev.lavalite.command.music.seeking.SeekCommand;
-import net.toaddev.lavalite.command.util.*;
-import net.toaddev.lavalite.entities.command.CommandRegistry;
 import net.toaddev.lavalite.command.fun.JokeCommand;
-import net.toaddev.lavalite.command.music.info.NowPlayingCommand;
-import net.toaddev.lavalite.command.music.info.QueueCommand;
-import net.toaddev.lavalite.command.music.seeking.RestartCommand;
 import net.toaddev.lavalite.command.maintenance.ShardsCommand;
 import net.toaddev.lavalite.command.maintenance.StatsCommand;
 import net.toaddev.lavalite.command.maintenance.VersionCommand;
+import net.toaddev.lavalite.command.music.control.*;
+import net.toaddev.lavalite.command.music.info.DurationCommand;
+import net.toaddev.lavalite.command.music.info.InfoCommand;
+import net.toaddev.lavalite.command.music.info.NowPlayingCommand;
+import net.toaddev.lavalite.command.music.info.QueueCommand;
+import net.toaddev.lavalite.command.music.seeking.RestartCommand;
+import net.toaddev.lavalite.command.music.seeking.SeekCommand;
+import net.toaddev.lavalite.command.util.*;
+import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.entities.modules.Module;
+import org.slf4j.LoggerFactory;
 
-import static net.toaddev.lavalite.entities.command.CommandRegistry.registerAlias;
-import static net.toaddev.lavalite.entities.command.CommandRegistry.registerCommand;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-public class CommandInitializer
+public class CommandsModule extends Module
 {
-    public static void initCommands()
+    private org.slf4j.Logger logger;
+    public Map<String, Command> registry;
+
+    public CommandsModule()
+    {
+        super("commands");
+    }
+
+    @Override
+    public void onEnable()
+    {
+        this.registry = new HashMap<>();
+        this.logger = LoggerFactory.getLogger(CommandsModule.class);
+
+        initCommands();
+    }
+
+    public void initCommands()
+    {
+        logger.info("Loading all commands... ");
+        registerAllCommands();
+        logger.info("Registered {} commands correctly!", getSize());
+    }
+
+    /**
+     *
+     * @param command The {@link net.toaddev.lavalite.entities.command.Command command} to register.
+     */
+    public void registerCommand(Command command)
+    {
+        logger.info("Registered the command" + " " + command.getName() + ".");
+        registry.put(command.getName(), command);
+    }
+
+    /**
+     *
+     * @param command The {@link net.toaddev.lavalite.entities.command.Command command}.
+     * @param alias The alias for the {@link net.toaddev.lavalite.entities.command.Command command}.
+     */
+    public void registerAlias(String command, String alias)
+    {
+        logger.info("Registered the alias" + " " + alias + ".");
+        registry.put(alias, registry.get(command));
+    }
+
+    /**
+     *
+     * @param name The {@link net.toaddev.lavalite.entities.command.Command command} name to find the command by.
+     * @return The {@link net.toaddev.lavalite.entities.command.Command command} that has been found.
+     */
+    public Command getCommand(String name)
+    {
+        return registry.get(name);
+    }
+
+    public int getSize()
+    {
+        return registry.size();
+    }
+
+    public Set<String> getRegisteredCommandsAndAliases()
+    {
+        return registry.keySet();
+    }
+
+    public void registerAllCommands()
     {
         registerCommand(new TestCommand());
         registerCommand(new CommandsCommand());
@@ -91,5 +159,11 @@ public class CommandInitializer
         registerAlias("play", "p");
         registerAlias("duration", "position");
         registerAlias("volume", "vol");
+    }
+
+    @Override
+    public void onDisable()
+    {
+        registry.clear();
     }
 }

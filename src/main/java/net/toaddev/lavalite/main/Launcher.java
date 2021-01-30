@@ -32,16 +32,16 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
-import net.toaddev.lavalite.entities.command.CommandManager;
+import net.toaddev.lavalite.entities.modules.Modules;
+import net.toaddev.lavalite.entities.modules.init.ModuleInitializer;
+import net.toaddev.lavalite.modules.CommandsModule;
+import net.toaddev.lavalite.modules.DatabaseModule;
 import net.toaddev.lavalite.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.agent.ShardAgent;
-import net.toaddev.lavalite.entities.command.CommandRegistry;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
-import net.toaddev.lavalite.entities.database.DatabaseManager;
-import net.toaddev.lavalite.entities.database.GuildRegistry;
 import net.toaddev.lavalite.event.EventListenerLite;
 import net.toaddev.lavalite.event.ShardListener;
 import net.toaddev.lavalite.util.SetActivity;
@@ -71,8 +71,8 @@ public class Launcher
     private static String exampleConfigFile;
     static JDA jda;
     ShardListener shardListener = null;
-    static CommandManager commandManager;
-    private static DatabaseManager databaseManager;
+    private static DatabaseModule databaseModule;
+    private static CommandsModule commandsModule;
     private static String getVersionInfo()
     {
         String indentation = "\t";
@@ -151,9 +151,9 @@ public class Launcher
 
         Constants.Init();
 
-        commandManager = new CommandManager();
+        ModuleInitializer.initModules();
 
-        logger.info("Loaded commands, registry size is " + CommandRegistry.getSize());
+        commandsModule = Modules.get(CommandsModule.class);
 
         DATABASE_ENABLED = Config.INS.getDatabase();
 
@@ -169,8 +169,8 @@ public class Launcher
                 DATABASE_ENABLED = false;
                 return;
             }
-            databaseManager = new DatabaseManager(Config.INS.getMongoUri());
-            databaseManager.setDatabaseName(Config.INS.getMongoName());
+            databaseModule = Modules.get(DatabaseModule.class);
+            databaseModule.setDatabaseName(Config.INS.getMongoName());
         }
 
         if (bot)
@@ -238,9 +238,10 @@ public class Launcher
     public static void shutdown(int code)
     {
         net.toaddev.lavalite.util.Logger.info("Shutting down with exit code " + code);
-        CommandRegistry.registry.clear();
-        CommandRegistry.logger.info("Clearing all command registry");
-        GuildRegistry.guildRegistry.clear();
+        Modules.getAllModules().forEach(module -> {
+            module.disable();
+        });
+        Launcher.getDatabaseModule().guildRegistry.clear();
         shutdownCode = code;
         for(Launcher lch : shards) {
             lch.getJda().shutdown();
@@ -327,18 +328,18 @@ public class Launcher
         return shardListener;
     }
 
-    public static DatabaseManager getDatabaseManager()
+    public static DatabaseModule getDatabaseModule()
     {
-        return databaseManager;
-    }
-
-    public static CommandManager getCommandManager()
-    {
-        return commandManager;
+        return databaseModule;
     }
 
     public static String getExampleConfigFile()
     {
         return exampleConfigFile;
+    }
+
+    public static CommandsModule getCommandsModule()
+    {
+        return commandsModule;
     }
 }

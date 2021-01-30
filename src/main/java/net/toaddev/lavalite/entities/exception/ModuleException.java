@@ -22,37 +22,36 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.entities.command;
+package net.toaddev.lavalite.entities.exception;
 
-import org.slf4j.LoggerFactory;
+import net.toaddev.lavalite.entities.modules.Module;
 
-import java.util.HashMap;
-import java.util.Set;
-
-public class CommandRegistry
+public class ModuleException extends RuntimeException
 {
-    public static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandRegistry.class);
-    public static HashMap<String, Command> registry = new HashMap<>();
-    public static void registerCommand(Command command)
+    private final String text;
+    private final Module module;
+
+    public ModuleException(Module module)
     {
-        logger.info("Registered the command" + " " + command.getName() + ".");
-        registry.put(command.getName(), command);
+        super("An exception occurred in the module " + module.getName(), null, true, false);
+        this.text = "An exception occurred in the module " + module.getName();
+        this.module = module;
     }
-    public static void registerAlias(String command, String alias)
+
+    public ModuleException(String text)
     {
-        logger.info("Registered the alias" + " " + alias + ".");
-        registry.put(alias, registry.get(command));
+        super(text, null, true, false);
+        this.text = text;
+        this.module = null;
     }
-    public static Command getCommand(String name)
+
+    public String getText()
     {
-        return registry.get(name);
+        return text;
     }
-    public static int getSize()
+
+    public Module getModule()
     {
-        return registry.size();
-    }
-    public static Set<String> getRegisteredCommandsAndAliases()
-    {
-        return registry.keySet();
+        return module;
     }
 }

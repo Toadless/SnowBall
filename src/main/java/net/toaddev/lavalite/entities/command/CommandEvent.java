@@ -29,7 +29,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.lavalite.entities.database.GuildRegistry;
 import net.toaddev.lavalite.event.EventListenerLite;
 import net.toaddev.lavalite.util.DiscordUtil;
 
@@ -55,7 +54,7 @@ public class CommandEvent
      *
      * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
      * @param args The {@link EventListenerLite args} to use.
-     * @param prefix The {@link GuildRegistry prefix} to use.
+     * @param prefix The {@link net.toaddev.lavalite.modules.DatabaseModule prefix} to use.
      */
     public CommandEvent(GuildMessageReceivedEvent event, String[] args, String prefix)
     {

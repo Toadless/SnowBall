@@ -38,7 +38,7 @@ public class GuildDataManager
      * @param object The new object to insert
      */
     public static void insert(Document object) {
-        Launcher.getDatabaseManager().runTask(database ->
+        Launcher.getDatabaseModule().runTask(database ->
         {
             database.getCollection(COLLECTION).insertOne(object);
         });
@@ -51,7 +51,7 @@ public class GuildDataManager
      */
     public static void replace(long id, Document object)
     {
-        Launcher.getDatabaseManager().runTask(database ->
+        Launcher.getDatabaseModule().runTask(database ->
         {
             database.getCollection(COLLECTION).replaceOne(eq("id", id), object);
         });

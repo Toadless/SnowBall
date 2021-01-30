@@ -21,6 +21,7 @@ val yamlVersion = "1.7.2"
 val groovyVersion = "3.0.7"
 val mongoVersion = "3.12.7"
 val jsonVersion = "20180813"
+val caffeineVersion = "2.8.8"
 
 dependencies {
     implementation("ch.qos.logback:logback-classic:$logbackVersion")

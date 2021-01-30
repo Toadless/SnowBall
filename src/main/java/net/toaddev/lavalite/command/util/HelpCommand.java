@@ -24,10 +24,9 @@
 
 package net.toaddev.lavalite.command.util;
 
+import net.toaddev.lavalite.main.Launcher;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
-import net.toaddev.lavalite.entities.command.CommandRegistry;
-import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 
 public class HelpCommand extends Command
@@ -53,7 +52,7 @@ public class HelpCommand extends Command
             ctx.getChannel().sendMessage(stringBuilder.toString()).queue();
             return;
         }
-        Command command = CommandRegistry.registry.get(ctx.getArgs()[1]);
+        Command command = Launcher.getCommandsModule().registry.get(ctx.getArgs()[1]);
         if (command == null)
         {
             ctx.getChannel().sendMessage("Unknown command: `" + ctx.getArgs()[1] + "`.");

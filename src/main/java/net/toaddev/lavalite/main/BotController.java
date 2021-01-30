@@ -31,8 +31,11 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.toaddev.lavalite.data.Config;
+import net.toaddev.lavalite.entities.modules.Module;
+import net.toaddev.lavalite.entities.modules.Modules;
 import net.toaddev.lavalite.event.EventLogger;
 import net.toaddev.lavalite.event.ShardListener;
+import net.toaddev.lavalite.modules.CacheModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,6 +63,7 @@ public class BotController extends Launcher
                 if(listener != null)
                 {
                     builder.addEventListeners(listener);
+                    builder.addEventListeners(Modules.getModules());
                     builder.addEventListeners(new EventLogger());
                     builder.addEventListeners(shardListener);
                 } else

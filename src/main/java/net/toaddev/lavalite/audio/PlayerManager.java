@@ -36,7 +36,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.lavalite.data.Constants;
-import net.toaddev.lavalite.entities.database.GuildRegistry;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.DiscordUtil;
@@ -67,7 +66,7 @@ public class PlayerManager
     {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) ->
         {
-            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
+            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager, guild);
             guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
             return guildMusicManager;
         });
@@ -122,7 +121,7 @@ public class PlayerManager
             {
                 if (Launcher.DATABASE_ENABLED)
                 {
-                    channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(GuildRegistry.getPrefix(Long.parseLong(event.getGuild().getId())) + "play", "") + "`").queue();
+                    channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getDatabaseModule().getPrefix(Long.parseLong(event.getGuild().getId())) + "play", "") + "`").queue();
                     return;
                 }
                 channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Constants.GUILD_PREFIX + "play", "") + "`").queue();

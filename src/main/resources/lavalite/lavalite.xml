@@ -22,7 +22,7 @@
   ~ SOFTWARE
   -->
 <LavaLite>
-    <Version>4.0.1</Version>
+    <Version>4.2.0</Version>
 
     <Options>
         <Bot>true</Bot>
@@ -31,4 +31,6 @@
 
     <ConfigFile>application</ConfigFile>
     <ExampleConfigFile>lavalite/example.application.yml</ExampleConfigFile>
+
+    <ConsoleInput>true</ConsoleInput>
 </LavaLite>

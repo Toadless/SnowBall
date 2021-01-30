@@ -22,27 +22,58 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.entities.command;
+package net.toaddev.lavalite.modules;
 
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.lavalite.entities.modules.Modules;
-import net.toaddev.lavalite.main.Launcher;
-import net.toaddev.lavalite.modules.CommandsModule;
-import org.slf4j.LoggerFactory;
+import net.toaddev.lavalite.entities.modules.Module;
 
-public class CommandManager
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class CacheModule extends Module
 {
-    public static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandManager.class);
-
-    public static void handleCommand(String[] args, GuildMessageReceivedEvent event, String prefix)
+    private Map<Long, Message> latestMessage = new HashMap<>();
+    public CacheModule()
     {
-        String providedCommandName = args[0].replace(prefix, "");
+        super("cache");
+    }
 
-        Command command = Launcher.getCommandsModule().getCommand(providedCommandName);
-        if (command == null) {
+    @Override
+    public void onEnable()
+    {
+    }
+
+    @Override
+    public void onGuildMessageReceived(GuildMessageReceivedEvent event)
+    {
+        if(event.getMessage().getContentRaw().isBlank())
+        {
             return;
         }
-        CommandEvent ctx = new CommandEvent(event, args, prefix);
-        command.process(ctx);
+        cacheMessage(event.getMessage());
+    }
+
+    private void cacheMessage(Message message){
+        try
+        {
+            this.latestMessage.remove(message.getGuild().getIdLong());
+        }
+        catch (NullPointerException e)
+        {
+        }
+        this.latestMessage.put(message.getGuild().getIdLong(), message);
+    }
+
+    public Map<Long, Message> getLatestMessage()
+    {
+        return latestMessage;
+    }
+
+    @Override
+    public void onDisable()
+    {
+        this.latestMessage.clear();
     }
 }

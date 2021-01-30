@@ -22,25 +22,99 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.entities.database;
+package net.toaddev.lavalite.modules;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
+import net.toaddev.lavalite.data.Config;
+import net.toaddev.lavalite.data.Constants;
+import net.toaddev.lavalite.entities.database.IMongoTask;
+import net.toaddev.lavalite.entities.database.managers.GuildDataManager;
+import net.toaddev.lavalite.entities.modules.Module;
 import net.toaddev.lavalite.main.Launcher;
 import org.bson.Document;
-
-import net.toaddev.lavalite.data.Constants;
-import net.toaddev.lavalite.entities.database.managers.GuildDataManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
-public class GuildRegistry
+public class DatabaseModule extends Module
 {
+    public static Map<Long, String> guildRegistry;
+
+    // #####################################################
+    // ##              Database Manager
+    // #####################################################
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseModule.class);
+    private MongoClient SYNC_CLIENT;
+    private String databaseName;
+
+    public DatabaseModule()
+    {
+        super("database");
+        guildRegistry = new HashMap<>();
+    }
+
+    @Override
+    public void onEnable()
+    {
+        MongoClientSettings.Builder builder = MongoClientSettings.builder();
+        ConnectionString connString = new ConnectionString(Config.INS.getMongoUri());
+        builder.applyConnectionString(connString);
+        setDatabaseName(connString.getDatabase());
+        SYNC_CLIENT = MongoClients.create(builder.build());
+        LOGGER.info("Logged into database.");
+    }
+
+    /**
+     *
+     * @return The {@link DatabaseModule database}.
+     */
+    public MongoDatabase getDatabase()
+    {
+        return SYNC_CLIENT.getDatabase(databaseName);
+    }
+
+    /**
+     *
+     * @param task The {@link IMongoTask task} to run.
+     */
+    public void runTask(IMongoTask task)
+    {
+        task.run(SYNC_CLIENT.getDatabase(databaseName));
+    }
+
+    /**
+     *
+     * @param database The {@link DatabaseModule database} to set.
+     */
+    public void setDatabaseName(String database)
+    {
+        this.databaseName = database;
+    }
+
+    @Override
+    public void onDisable()
+    {
+        SYNC_CLIENT.close();
+    };
+
+
+    // #####################################################
+    // ##                Guild Registry
+    // #####################################################
+
     /**
      *  The cache where we store the all of the guilds prefixes.
      */
-    public static HashMap<Long, String> guildRegistry = new HashMap<>();
-    public static void registerGuild(long id, String prefix)
+    public void registerGuild(long id, String prefix)
     {
         guildRegistry.put(id, prefix);
     }
@@ -49,7 +123,7 @@ public class GuildRegistry
      *
      * @param id The {@link net.dv8tion.jda.api.entities.Guild guild} id.
      */
-    public static void createGuild(long id)
+    public void createGuild(long id)
     {
         guildRegistry.put(id, Constants.GUILD_PREFIX);
         Document guild = new Document("id", id);
@@ -62,7 +136,7 @@ public class GuildRegistry
      * @param id The {@link net.dv8tion.jda.api.entities.Guild guild} id.
      * @return The {@link net.dv8tion.jda.api.entities.Guild guild} prefix.
      */
-    public static String getPrefix(long id)
+    public String getPrefix(long id)
     {
         String prefix = guildRegistry.get(id);
         if (prefix != null)
@@ -70,7 +144,7 @@ public class GuildRegistry
             return prefix;
         }
         Document guildDocument = new Document("id", id);
-        FindIterable<Document> guild = Launcher.getDatabaseManager().getDatabase().getCollection(GuildDataManager.COLLECTION).find(guildDocument);
+        FindIterable<Document> guild = Launcher.getDatabaseModule().getDatabase().getCollection(GuildDataManager.COLLECTION).find(guildDocument);
         if (guild.first() == null)
         {
             createGuild(id);
@@ -86,7 +160,7 @@ public class GuildRegistry
      * @param id The {@link net.dv8tion.jda.api.entities.Guild guild} id.
      * @param prefix The {@link net.dv8tion.jda.api.entities.Guild guild} new prefix.
      */
-    public static void setPrefix(long id, String prefix)
+    public void setPrefix(long id, String prefix)
     {
         Document newGuildDocument = new Document("id", id);
         newGuildDocument.append("prefix", prefix);
