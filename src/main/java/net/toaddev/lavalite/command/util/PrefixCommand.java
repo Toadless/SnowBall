@@ -29,6 +29,7 @@ import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.database.GuildRegistry;
 
 public class PrefixCommand extends Command
 {
@@ -48,7 +49,7 @@ public class PrefixCommand extends Command
         }
         else if (ctx.getArgs().length < 2)
         {
-            ctx.getChannel().sendMessageFormat("Your prefix is: `%s`", Launcher.getDatabaseModule().getPrefix(guildId)).queue();
+            ctx.getChannel().sendMessageFormat("Your prefix is: `%s`", GuildRegistry.getPrefix(guildId)).queue();
             return;
         }
         else if (ctx.getArgs()[1].length() > 5)
@@ -58,7 +59,7 @@ public class PrefixCommand extends Command
         }
         else
         {
-            Launcher.getDatabaseModule().setPrefix(guildId, ctx.getArgs()[1]);
+            GuildRegistry.setPrefix(guildId, ctx.getArgs()[1]);
             ctx.getChannel().sendMessageFormat("Set the guilds prefix to: `%s`", ctx.getArgs()[1]).queue();
         }
     }

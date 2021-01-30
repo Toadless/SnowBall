@@ -28,8 +28,9 @@ import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.RestAction;
+import net.toaddev.lavalite.entities.command.CommandFlag;
+import net.toaddev.lavalite.entities.command.CommandRegistry;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.main.Launcher;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 
@@ -54,7 +55,7 @@ public class CommandsCommand extends Command
         helpString.append(title);
 
         List<String> helpList = new ArrayList<>();
-        Launcher.getCommandsModule().registry.forEach(((s, command) ->
+        CommandRegistry.registry.forEach(((s, command) ->
         {
             String help = command.getDescription();
             if (helpList.contains(help)) {

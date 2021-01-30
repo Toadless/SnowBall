@@ -30,7 +30,7 @@ public interface IMongoTask
 {
     /**
      *
-     * @param database The {@link net.toaddev.lavalite.modules.DatabaseModule database} to use.
+     * @param database The {@link DatabaseManager database} to use.
      */
     public void run(MongoDatabase database);
 }

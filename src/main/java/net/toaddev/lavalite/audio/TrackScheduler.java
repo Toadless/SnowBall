@@ -28,12 +28,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.toaddev.lavalite.entities.exception.MusicException;
-import net.toaddev.lavalite.entities.modules.Modules;
-import net.toaddev.lavalite.modules.CacheModule;
-import net.toaddev.lavalite.modules.CommandsModule;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -47,13 +42,11 @@ public class TrackScheduler extends AudioEventAdapter
     // ################################################################################
     public final AudioPlayer player;
     public final Queue<AudioTrack> queue;
-    public final Guild guild;
     public boolean repeating = false;
 
-    public TrackScheduler(AudioPlayer player, Guild guild)
+    public TrackScheduler(AudioPlayer player)
     {
         this.player = player;
-        this.guild = guild;
         this.queue = new LinkedList<>();
     }
 
@@ -68,24 +61,7 @@ public class TrackScheduler extends AudioEventAdapter
     public void nextTrack()
     {
         try {
-            AudioTrack newTrack = this.queue.poll();
-            if (newTrack == null)
-            {
-                return;
-            }
-            this.player.startTrack(newTrack, false);
-            CacheModule cacheModule = Modules.get(CacheModule.class);
-            Message latestMessage = cacheModule.getLatestMessage().get(guild.getIdLong());
-            if (latestMessage == null)
-            {
-                System.out.println("null");
-                return;
-            }
-            try {
-                latestMessage.getChannel().sendMessage("Now playing: " + newTrack.getInfo().title + "!").queue();
-            } catch (Exception e)
-            {
-            }
+            this.player.startTrack(this.queue.poll(), false);
         } catch (Exception e) {
             throw new MusicException("Error skipping to next track.");
         }

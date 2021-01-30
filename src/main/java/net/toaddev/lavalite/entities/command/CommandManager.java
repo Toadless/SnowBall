@@ -25,20 +25,23 @@
 package net.toaddev.lavalite.entities.command;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.lavalite.entities.modules.Modules;
-import net.toaddev.lavalite.main.Launcher;
-import net.toaddev.lavalite.modules.CommandsModule;
 import org.slf4j.LoggerFactory;
+
+import static net.toaddev.lavalite.entities.command.init.CommandInitializer.initCommands;
 
 public class CommandManager
 {
     public static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandManager.class);
 
-    public static void handleCommand(String[] args, GuildMessageReceivedEvent event, String prefix)
+    public CommandManager()
+    {
+        initCommands();
+    }
+
+    public void handleCommand(String[] args, GuildMessageReceivedEvent event, String prefix)
     {
         String providedCommandName = args[0].replace(prefix, "");
-
-        Command command = Launcher.getCommandsModule().getCommand(providedCommandName);
+        Command command = CommandRegistry.getCommand(providedCommandName);
         if (command == null) {
             return;
         }

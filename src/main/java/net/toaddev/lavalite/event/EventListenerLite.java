@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.lavalite.entities.command.CommandManager;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.data.Constants;
+import net.toaddev.lavalite.entities.database.GuildRegistry;
 
 public class EventListenerLite extends AbstractEventListener
 {
@@ -57,7 +58,7 @@ public class EventListenerLite extends AbstractEventListener
         }
         else if (Launcher.DATABASE_ENABLED)
         {
-            String guildPrefix = Launcher.getDatabaseModule().getPrefix(guildId);
+            String guildPrefix = GuildRegistry.getPrefix(guildId);
             if (event.getMessage().getContentRaw().startsWith(guildPrefix))
             {
                 this.executeCommand(args, event, guildPrefix);
@@ -88,6 +89,7 @@ public class EventListenerLite extends AbstractEventListener
         String[] a = args;
         GuildMessageReceivedEvent e = event;
         String p = prefix;
-        CommandManager.handleCommand(a, e, p);
+        CommandManager manager = Launcher.getCommandManager();
+        manager.handleCommand(a, e, p);
     }
 }

@@ -22,38 +22,37 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.entities.database.managers;
+package net.toaddev.lavalite.entities.command;
 
-import net.toaddev.lavalite.main.Launcher;
-import org.bson.Document;
+import org.slf4j.LoggerFactory;
 
-import static com.mongodb.client.model.Filters.eq;
+import java.util.HashMap;
+import java.util.Set;
 
-public class GuildDataManager
+public class CommandRegistry
 {
-    public static String COLLECTION = "guilds";
-
-    /**
-     *
-     * @param object The new object to insert
-     */
-    public static void insert(Document object) {
-        Launcher.getDatabaseManager().runTask(database ->
-        {
-            database.getCollection(COLLECTION).insertOne(object);
-        });
-    }
-
-    /**
-     *
-     * @param id The guilds id
-     * @param object The object
-     */
-    public static void replace(long id, Document object)
+    public static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandRegistry.class);
+    public static HashMap<String, Command> registry = new HashMap<>();
+    public static void registerCommand(Command command)
     {
-        Launcher.getDatabaseManager().runTask(database ->
-        {
-            database.getCollection(COLLECTION).replaceOne(eq("id", id), object);
-        });
+        logger.info("Registered the command" + " " + command.getName() + ".");
+        registry.put(command.getName(), command);
+    }
+    public static void registerAlias(String command, String alias)
+    {
+        logger.info("Registered the alias" + " " + alias + ".");
+        registry.put(alias, registry.get(command));
+    }
+    public static Command getCommand(String name)
+    {
+        return registry.get(name);
+    }
+    public static int getSize()
+    {
+        return registry.size();
+    }
+    public static Set<String> getRegisteredCommandsAndAliases()
+    {
+        return registry.keySet();
     }
 }
