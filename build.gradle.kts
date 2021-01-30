@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     application
-    id("com.github.johnrengelman.shadow") version "5.2.0"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "net.toaddev"
@@ -28,7 +28,7 @@ dependencies {
     implementation ("com.sedmelluq:lavaplayer:$lavaplayerVersion")
     implementation ("me.carleslc.Simple-YAML:Simple-Yaml:$yamlVersion")
     implementation ("org.codehaus.groovy:groovy-jsr223:$groovyVersion")
-    compile ("org.mongodb:mongo-java-driver:$mongoVersion")
+    implementation ("org.mongodb:mongo-java-driver:$mongoVersion")
     implementation ("org.json:json:$jsonVersion")
 }
 

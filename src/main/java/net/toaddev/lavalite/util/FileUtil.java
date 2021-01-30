@@ -29,10 +29,7 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
+import java.io.*;
 
 public class FileUtil
 {
@@ -66,7 +63,7 @@ public class FileUtil
         {
             while((str = reader.readLine()) != null)
             {
-                stringBuilder.append(str);
+                stringBuilder.append(str + "\n");
             }
         }
         catch(Exception exception)

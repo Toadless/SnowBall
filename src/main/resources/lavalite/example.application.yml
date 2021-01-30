@@ -1,0 +1,59 @@
+#####################################################
+#     .   _                  _ _ _        __ _ _    #
+#    /\\ | | __ ___   ____ _| (_) |_ ___  \ \ \ \   #
+#   ( ( )| |/ _` \ \ / / _` | | | __/ _ \  \ \ \ \  #
+#   \\/  | | (_| |\ V / (_| | | | ||  __/  ) ) ) )  #
+#    '   |_|\__,_| \_/ \__,_|_|_|\__\___| / / / /   #
+#  ======================================/_/_/_/    #
+#####################################################
+
+################################################################
+###                    *** WARNING ***
+################################################################
+###
+### ALMOST EVERYTHING REQUESTED IN THIS FILE ARE CONFIDENTIAL CREDENTIALS
+### IF YOU POST THIS FILE ONLINE (such as on GitHub) YOUR BOT COULD BE COMPROMISED
+###
+###
+### Use a proper text editor when editing this file, for example VSCode.
+### Do not use tab characters in this file, use plain spaces.
+###
+###
+### More information on correctly formatting yaml files: http://www.yaml.org/start.html
+
+################################################################
+###                 Basic configuration
+################################################################
+
+
+config:
+  development:          false                      # Only true if is in development
+
+  prefix:               ';;'                       # Bots prefix
+  game:                 'Lavalite | ;;help'        # What the bots playing
+  status:               'playing'                  # The status type "playing" or "listening" or "watching" or "competing"
+  ownerid:              '582560658575589381'       # The bots owner id
+  shardStart:           0                          # Leave this at zero unless you know what you are doing and hosting over multiple servers
+  shardCount:           1                          # The number of shards this bot supports. Leave at one unless you know what you are doing.
+  maxShards:            1                          # Leave this at one unless you know what you are doing and hosting over multiple servers
+  invite:               false                      # The bot invite command, this will display the bots invite link. Keep this false if the bot will be private
+  join: "**Thank you for adding me!** :white_check_mark: \n `-` My prefix is: ` {prefix} `"     # The message that gets sent when the bot gets added. Placeholders {prefix}, {guildName} and \n for a new line
+  database:             true                       # Only enable this if you have set a database url in the credentials tab
+
+
+################################################################
+###                 Essential credentials
+################################################################
+
+
+credentials:
+  # To start the bot you need a key from the discord developer portal
+  # How to get the key: https://discord.com/developers/docs/intro#bots-and-apps
+  # Add your discord API key between the quotation marks
+  discordBotToken: "TOKEN"
+  # To have a database you need to provide a connection uri
+  # How to get the uri: https://www.mongodb.com/
+  # Add your connection uri key between the quotation marks
+  mongoDBUri:      "DB_URI"
+  # This name can be anything you like
+  mongoDBName:     "lavalite"

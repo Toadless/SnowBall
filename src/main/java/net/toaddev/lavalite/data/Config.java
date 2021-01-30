@@ -24,16 +24,18 @@
 
 package net.toaddev.lavalite.data;
 
+import net.toaddev.lavalite.util.FileUtil;
 import net.toaddev.lavalite.util.Logger;
 import org.simpleyaml.configuration.file.FileConfiguration;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * A class that pulls the config from the "application.yml" file
+ * A class that pulls the config from the "example.application.yml" file
  */
 public class Config
 {
@@ -41,6 +43,7 @@ public class Config
     // ##                     Login / credentials
     // ################################################################################
     private File config;
+    private String fileName;
     public static Config INS;
     private String Prefix;
     private String Token;
@@ -61,22 +64,22 @@ public class Config
      *
      * @param file The config files name
      */
-    private Config(String file)
+    public static void init(String file) throws IOException
     {
-        config = new File(file);
-        initConfig();
+        INS = new Config(file);
     }
 
     /**
      *
      * @param file The config files name
      */
-    public static void init(String file)
+    private Config(String file) throws IOException
     {
-        INS = new Config(file);
+        config = new File(file);
+        initConfig();
     }
 
-    private void initConfig()
+    private void initConfig() throws IOException
     {
         FileConfiguration config = new YamlConfiguration();
         try
@@ -84,7 +87,18 @@ public class Config
             config.load(this.config);
         } catch (InvalidConfigurationException | IOException e)
         {
-            Logger.error("Invalid application.yml");
+            if (!this.config.exists())
+            {
+                String appConfig = FileUtil.getResourceFileContents("lavalite/example.application.yml");
+                this.config.createNewFile();
+                FileWriter fileWriter = new FileWriter(this.config.getName());
+                fileWriter.write(appConfig);
+                fileWriter.close();
+                Logger.warn("Application.yml file created. Please insert your bot token.");
+                System.exit(0);
+                return;
+            }
+            Logger.error("Invalid example.application.yml");
             return;
         }
         this.Token = config.getString("credentials.discordBotToken");

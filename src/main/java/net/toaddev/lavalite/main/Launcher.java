@@ -1,3 +1,27 @@
+/*
+ *  MIT License
+ *
+ *  Copyright (c) 2021 Toadless @ toaddev.net
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of Lavalite and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of Lavalite, and to permit persons to whom Lavalite is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Lavalite.
+ *
+ * LAVALITE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE
+ */
+
 package net.toaddev.lavalite.main;
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
@@ -14,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.agent.ShardAgent;
 import net.toaddev.lavalite.entities.command.CommandRegistry;
-import net.toaddev.lavalite.entities.command.init.CommandInitializer;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.entities.database.DatabaseManager;
@@ -23,16 +46,10 @@ import net.toaddev.lavalite.event.EventListenerLite;
 import net.toaddev.lavalite.event.ShardListener;
 import net.toaddev.lavalite.util.SetActivity;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -106,6 +123,7 @@ public class Launcher
     {
         String xml = FileUtil.getResourceFileContents("lavalite/lavalite.xml");
         Document xmlDoc = FileUtil.convertStringToXMLDocument(xml);
+
         version = xmlDoc.getElementsByTagName("Version").item(0).getFirstChild().getNodeValue();
 
         Config.init("application.yml");
@@ -149,7 +167,7 @@ public class Launcher
             databaseManager.setDatabaseName(Config.INS.getMongoName());
         }
 
-        Boolean bot = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Bot").item(0).getFirstChild().getNodeValue());
+        boolean bot = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Bot").item(0).getFirstChild().getNodeValue());
 
         if (bot)
         {
@@ -158,7 +176,7 @@ public class Launcher
             SetActivity.SetActivity(jda);
         }
 
-        Boolean agents = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Agents").item(0).getFirstChild().getNodeValue());
+        boolean agents = Boolean.parseBoolean(xmlDoc.getElementsByTagName("Agents").item(0).getFirstChild().getNodeValue());
 
         if (agents)
         {
