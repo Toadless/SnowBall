@@ -86,6 +86,11 @@ public class CommandsModule extends Module
         return commands.get(name);
     }
 
+    public void deleteAllCommands()
+    {
+        commands.clear();
+    }
+
     @Override
     public void onDisable()
     {
