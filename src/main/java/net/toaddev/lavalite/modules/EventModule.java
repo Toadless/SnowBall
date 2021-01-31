@@ -28,10 +28,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.toaddev.lavalite.audio.PlayerManager;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.entities.module.Module;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,5 +75,11 @@ public class EventModule extends Module
     {
         String msg = String.format(message, options);
         log.info(msg);
+    }
+
+    @Override
+    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event)
+    {
+        PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
     }
 }
