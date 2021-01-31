@@ -33,7 +33,6 @@ import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.audio.PlayerManager;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
-import net.toaddev.lavalite.entities.command.CommandManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.exception.CommandErrorException;
 import net.toaddev.lavalite.util.FormatTime;
@@ -100,7 +99,6 @@ public class SeekCommand extends Command
         } catch (NumberFormatException e)
         {
             ctx.getChannel().sendMessage("Please provide a valid number.").queue();
-            CommandManager.logger.info("NumberFormatException has been thrown");
             throw new CommandErrorException("NumberFormatException has been thrown");
         }
     }

@@ -24,34 +24,10 @@
 
 package net.toaddev.lavalite.entities.exception;
 
-import net.toaddev.lavalite.entities.modules.Module;
-
-public class ModuleException extends RuntimeException
+public class ModuleNotFoundException extends RuntimeException
 {
-    private final String text;
-    private final Module module;
-
-    public ModuleException(Module module)
+    public ModuleNotFoundException(Class clazz)
     {
-        super("An exception occurred in the module " + module.getName(), null, true, false);
-        this.text = "An exception occurred in the module " + module.getName();
-        this.module = module;
-    }
-
-    public ModuleException(String text)
-    {
-        super(text, null, true, false);
-        this.text = text;
-        this.module = null;
-    }
-
-    public String getText()
-    {
-        return text;
-    }
-
-    public Module getModule()
-    {
-        return module;
+        super("Failed to load the '" + clazz.getName() + "' module.");
     }
 }

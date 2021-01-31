@@ -41,6 +41,7 @@ public class SoundCloud extends Command
         super("soundcloud", "Plays music from soundcloud");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("sc");
     }
 
     @Override

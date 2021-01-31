@@ -22,52 +22,37 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.event;
+package net.toaddev.lavalite.modules;
 
-import net.dv8tion.jda.api.events.ReadyEvent;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.toaddev.lavalite.main.Launcher;
+import net.toaddev.lavalite.entities.module.Module;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.Map;
 
-public abstract class AbstractEventListener extends ListenerAdapter
+public class MessageModule extends Module
 {
-    private final HashMap<String, UserListener> userListener = new HashMap<>();
+    private Map<Long, Message> latestMessage;
 
-    AbstractEventListener()
+    @Override
+    public void onEnable()
     {
-
+        this.latestMessage = new HashMap<>();
     }
 
     @Override
-    public void onReady(ReadyEvent event)
-    {
-        Launcher.getInstance(event.getJDA()).onInit(event);
-    }
-
-    @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event)
-    {
-        UserListener listener = userListener.get(event.getAuthor().getId());
-        if (listener != null)
-        {
-            try
-            {
-                listener.onGuildMessageReceived(event);
-            } catch(Exception ex)
-            {
-            }
+    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event){
+        if(event.getMessage().getContentRaw().isBlank()){
+            return;
         }
+        latestMessage.remove(event.getGuild().getIdLong());
+        latestMessage.put(event.getGuild().getIdLong(), event.getMessage());
     }
 
-    public void putListener(String id, UserListener listener)
+    public Map<Long, Message> getLatestMessage()
     {
-        userListener.put(id, listener);
-    }
-
-    public void removeListener(String id)
-    {
-        userListener.remove(id);
+        return latestMessage;
     }
 }

@@ -24,13 +24,28 @@ val jsonVersion = "20180813"
 val caffeineVersion = "2.8.8"
 
 dependencies {
+    // logback
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
+    // discord
     implementation("net.dv8tion:JDA:$jdaVersion")
+
+    // audio
     implementation ("com.sedmelluq:lavaplayer:$lavaplayerVersion")
+
+    // yaml config
     implementation ("me.carleslc.Simple-YAML:Simple-Yaml:$yamlVersion")
+
+    //eval
     implementation ("org.codehaus.groovy:groovy-jsr223:$groovyVersion")
+
+    // database
     implementation ("org.mongodb:mongo-java-driver:$mongoVersion")
     implementation ("org.json:json:$jsonVersion")
+
+    // other
+    implementation ("io.github.classgraph:classgraph:4.8.98")
+    implementation ("com.github.ben-manes.caffeine:caffeine:2.8.8")
 }
 
 application {

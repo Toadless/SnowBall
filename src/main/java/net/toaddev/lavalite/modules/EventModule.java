@@ -22,36 +22,29 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.event;
+package net.toaddev.lavalite.modules;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
+import net.toaddev.lavalite.entities.module.Module;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class EventLogger extends ListenerAdapter
+public class EventModule extends Module
 {
     public static JDA jda;
-    public static final Logger log = LoggerFactory.getLogger(EventLogger.class);
-
-    private void send(String msg) {
-        log.info(msg);
-    }
+    public static final Logger log = LoggerFactory.getLogger(EventModule.class);
 
     @Override
     public void onGuildJoin(GuildJoinEvent event)
     {
-        send
-                (
-                "✅ Joined guild `" + event.getGuild() + "`. Users: `" + event.getGuild().getMembers().size() + "`."
-                )
-        ;
+        this.send("Joined guild %s.", event.getGuild().getName());
+
         try
         {
             String defaultMessage = Config.INS.getJoin();
@@ -72,10 +65,12 @@ public class EventLogger extends ListenerAdapter
     @Override
     public void onGuildLeave(GuildLeaveEvent event)
     {
-        send
-                (
-                "Left guild `" + event.getGuild() + "`. Users: `" + event.getGuild().getMembers().size() + "`."
-                )
-        ;
+        send("Left guild %s!", event.getGuild().getName());
+    }
+
+    private void send(String message, Object options)
+    {
+        String msg = String.format(message, options);
+        log.info(msg);
     }
 }

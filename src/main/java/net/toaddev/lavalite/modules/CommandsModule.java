@@ -24,146 +24,71 @@
 
 package net.toaddev.lavalite.modules;
 
-import net.toaddev.lavalite.command.admin.*;
-import net.toaddev.lavalite.command.fun.JokeCommand;
-import net.toaddev.lavalite.command.maintenance.ShardsCommand;
-import net.toaddev.lavalite.command.maintenance.StatsCommand;
-import net.toaddev.lavalite.command.maintenance.VersionCommand;
-import net.toaddev.lavalite.command.music.control.*;
-import net.toaddev.lavalite.command.music.info.DurationCommand;
-import net.toaddev.lavalite.command.music.info.InfoCommand;
-import net.toaddev.lavalite.command.music.info.NowPlayingCommand;
-import net.toaddev.lavalite.command.music.info.QueueCommand;
-import net.toaddev.lavalite.command.music.seeking.RestartCommand;
-import net.toaddev.lavalite.command.music.seeking.SeekCommand;
-import net.toaddev.lavalite.command.util.*;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.entities.modules.Module;
+import net.toaddev.lavalite.entities.module.Module;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class CommandsModule extends Module
 {
-    private org.slf4j.Logger logger;
-    public Map<String, Command> registry;
-
-    public CommandsModule()
-    {
-        super("commands");
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(CommandsModule.class);
+    private static final String COMMANDS_PACKAGE = "net.toaddev.lavalite.command";
+    private Map<String, Command> commands;
 
     @Override
     public void onEnable()
     {
-        this.registry = new HashMap<>();
-        this.logger = LoggerFactory.getLogger(CommandsModule.class);
-
-        initCommands();
+        scanCommands();
     }
 
-    public void initCommands()
+    public void scanCommands(){
+        LOG.info("Loading commands...");
+        try(var result = new ClassGraph().acceptPackages(COMMANDS_PACKAGE).enableAnnotationInfo().scan())
+        {
+            this.commands = result.getSubclasses(Command.class.getName()).stream()
+                    .map(ClassInfo::loadClass)
+                    .filter(Command.class::isAssignableFrom)
+                    .map(clazz ->
+                    {
+                        try{
+                            return (Command) clazz.getDeclaredConstructor().newInstance();
+                        }
+                        catch(Exception e){
+                            LOG.info("Error while registering command: '{}'", clazz.getSimpleName(), e);
+                        }
+                        return null;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toMap(Command::getName, Function.identity()));
+        }
+        LOG.info("Loaded {} commands", this.commands.size());
+
+        new ArrayList<>(commands.entrySet()).forEach(stringCommandEntry -> {
+            stringCommandEntry.getValue().getAlias().forEach(s -> {
+                commands.put(s, commands.get(stringCommandEntry.getKey()));
+            });
+        });
+    }
+
+    public Map<String, Command> getCommands()
     {
-        logger.info("Loading all commands... ");
-        registerAllCommands();
-        logger.info("Registered {} commands correctly!", getSize());
+        return this.commands;
     }
 
-    /**
-     *
-     * @param command The {@link net.toaddev.lavalite.entities.command.Command command} to register.
-     */
-    public void registerCommand(Command command)
-    {
-        logger.info("Registered the command" + " " + command.getName() + ".");
-        registry.put(command.getName(), command);
-    }
-
-    /**
-     *
-     * @param command The {@link net.toaddev.lavalite.entities.command.Command command}.
-     * @param alias The alias for the {@link net.toaddev.lavalite.entities.command.Command command}.
-     */
-    public void registerAlias(String command, String alias)
-    {
-        logger.info("Registered the alias" + " " + alias + ".");
-        registry.put(alias, registry.get(command));
-    }
-
-    /**
-     *
-     * @param name The {@link net.toaddev.lavalite.entities.command.Command command} name to find the command by.
-     * @return The {@link net.toaddev.lavalite.entities.command.Command command} that has been found.
-     */
     public Command getCommand(String name)
     {
-        return registry.get(name);
-    }
-
-    public int getSize()
-    {
-        return registry.size();
-    }
-
-    public Set<String> getRegisteredCommandsAndAliases()
-    {
-        return registry.keySet();
-    }
-
-    public void registerAllCommands()
-    {
-        registerCommand(new TestCommand());
-        registerCommand(new CommandsCommand());
-        registerCommand(new HelpCommand());
-        registerCommand(new InviteCommand());
-        registerCommand(new VersionCommand());
-        registerCommand(new StatsCommand());
-        registerCommand(new ShardsCommand());
-        registerCommand(new PingCommand());
-        registerCommand(new PlayCommand());
-        registerCommand(new JoinCommand());
-        registerCommand(new LeaveCommand());
-        registerCommand(new NowPlayingCommand());
-        registerCommand(new QueueCommand());
-        registerCommand(new RepeatCommand());
-        registerCommand(new SkipCommand());
-        registerCommand(new StopCommand());
-        registerCommand(new VolumeCommand());
-        registerCommand(new ShuffleCommand());
-        registerCommand(new DestroyCommand());
-        registerCommand(new PauseCommand());
-        registerCommand(new RestartCommand());
-        registerCommand(new InfoCommand());
-        registerCommand(new SeekCommand());
-        registerCommand(new EvalCommand());
-        registerCommand(new ExitCommand());
-        registerCommand(new ReviveCommand());
-        registerCommand(new RegistryCommand());
-        registerCommand(new PrefixCommand());
-        registerCommand(new SoundCloud());
-        registerCommand(new DurationCommand());
-        registerCommand(new JokeCommand());
-
-        registerAlias("prefix", "setprefix");
-        registerAlias("setvolume", "volume");
-        registerAlias("skip", "next");
-        registerAlias("repeat", "loop");
-        registerAlias("nowplaying", "np");
-        registerAlias("leave", "disconnect");
-        registerAlias("join", "summon");
-        registerAlias("join", "connect");
-        registerAlias("pause", "resume");
-        registerAlias("soundcloud", "sc");
-        registerAlias("play", "p");
-        registerAlias("duration", "position");
-        registerAlias("volume", "vol");
+        return commands.get(name);
     }
 
     @Override
     public void onDisable()
     {
-        registry.clear();
+        this.commands.clear();
     }
 }

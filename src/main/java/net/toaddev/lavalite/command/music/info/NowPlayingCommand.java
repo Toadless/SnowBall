@@ -45,6 +45,7 @@ public class NowPlayingCommand extends Command
         super("nowplaying", "Displays the currently playing song");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("np");
     }
 
     @Override

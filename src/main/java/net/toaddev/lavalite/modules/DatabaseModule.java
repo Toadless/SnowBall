@@ -30,11 +30,11 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import net.dv8tion.jda.api.entities.Guild;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.entities.database.IMongoTask;
-import net.toaddev.lavalite.entities.database.managers.GuildDataManager;
-import net.toaddev.lavalite.entities.modules.Module;
+import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.main.Launcher;
 import org.bson.Document;
 import org.slf4j.Logger;
@@ -44,33 +44,34 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.mongodb.client.model.Filters.eq;
+
 public class DatabaseModule extends Module
 {
-    public static Map<Long, String> guildRegistry;
-
-    // #####################################################
-    // ##              Database Manager
-    // #####################################################
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseModule.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseModule.class);
+    public static String COLLECTION = "guilds";
+    private boolean enabled;
     private MongoClient SYNC_CLIENT;
     private String databaseName;
-
-    public DatabaseModule()
-    {
-        super("database");
-        guildRegistry = new HashMap<>();
-    }
 
     @Override
     public void onEnable()
     {
+        enabled = Config.INS.getDatabase();
+
+        if (!enabled)
+        {
+            LOG.info("Cancelling the launch of the database!");
+            return;
+        }
+
         MongoClientSettings.Builder builder = MongoClientSettings.builder();
         ConnectionString connString = new ConnectionString(Config.INS.getMongoUri());
         builder.applyConnectionString(connString);
         setDatabaseName(connString.getDatabase());
+        setDatabaseName(Config.INS.getMongoName());
         SYNC_CLIENT = MongoClients.create(builder.build());
-        LOGGER.info("Logged into database.");
+        LOG.info("Loaded database.");
     }
 
     /**
@@ -100,35 +101,15 @@ public class DatabaseModule extends Module
         this.databaseName = database;
     }
 
-    @Override
-    public void onDisable()
-    {
-        SYNC_CLIENT.close();
-    };
-
-
-    // #####################################################
-    // ##                Guild Registry
-    // #####################################################
-
-    /**
-     *  The cache where we store the all of the guilds prefixes.
-     */
-    public void registerGuild(long id, String prefix)
-    {
-        guildRegistry.put(id, prefix);
-    }
-
     /**
      *
      * @param id The {@link net.dv8tion.jda.api.entities.Guild guild} id.
      */
     public void createGuild(long id)
     {
-        guildRegistry.put(id, Constants.GUILD_PREFIX);
         Document guild = new Document("id", id);
         guild.append("prefix", Constants.GUILD_PREFIX);
-        GuildDataManager.insert(guild);
+        insert(guild);
     }
 
     /**
@@ -138,21 +119,19 @@ public class DatabaseModule extends Module
      */
     public String getPrefix(long id)
     {
-        String prefix = guildRegistry.get(id);
-        if (prefix != null)
+        if (!enabled)
         {
-            return prefix;
+            return Constants.GUILD_PREFIX;
         }
+
         Document guildDocument = new Document("id", id);
-        FindIterable<Document> guild = Launcher.getDatabaseModule().getDatabase().getCollection(GuildDataManager.COLLECTION).find(guildDocument);
+        FindIterable<Document> guild = Launcher.getModules().get(DatabaseModule.class).getDatabase().getCollection(COLLECTION).find(guildDocument);
         if (guild.first() == null)
         {
             createGuild(id);
             return Constants.GUILD_PREFIX;
         }
-        prefix = (String) Objects.requireNonNull(guild.first()).get("prefix");
-        registerGuild(id, prefix);
-        return prefix;
+        return (String) guild.first().get("prefix");
     }
 
     /**
@@ -164,8 +143,66 @@ public class DatabaseModule extends Module
     {
         Document newGuildDocument = new Document("id", id);
         newGuildDocument.append("prefix", prefix);
-        GuildDataManager.replace(id, newGuildDocument);
-        guildRegistry.remove(id);
-        guildRegistry.put(id, prefix);
+        replace(id, newGuildDocument);
+    }
+
+    public void insertSettingsIfNotExists(long id)
+    {
+        if (!enabled)
+        {
+            return;
+        }
+        Document guildDocument = new Document("id", id);
+        FindIterable<Document> guild = Launcher.getModules().get(DatabaseModule.class).getDatabase().getCollection(COLLECTION).find(guildDocument);
+        if (guild.first() == null)
+        {
+            createGuild(id);
+            return;
+        }
+        return;
+    }
+
+
+    /**
+     *
+     * @param object The new object to insert
+     */
+    public void insert(Document object) {
+        Launcher.getModules().get(DatabaseModule.class).runTask(database ->
+        {
+            database.getCollection(COLLECTION).insertOne(object);
+        });
+    }
+
+    /**
+     *
+     * @param id The guilds id
+     * @param object The object
+     */
+    public void replace(long id, Document object)
+    {
+        Launcher.getModules().get(DatabaseModule.class).runTask(database ->
+        {
+            database.getCollection(COLLECTION).replaceOne(eq("id", id), object);
+        });
+    }
+
+    public void remove(long id)
+    {
+        Launcher.getModules().get(DatabaseModule.class).runTask(database ->
+        {
+            database.getCollection(COLLECTION).deleteOne(eq("id", id));
+        });
+    }
+
+    @Override
+    public void onDisable()
+    {
+        if (!enabled)
+        {
+            return;
+        }
+
+        SYNC_CLIENT.close();
     }
 }

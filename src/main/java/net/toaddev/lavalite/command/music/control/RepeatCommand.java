@@ -41,6 +41,7 @@ public class RepeatCommand extends Command
         super("repeat", "Loops the player");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("loop");
     }
 
     @Override

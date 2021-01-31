@@ -30,19 +30,15 @@ import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.hooks.EventListener;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
-import net.toaddev.lavalite.entities.command.CommandManager;
+import net.toaddev.lavalite.entities.module.Module;
+import net.toaddev.lavalite.entities.module.Modules;
 import net.toaddev.lavalite.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.agent.ShardAgent;
-import net.toaddev.lavalite.entities.command.CommandRegistry;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
-import net.toaddev.lavalite.entities.database.DatabaseManager;
-import net.toaddev.lavalite.entities.database.GuildRegistry;
-import net.toaddev.lavalite.event.EventListenerLite;
 import net.toaddev.lavalite.event.ShardListener;
 import net.toaddev.lavalite.util.SetActivity;
 import org.w3c.dom.Document;
@@ -58,21 +54,19 @@ public class Launcher
 {
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
     public static String version;
-    public static EventListenerLite listenerBot;
-    private static final ArrayList<Launcher> shards = new ArrayList<>();
-    private static AtomicInteger numShardsReady = new AtomicInteger(0);
+    public static boolean DATABASE_ENABLED = false;
     public static final long START_TIME = System.currentTimeMillis();
     public static final int UNKNOWN_SHUTDOWN_CODE = -991023;
     public static int shutdownCode = UNKNOWN_SHUTDOWN_CODE;
     public static final int SHARD_CREATION_SLEEP_INTERVAL = 5100;
+    public static JDA jda;
+    public ShardListener shardListener = null;
+    private static final ArrayList<Launcher> shards = new ArrayList<>();
+    private static AtomicInteger numShardsReady = new AtomicInteger(0);
     private static boolean vanity = true;
     private boolean hasReadiedOnce = false;
-    public static boolean DATABASE_ENABLED = false;
+    private static Modules modules;
     private static String exampleConfigFile;
-    static JDA jda;
-    ShardListener shardListener = null;
-    static CommandManager commandManager;
-    private static DatabaseManager databaseManager;
     private static String getVersionInfo()
     {
         String indentation = "\t";
@@ -147,36 +141,18 @@ public class Launcher
         logger.info(getVersionInfo());
         logger.info("Starting lavalite v" + version + ".");
 
-        listenerBot = new EventListenerLite();
-
         Constants.Init();
-
-        commandManager = new CommandManager();
-
-        logger.info("Loaded commands, registry size is " + CommandRegistry.getSize());
 
         DATABASE_ENABLED = Config.INS.getDatabase();
 
-        if (DATABASE_ENABLED)
-        {
-            if (Config.INS.getMongoUri() == null || Config.INS.getMongoUri().equals(""))
-            {
-                DATABASE_ENABLED = false;
-                return;
-            }
-            if (Config.INS.getMongoName() == null || Config.INS.getMongoName().equals(""))
-            {
-                DATABASE_ENABLED = false;
-                return;
-            }
-            databaseManager = new DatabaseManager(Config.INS.getMongoUri());
-            databaseManager.setDatabaseName(Config.INS.getMongoName());
-        }
+        // Launcher.getModules().get(DatabaseModule.class)
+
+        modules = new Modules(getJda());
 
         if (bot)
         {
             /* Init JDA */
-            initBotShards(listenerBot);
+            initBotShards();
             SetActivity.SetActivity(jda);
         }
 
@@ -194,13 +170,13 @@ public class Launcher
         logger.info("Active Threads:\t" + java.lang.Thread.activeCount());
     }
 
-    private static void initBotShards(EventListener listener)
+    private static void initBotShards()
     {
         for(int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++)
         {
             try
             {
-                shards.add(i, new BotController(i, listener));
+                shards.add(i, new BotController(i));
             } catch (Exception e)
             {
                 logger.error("Caught an exception while starting shard " + i + "!", e);
@@ -238,9 +214,7 @@ public class Launcher
     public static void shutdown(int code)
     {
         net.toaddev.lavalite.util.Logger.info("Shutting down with exit code " + code);
-        CommandRegistry.registry.clear();
-        CommandRegistry.logger.info("Clearing all command registry");
-        GuildRegistry.guildRegistry.clear();
+        modules.modules.forEach(Module::onDisable);
         shutdownCode = code;
         for(Launcher lch : shards) {
             lch.getJda().shutdown();
@@ -283,7 +257,7 @@ public class Launcher
     {
         jda.shutdown();
         net.toaddev.lavalite.util.Logger.info("Reviving a shard");
-        shards.set(getShardInfo().getShardId(), new BotController(getShardInfo().getShardId(), listenerBot));
+        shards.set(getShardInfo().getShardId(), new BotController(getShardInfo().getShardId()));
     }
 
     public static List<Launcher> getShards()
@@ -327,18 +301,13 @@ public class Launcher
         return shardListener;
     }
 
-    public static DatabaseManager getDatabaseManager()
-    {
-        return databaseManager;
-    }
-
-    public static CommandManager getCommandManager()
-    {
-        return commandManager;
-    }
-
     public static String getExampleConfigFile()
     {
         return exampleConfigFile;
+    }
+
+    public static Modules getModules()
+    {
+        return modules;
     }
 }

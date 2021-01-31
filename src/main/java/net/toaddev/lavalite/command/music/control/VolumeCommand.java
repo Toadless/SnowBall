@@ -43,6 +43,7 @@ public class VolumeCommand extends Command
         super("setvolume", "Changes the players volume");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("vol");
     }
 
     @Override

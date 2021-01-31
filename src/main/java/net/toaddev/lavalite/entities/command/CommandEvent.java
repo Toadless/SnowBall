@@ -29,8 +29,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.lavalite.entities.database.GuildRegistry;
-import net.toaddev.lavalite.event.EventListenerLite;
 import net.toaddev.lavalite.util.DiscordUtil;
 
 import javax.annotation.Nonnull;

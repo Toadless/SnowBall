@@ -43,6 +43,7 @@ public class LeaveCommand extends Command
         super("leave", "Disconnects from the voice channel");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("disconnect");
     }
 
     @Override

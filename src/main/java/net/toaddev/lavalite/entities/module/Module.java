@@ -22,38 +22,26 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.entities.database.managers;
+package net.toaddev.lavalite.entities.module;
 
-import net.toaddev.lavalite.main.Launcher;
-import org.bson.Document;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import static com.mongodb.client.model.Filters.eq;
+import java.util.Set;
 
-public class GuildDataManager
+public abstract class Module extends ListenerAdapter
 {
-    public static String COLLECTION = "guilds";
+    protected Modules modules;
 
-    /**
-     *
-     * @param object The new object to insert
-     */
-    public static void insert(Document object) {
-        Launcher.getDatabaseManager().runTask(database ->
-        {
-            database.getCollection(COLLECTION).insertOne(object);
-        });
+    public Module init(Modules modules){
+        this.modules = modules;
+        return this;
     }
 
-    /**
-     *
-     * @param id The guilds id
-     * @param object The object
-     */
-    public static void replace(long id, Document object)
-    {
-        Launcher.getDatabaseManager().runTask(database ->
-        {
-            database.getCollection(COLLECTION).replaceOne(eq("id", id), object);
-        });
+    public Set<Class<? extends Module>> getDependencies(){
+        return null;
     }
+
+    public void onEnable(){}
+
+    public void onDisable(){}
 }

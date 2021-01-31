@@ -28,7 +28,11 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.toaddev.lavalite.entities.exception.MusicException;
+import net.toaddev.lavalite.main.Launcher;
+import net.toaddev.lavalite.modules.MessageModule;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -42,12 +46,14 @@ public class TrackScheduler extends AudioEventAdapter
     // ################################################################################
     public final AudioPlayer player;
     public final Queue<AudioTrack> queue;
+    public final Guild guild;
     public boolean repeating = false;
 
-    public TrackScheduler(AudioPlayer player)
+    public TrackScheduler(AudioPlayer player, Guild guild)
     {
         this.player = player;
         this.queue = new LinkedList<>();
+        this.guild = guild;
     }
 
     public void queue(AudioTrack track)
@@ -61,7 +67,19 @@ public class TrackScheduler extends AudioEventAdapter
     public void nextTrack()
     {
         try {
-            this.player.startTrack(this.queue.poll(), false);
+            AudioTrack nextTrack = this.queue.poll();
+            if (nextTrack == null)
+            {
+                return;
+            }
+            this.player.startTrack(nextTrack, false);
+
+            Message latestMessage = Launcher.getModules().get(MessageModule.class).getLatestMessage().get(guild.getIdLong());
+            if (latestMessage == null)
+            {
+                return;
+            }
+            latestMessage.getChannel().sendMessage("Now playing: `" + nextTrack.getInfo().title + "`!").queue();
         } catch (Exception e) {
             throw new MusicException("Error skipping to next track.");
         }

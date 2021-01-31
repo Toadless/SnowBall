@@ -44,6 +44,7 @@ public class DurationCommand extends Command
         super("duration", "Displays the current songs duration");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("dur", "position");
     }
 
     @Override

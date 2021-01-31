@@ -42,6 +42,7 @@ public class SkipCommand extends Command
         super("skip", "Skips to the next song");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("next");
     }
 
     @Override

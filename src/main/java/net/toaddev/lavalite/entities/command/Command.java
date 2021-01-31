@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class representing a command for use in the {@link CommandManager CommandManager}.
+ * A class representing a command for use in the {@link net.toaddev.lavalite.modules.CommandsModule CommandManager}.
  *
  */
 public abstract class Command
@@ -49,6 +49,7 @@ public abstract class Command
      */
     private final List<Permission> selfRequiredPermissions;
     private final List<CommandFlag> flags;
+    private final List<String> alias;
 
     /**
      *
@@ -62,12 +63,13 @@ public abstract class Command
         this.memberRequiredPermissions = new ArrayList<>();
         this.selfRequiredPermissions = new ArrayList<>();
         this.flags = new ArrayList<>();
+        this.alias = new ArrayList<>();
     }
 
     /**
-     * Processes this {@link CommandManager command} for execution.
+     * Processes this {@link net.toaddev.lavalite.modules.CommandsModule command} for execution.
      * <p>
-     * This will consider the {@link CommandFlag flags} of this {@link CommandManager command}
+     * This will consider the {@link CommandFlag flags} of this {@link net.toaddev.lavalite.modules.CommandsModule command}
      * <p>
      * This will only {@link #run(CommandEvent) run} the command if all checks pass.
      * @param event The command event to process with.
@@ -110,7 +112,7 @@ public abstract class Command
     }
 
     /**
-     * @return The {@link CommandFlag flags} for this {@link CommandManager command}.
+     * @return The {@link CommandFlag flags} for this {@link net.toaddev.lavalite.modules.CommandsModule command}.
      * @see #addFlags(CommandFlag...)
      * @see #hasFlag(CommandFlag)
      */
@@ -121,7 +123,7 @@ public abstract class Command
     }
 
     /**
-     * Adds {@link CommandFlag flags} to this {@link CommandManager command}.
+     * Adds {@link CommandFlag flags} to this {@link net.toaddev.lavalite.modules.CommandsModule command}.
      *
      * @param flags The flags to add.
      * @see #getFlags()
@@ -134,7 +136,7 @@ public abstract class Command
 
     /**
      * @param flag The flag to check for.
-     * @return Whether this {@link CommandManager command} has the flag.
+     * @return Whether this {@link net.toaddev.lavalite.modules.CommandsModule command} has the flag.
      * @see #getFlags()
      * @see #addFlags(CommandFlag...)
      */
@@ -150,7 +152,7 @@ public abstract class Command
     public abstract void run(@Nonnull CommandEvent ctx);
 
     /**
-     * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link CommandManager command} {@link net.dv8tion.jda.api.entities.Member author} to execute.
+     * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.toaddev.lavalite.modules.CommandsModule command} {@link net.dv8tion.jda.api.entities.Member author} to execute.
      *
      * @return The permissions.
      * @see #addMemberPermissions(net.dv8tion.jda.api.Permission...)
@@ -162,7 +164,7 @@ public abstract class Command
     }
 
     /**
-     * Adds {@link net.dv8tion.jda.api.Permission permissions} required by the {@link CommandManager command} {@link net.dv8tion.jda.api.entities.Member author} to execute.
+     * Adds {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.toaddev.lavalite.modules.CommandsModule command} {@link net.dv8tion.jda.api.entities.Member author} to execute.
      *
      * @param permissions The permissions to add.
      * @see #getMemberRequiredPermissions()
@@ -174,7 +176,7 @@ public abstract class Command
 
 
     /**
-     * Adds {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.dv8tion.jda.api.entities.Member self user} to execute the {@link CommandManager command}.
+     * Adds {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.dv8tion.jda.api.entities.Member self user} to execute the {@link net.toaddev.lavalite.modules.CommandsModule command}.
      *
      * @param permissions The permissions to add.
      * @see #getSelfRequiredPermissions()
@@ -185,7 +187,7 @@ public abstract class Command
     }
 
     /**
-     * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.dv8tion.jda.api.entities.Member self user} to execute the {@link CommandManager command}.
+     * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.dv8tion.jda.api.entities.Member self user} to execute the {@link net.toaddev.lavalite.modules.CommandsModule command}.
      *
      * @see #getSelfRequiredPermissions()
      * @return
@@ -193,6 +195,16 @@ public abstract class Command
     public List<Permission> getSelfRequiredPermissions()
     {
         return selfRequiredPermissions;
+    }
+
+    public void addAlias(@Nonnull String... alias)
+    {
+        this.alias.addAll(List.of(alias));
+    }
+
+    public List<String> getAlias()
+    {
+        return this.alias;
     }
 
     /**

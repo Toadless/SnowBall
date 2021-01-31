@@ -42,6 +42,7 @@ public class ShuffleCommand extends Command
         super("shuffle", "Shuffles the guilds player");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("randomize");
     }
 
     @Override

@@ -42,6 +42,7 @@ public class JoinCommand extends Command
         super("join", "Joins your voice channel");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("summon", "connect");
     }
 
     @Override
