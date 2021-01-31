@@ -22,7 +22,7 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.command.util;
+package net.toaddev.lavalite.command.moderation;
 
 import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;

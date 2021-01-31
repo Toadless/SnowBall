@@ -33,11 +33,10 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
-import net.toaddev.lavalite.audio.PlayerManager;
-import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.DiscordUtil;
-import net.toaddev.lavalite.util.FormatTime;
+import net.toaddev.lavalite.util.FormatTimeUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 
@@ -81,7 +80,7 @@ public class QueueCommand extends Command
             return;
         }
 
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
+        final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         if (audioPlayer.getPlayingTrack() == null)
         {
@@ -102,7 +101,7 @@ public class QueueCommand extends Command
         final AudioTrack currentTrack = audioPlayer.getPlayingTrack();
         final AudioTrackInfo currentTrackInfo = currentTrack.getInfo();
         embed.addField("**Now Playing**", "\u200C", false);
-        String currentTrackField = ("by" + " " + currentTrackInfo.author + " `[" + FormatTime.formatTime(currentTrackInfo.length) + "]`");
+        String currentTrackField = ("by" + " " + currentTrackInfo.author + " `[" + FormatTimeUtil.formatTime(currentTrackInfo.length) + "]`");
         embed.addField(currentTrackInfo.title, currentTrackField, false);
         embed.addField("\u200C", "\u200C", false);
         embed.addField("**Up Next:**", "\u200C", false);
@@ -110,7 +109,7 @@ public class QueueCommand extends Command
             final AudioTrack track = trackList.get(i);
             final AudioTrackInfo info = track.getInfo();
             String field1 = ("`" + String.valueOf(i + 1) + ".`" + " " + info.title);
-            String field2 = ("by" + " " + info.author + " `[" + FormatTime.formatTime(track.getDuration()) + "]`");
+            String field2 = ("by" + " " + info.author + " `[" + FormatTimeUtil.formatTime(track.getDuration()) + "]`");
             embed.addField(field1, field2, false);
         }
         if (trackList.size() > trackCount) {

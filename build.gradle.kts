@@ -48,6 +48,11 @@ dependencies {
     implementation ("com.github.ben-manes.caffeine:caffeine:2.8.8")
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_10
+    targetCompatibility = JavaVersion.VERSION_1_10
+}
+
 application {
     mainClassName = "net.toaddev.lavalite.main.Launcher"
 }

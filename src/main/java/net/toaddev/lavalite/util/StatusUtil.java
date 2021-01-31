@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.data.Constants;
 
-public class SetActivity
+public class StatusUtil
 {
     public static Boolean defaultStatus = false;
     public static void SetActivity(JDA jda)

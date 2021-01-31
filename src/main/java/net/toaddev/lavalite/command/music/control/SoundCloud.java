@@ -30,8 +30,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.lavalite.audio.PlayerManager;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 
@@ -75,7 +75,7 @@ public class SoundCloud extends Command
         }
         String song = "scsearch:" + songName;
         channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
-        PlayerManager.getInstance()
+        MusicModule.getInstance()
                 .loadAndPlay(channel, song, ctx.getEvent());
         return;
     }

@@ -37,7 +37,6 @@ import net.toaddev.lavalite.modules.MessageModule;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class TrackScheduler extends AudioEventAdapter
 {
@@ -45,7 +44,7 @@ public class TrackScheduler extends AudioEventAdapter
     // ##                     Track Scheduler
     // ################################################################################
     public final AudioPlayer player;
-    public final Queue<AudioTrack> queue;
+    public final LinkedList<AudioTrack> queue;
     public final Guild guild;
     public boolean repeating = false;
 
@@ -87,7 +86,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void shuffle()
     {
-        Collections.shuffle((List<?>) queue);
+        Collections.shuffle(queue);
     }
 
     @Override

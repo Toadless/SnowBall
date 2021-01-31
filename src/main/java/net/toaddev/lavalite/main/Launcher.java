@@ -33,6 +33,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
 import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.entities.module.Modules;
+import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +41,7 @@ import net.toaddev.lavalite.agent.ShardAgent;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.event.ShardListener;
-import net.toaddev.lavalite.util.SetActivity;
+import net.toaddev.lavalite.util.StatusUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -66,7 +67,9 @@ public class Launcher
     private static boolean vanity = true;
     private boolean hasReadiedOnce = false;
     private static Modules modules;
+    private static MusicModule musicModule;
     private static String exampleConfigFile;
+
     private static String getVersionInfo()
     {
         String indentation = "\t";
@@ -145,15 +148,14 @@ public class Launcher
 
         DATABASE_ENABLED = Config.INS.getDatabase();
 
-        // Launcher.getModules().get(DatabaseModule.class)
-
         modules = new Modules(getJda());
+        musicModule = modules.get(MusicModule.class);
 
         if (bot)
         {
             /* Init JDA */
             initBotShards();
-            SetActivity.SetActivity(jda);
+            StatusUtil.SetActivity(jda);
         }
 
         if (agents)
@@ -213,7 +215,7 @@ public class Launcher
 
     public static void shutdown(int code)
     {
-        net.toaddev.lavalite.util.Logger.info("Shutting down with exit code " + code);
+        logger.info("Shutting down with exit code " + code);
         modules.modules.forEach(Module::onDisable);
         shutdownCode = code;
         for(Launcher lch : shards) {
@@ -256,7 +258,7 @@ public class Launcher
     public void revive()
     {
         jda.shutdown();
-        net.toaddev.lavalite.util.Logger.info("Reviving a shard");
+        logger.info("Reviving a shard");
         shards.set(getShardInfo().getShardId(), new BotController(getShardInfo().getShardId()));
     }
 
@@ -309,5 +311,10 @@ public class Launcher
     public static Modules getModules()
     {
         return modules;
+    }
+
+    public static MusicModule getMusicModule()
+    {
+        return musicModule;
     }
 }

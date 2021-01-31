@@ -26,7 +26,7 @@ package net.toaddev.lavalite.util;
 
 import java.util.concurrent.TimeUnit;
 
-public class FormatTime
+public class FormatTimeUtil
 {
     public static String formatTime(long timeInMillis)
     {

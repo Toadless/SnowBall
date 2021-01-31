@@ -26,7 +26,7 @@ package net.toaddev.lavalite.entities.command;
 
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.Permission;
-import net.toaddev.lavalite.util.EmbedUtils;
+import net.toaddev.lavalite.util.EmbedUtil;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -78,23 +78,23 @@ public abstract class Command
     {
         if (hasFlag(CommandFlag.DISABLED))
         {
-            EmbedUtils.sendDisabledError(event);
+            EmbedUtil.sendDisabledError(event);
         }
         else if (hasFlag(CommandFlag.DEVELOPER_ONLY) && !event.isDeveloper())
         {
-            EmbedUtils.sendError(event.getChannel(), "This command is in developer only mode.");
+            EmbedUtil.sendError(event.getChannel(), "This command is in developer only mode.");
         }
         else if(!getMemberRequiredPermissions().isEmpty() && !event.memberPermissionCheck(getMemberRequiredPermissions()))
         {
-            EmbedUtils.sendError(event.getChannel(), "You do not have the required permission to perform this action.");
+            EmbedUtil.sendError(event.getChannel(), "You do not have the required permission to perform this action.");
         }
         else if(!getSelfRequiredPermissions().isEmpty() && !event.selfPermissionCheck(getSelfRequiredPermissions()))
         {
-            EmbedUtils.sendError(event.getChannel(), "I do not have the required permission to perform this action.");
+            EmbedUtil.sendError(event.getChannel(), "I do not have the required permission to perform this action.");
         }
         else if (hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isDeveloper() || hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isServerAdmin())
         {
-            EmbedUtils.sendError(event.getChannel(), "You do not have sufficient permissions to perform this action!");
+            EmbedUtil.sendError(event.getChannel(), "You do not have sufficient permissions to perform this action!");
         }
         else
         {
@@ -106,7 +106,7 @@ public abstract class Command
             try {
                 run(event);
             } catch (Exception e) {
-                EmbedUtils.sendError(event.getChannel(), "An error occurred whilst executing this command. This is most likely a self permission exception.");
+                EmbedUtil.sendError(event.getChannel(), "An error occurred whilst executing this command. This is most likely a self permission exception.");
             }
         }
     }

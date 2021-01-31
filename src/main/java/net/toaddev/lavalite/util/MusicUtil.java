@@ -24,7 +24,7 @@
 
 package net.toaddev.lavalite.util;
 
-public class IsUrl
+public class MusicUtil
 {
     public static boolean isUrl(String url)
     {

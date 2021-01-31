@@ -30,12 +30,12 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
-import net.toaddev.lavalite.audio.PlayerManager;
+import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.exception.CommandErrorException;
-import net.toaddev.lavalite.util.FormatTime;
+import net.toaddev.lavalite.util.FormatTimeUtil;
 
 public class SeekCommand extends Command
 {
@@ -73,7 +73,7 @@ public class SeekCommand extends Command
             return;
         }
 
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
+        final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         if (audioPlayer.getPlayingTrack() == null)
         {
@@ -91,11 +91,11 @@ public class SeekCommand extends Command
             amount = (amount * 1000);
             if (musicManager.scheduler.player.getPlayingTrack().getDuration() < Long.parseLong(String.valueOf(amount)))
             {
-                ctx.getChannel().sendMessage("The tracks duration is less than: `" + FormatTime.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
+                ctx.getChannel().sendMessage("The tracks duration is less than: `" + FormatTimeUtil.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
                 return;
             }
             musicManager.scheduler.player.getPlayingTrack().setPosition(Long.parseLong(String.valueOf(amount)));
-            ctx.getChannel().sendMessage("The tracks position has been set to: `" + FormatTime.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
+            ctx.getChannel().sendMessage("The tracks position has been set to: `" + FormatTimeUtil.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
         } catch (NumberFormatException e)
         {
             ctx.getChannel().sendMessage("Please provide a valid number.").queue();

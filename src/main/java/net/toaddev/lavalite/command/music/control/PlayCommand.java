@@ -31,11 +31,11 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.toaddev.lavalite.audio.GuildMusicManager;
-import net.toaddev.lavalite.audio.PlayerManager;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
-import net.toaddev.lavalite.util.IsUrl;
+import net.toaddev.lavalite.util.MusicUtil;
 
 public class PlayCommand extends Command
 {
@@ -66,7 +66,7 @@ public class PlayCommand extends Command
 
         if (ctx.getArgs().length < 2)
         {
-            final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
+            final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
             if (musicManager.audioPlayer.getPlayingTrack() != null)
             {
                 boolean paused = musicManager.scheduler.player.isPaused();
@@ -87,7 +87,7 @@ public class PlayCommand extends Command
             audioManager.openAudioConnection(memberChannel);
         }
         String song = ctx.getArgs()[1];
-        if (!IsUrl.isUrl(song))
+        if (!MusicUtil.isUrl(song))
         {
             if (songName == null)
             {
@@ -97,7 +97,7 @@ public class PlayCommand extends Command
             song = "ytsearch:" + songName;
             channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         }
-        PlayerManager.getInstance()
+        MusicModule.getInstance()
                 .loadAndPlay(channel, song, ctx.getEvent());
         return;
     }

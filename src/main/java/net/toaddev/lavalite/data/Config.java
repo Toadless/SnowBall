@@ -26,10 +26,11 @@ package net.toaddev.lavalite.data;
 
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.FileUtil;
-import net.toaddev.lavalite.util.Logger;
 import org.simpleyaml.configuration.file.FileConfiguration;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -45,6 +46,7 @@ public class Config
     // ################################################################################
     private File config;
     private String fileName;
+    private final Logger logger = LoggerFactory.getLogger(Config.class);
     public static Config INS;
     private String Prefix;
     private String Token;
@@ -95,11 +97,11 @@ public class Config
                 FileWriter fileWriter = new FileWriter(this.config.getName());
                 fileWriter.write(appConfig);
                 fileWriter.close();
-                Logger.warn("Config file created. Please insert your bot token.");
+                logger.warn("Config file created. Please insert your bot token.");
                 System.exit(0);
                 return;
             }
-            Logger.error("Invalid config file.");
+            logger.error("Invalid config file.");
             return;
         }
         this.Token = config.getString("credentials.discordBotToken");

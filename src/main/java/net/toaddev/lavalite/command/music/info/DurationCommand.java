@@ -30,12 +30,11 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
-import net.toaddev.lavalite.audio.PlayerManager;
-import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
-import net.toaddev.lavalite.util.FormatTime;
+import net.toaddev.lavalite.util.FormatTimeUtil;
 
 public class DurationCommand extends Command
 {
@@ -63,7 +62,7 @@ public class DurationCommand extends Command
             return;
         }
 
-        final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
+        final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
         if (audioPlayer.getPlayingTrack() == null)
         {
@@ -77,11 +76,11 @@ public class DurationCommand extends Command
         stringBuilder.append(" Song Duration >\n");
         stringBuilder.append("Current Track Position:\n");
         stringBuilder.append("# ");
-        stringBuilder.append(FormatTime.formatTime(musicManager.audioPlayer.getPlayingTrack().getPosition()));
+        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.audioPlayer.getPlayingTrack().getPosition()));
         stringBuilder.append("\n");
         stringBuilder.append("Duration Left:\n");
         stringBuilder.append("# ");
-        stringBuilder.append(FormatTime.formatTime(musicManager.audioPlayer.getPlayingTrack().getDuration() - musicManager.audioPlayer.getPlayingTrack().getPosition()));
+        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.audioPlayer.getPlayingTrack().getDuration() - musicManager.audioPlayer.getPlayingTrack().getPosition()));
         stringBuilder.append("\n");
         stringBuilder.append("```");
         channel.sendMessage(stringBuilder.toString()).queue();

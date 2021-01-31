@@ -24,11 +24,9 @@
 
 package net.toaddev.lavalite.command.fun;
 
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.utils.data.DataObject;
-import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.util.Http;
+import net.toaddev.lavalite.util.WebUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 
@@ -42,7 +40,7 @@ public class JokeCommand extends Command
     @Override
     public void run(@NotNull CommandEvent ctx)
     {
-        String joke = Http.getReq("http://api.icndb.com/jokes/random");
+        String joke = WebUtil.getReq("http://api.icndb.com/jokes/random");
         if (joke == null)
         {
             ctx.getChannel().sendMessage("Unable to request a joke.").queue();

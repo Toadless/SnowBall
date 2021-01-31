@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.toaddev.lavalite.audio.GuildMusicManager;
-import net.toaddev.lavalite.audio.PlayerManager;
+import net.toaddev.lavalite.modules.MusicModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.main.Launcher;
@@ -65,7 +65,7 @@ public class VoiceChannelCleanupAgent extends Thread
     {
         JDA jda = Launcher.getJda();
         jda.getGuilds().forEach((guild -> {
-            GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(guild);
+            GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(guild);
             VoiceChannel vc = guild.getAudioManager().getConnectedChannel();
             if (vc == null)
             {

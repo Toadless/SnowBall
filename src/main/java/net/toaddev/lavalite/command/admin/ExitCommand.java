@@ -29,7 +29,6 @@ import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
-import net.toaddev.lavalite.util.ExitCodes;
 
 public class ExitCommand extends Command
 {
@@ -43,6 +42,6 @@ public class ExitCommand extends Command
     public void run(@NotNull CommandEvent ctx)
     {
         ctx.getChannel().sendMessage("This will **shut down the whole bot**.").complete();
-        Launcher.shutdown(ExitCodes.EXIT_CODE_NORMAL);
+        Launcher.shutdown(0);
     }
 }

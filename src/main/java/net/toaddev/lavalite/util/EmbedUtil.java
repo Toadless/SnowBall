@@ -35,9 +35,9 @@ import java.awt.*;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-public class EmbedUtils
+public class EmbedUtil
 {
-    private EmbedUtils()
+    private EmbedUtil()
     {
         //Overrides the default, public, constructor
     }

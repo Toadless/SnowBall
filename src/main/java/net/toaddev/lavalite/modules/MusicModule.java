@@ -22,7 +22,7 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.audio;
+package net.toaddev.lavalite.modules;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -34,38 +34,47 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.lavalite.data.Constants;
+import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.exception.MusicException;
+import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.main.Launcher;
-import net.toaddev.lavalite.modules.DatabaseModule;
 import net.toaddev.lavalite.util.DiscordUtil;
-import net.toaddev.lavalite.util.FormatTime;
+import net.toaddev.lavalite.util.FormatTimeUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerManager
+public class MusicModule extends Module
 {
-    // ################################################################################
-    // ##                     Player Manager
-    // ################################################################################
-    private static PlayerManager INSTANCE;
-    private final Map<Long, GuildMusicManager> musicManagers;
-    private final AudioPlayerManager audioPlayerManager;
+    private Map<Long, GuildMusicManager> musicPlayers;
+    private AudioPlayerManager audioPlayerManager;
 
-    public PlayerManager()
+    @Override
+    public void onEnable()
     {
-        this.musicManagers = new HashMap<>();
+        this.musicPlayers = new HashMap<>();
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
     }
 
+    @Override
+    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event)
+    {
+        if (!event.getMember().equals(event.getGuild().getSelfMember()))
+        {
+            return;
+        }
+        getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+    }
+
     public GuildMusicManager getMusicManager(Guild guild)
     {
-        return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) ->
+        return this.musicPlayers.computeIfAbsent(guild.getIdLong(), (guildId) ->
         {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager, guild);
             guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
@@ -96,12 +105,12 @@ public class PlayerManager
             {
                 final List<AudioTrack> tracks = playlist.getTracks();
                 if (playlist.isSearchResult())
-                { // Adding a single song from search result
+                {
                     sendAddedEmbed(tracks.get(0), channel, event);
                     musicManager.scheduler.queue(tracks.get(0));
                 }
                 else
-                    { // Adding a whole playlist
+                {
                     channel.sendMessage("Adding to queue: `")
                             .append(String.valueOf(tracks.size()))
                             .append("` tracks from playlist `")
@@ -114,7 +123,6 @@ public class PlayerManager
                         musicManager.scheduler.queue(track);
                     }
                 }
-                return;
             }
 
             @Override
@@ -132,15 +140,6 @@ public class PlayerManager
         });
     }
 
-    public static PlayerManager getInstance()
-    {
-        if (INSTANCE == null)
-        {
-            INSTANCE = new PlayerManager();
-        }
-        return INSTANCE;
-    }
-
     /**
      *
      * @param track The audio track
@@ -153,8 +152,19 @@ public class PlayerManager
         embed.setAuthor("Added to queue", track.getInfo().uri, event.getAuthor().getAvatarUrl());
         embed.setDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")");
         embed.addField("**Channel**", track.getInfo().author, true);
-        embed.addField("**Song Duration**", FormatTime.formatTime(track.getDuration()), true);
+        embed.addField("**Song Duration**", FormatTimeUtil.formatTime(track.getDuration()), true);
         embed.setColor(DiscordUtil.getEmbedColor());
         channel.sendMessage(embed.build()).queue();
+    }
+
+    public static MusicModule getInstance()
+    {
+        return Launcher.getMusicModule();
+    }
+
+    @Override
+    public void onDisable()
+    {
+        this.musicPlayers.clear();
     }
 }
