@@ -22,13 +22,14 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.entities.module;
+package net.toaddev.lavalite.services;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.toaddev.lavalite.entities.exception.ModuleNotFoundException;
+import net.toaddev.lavalite.entities.module.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ *  This class loads all of the bots modules
+ */
 public class Modules
 {
     private static final String MODULE_PACKAGE = "net.toaddev.lavalite.modules";

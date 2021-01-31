@@ -115,6 +115,11 @@ public class SettingsModule extends Module
         return prefix;
     }
 
+    /**
+     *
+     * @param id The guilds id.
+     * @param prefix The guilds new prefix.
+     */
     public void setGuildPrefix(long id, String prefix)
     {
         if (!Config.INS.getDatabase())

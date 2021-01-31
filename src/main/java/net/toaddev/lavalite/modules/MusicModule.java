@@ -62,6 +62,13 @@ public class MusicModule extends Module
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
     }
 
+    /**
+     *
+     * @param event The event.
+     *
+     * This is only here to save bandwidth and to stop the player from playing
+     *
+     */
     @Override
     public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event)
     {
@@ -72,6 +79,11 @@ public class MusicModule extends Module
         getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
     }
 
+    /**
+     *
+     * @param guild The {@link net.dv8tion.jda.api.entities.Guild guild} to fetch the music manager from.
+     * @return The {@link GuildMusicManager musicManager}.
+     */
     public GuildMusicManager getMusicManager(Guild guild)
     {
         return this.musicPlayers.computeIfAbsent(guild.getIdLong(), (guildId) ->
@@ -157,6 +169,10 @@ public class MusicModule extends Module
         channel.sendMessage(embed.build()).queue();
     }
 
+    /**
+     *
+     * @return The instance of this class
+     */
     public static MusicModule getInstance()
     {
         return Launcher.getMusicModule();

@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- *  A class representing an event for a {@link CommandManager command}.
+ *  A class representing an event for a {@link Command command}.
  */
 public class CommandEvent
 {
@@ -52,8 +52,8 @@ public class CommandEvent
      *  Constructs a new {@link CommandEvent event}.
      *
      * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
-     * @param args The {@link EventListenerLite args} to use.
-     * @param prefix The {@link GuildRegistry prefix} to use.
+     * @param args The {@link net.toaddev.lavalite.modules.InteractionsModule args} to use.
+     * @param prefix The {@link net.toaddev.lavalite.modules.SettingsModule prefix} to use.
      */
     public CommandEvent(GuildMessageReceivedEvent event, String[] args, String prefix)
     {

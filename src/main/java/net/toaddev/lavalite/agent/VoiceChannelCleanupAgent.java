@@ -69,30 +69,15 @@ public class VoiceChannelCleanupAgent extends Thread
             VoiceChannel vc = guild.getAudioManager().getConnectedChannel();
             if (vc == null)
             {
-                return; // If there is no voice channel we dont want to check how many members is in the "voice channel".
+                return; // If we arent connected theres no point in checking.
             }
-            AtomicInteger humansInVC = getHumanMembersInVC(vc);
-            if (Integer.parseInt(String.valueOf(humansInVC)) == 0)
+            long humansInVC = vc.getMembers().stream().filter(member -> !member.getUser().isBot()).count();
+            if (humansInVC == 0)
             {
                 musicManager.audioPlayer.destroy();
                 AudioManager audioManager = guild.getAudioManager();
                 audioManager.closeAudioConnection();
-                log.info("Disconnect from one of " + guild.getName() + "'s voice channels because of inactivity.");
             }
         }));
-    }
-
-    private static AtomicInteger getHumanMembersInVC(VoiceChannel vc)
-    {
-        AtomicInteger members = new AtomicInteger();
-        vc.getMembers().forEach(member ->
-        {
-            if (member.getUser().isBot())
-            {
-                return;
-            }
-            members.getAndIncrement();
-        });
-        return members;
     }
 }

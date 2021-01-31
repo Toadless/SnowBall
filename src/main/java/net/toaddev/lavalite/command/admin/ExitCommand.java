@@ -36,6 +36,7 @@ public class ExitCommand extends Command
     {
         super("exit", null);
         addFlags(CommandFlag.DEVELOPER_ONLY);
+        addAlias("end", "shutdown");
     }
 
     @Override

@@ -32,7 +32,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
 import net.toaddev.lavalite.entities.module.Module;
-import net.toaddev.lavalite.entities.module.Modules;
+import net.toaddev.lavalite.services.Modules;
 import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.FileUtil;
 import org.slf4j.Logger;

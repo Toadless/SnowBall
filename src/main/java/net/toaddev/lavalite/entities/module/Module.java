@@ -25,6 +25,7 @@
 package net.toaddev.lavalite.entities.module;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.toaddev.lavalite.services.Modules;
 
 import java.util.Set;
 
