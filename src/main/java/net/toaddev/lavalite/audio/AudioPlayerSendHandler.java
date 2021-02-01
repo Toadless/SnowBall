@@ -38,6 +38,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler
     private final AudioPlayer audioPlayer;
     private final ByteBuffer buffer;
     private final MutableAudioFrame frame;
+
     public AudioPlayerSendHandler(AudioPlayer audioPlayer)
     {
         this.audioPlayer = audioPlayer;
@@ -45,16 +46,19 @@ public class AudioPlayerSendHandler implements AudioSendHandler
         this.frame = new MutableAudioFrame();
         this.frame.setBuffer(buffer);
     }
+
     @Override
     public boolean canProvide()
     {
         return this.audioPlayer.provide(this.frame);
     }
+
     @Override
     public ByteBuffer provide20MsAudio()
     {
         return this.buffer.flip();
     }
+
     @Override
     public boolean isOpus()
     {

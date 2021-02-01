@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.DiscordUtil;
 import net.toaddev.lavalite.util.FormatTimeUtil;
@@ -96,7 +97,8 @@ public class QueueCommand extends Command
         final int trackCount = Math.min(queue.size(), 20);
         final List<AudioTrack> trackList = new ArrayList<>(queue);
         EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Queue");
+        embed.setTitle("Queue for " + Launcher.getJda().getSelfUser().getName());
+
         embed.setColor(DiscordUtil.getEmbedColor());
         final AudioTrack currentTrack = audioPlayer.getPlayingTrack();
         final AudioTrackInfo currentTrackInfo = currentTrack.getInfo();

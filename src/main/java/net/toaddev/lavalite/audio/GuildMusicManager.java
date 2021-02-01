@@ -30,9 +30,6 @@ import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildMusicManager
 {
-    // ################################################################################
-    // ##                     Guild Music Manager
-    // ################################################################################
     public final AudioPlayer audioPlayer;
     public final TrackScheduler scheduler;
     private final AudioPlayerSendHandler sendHandler;

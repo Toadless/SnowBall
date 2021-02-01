@@ -129,8 +129,8 @@ public class MusicModule extends Module
                             .append(playlist.getName())
                             .append("`")
                             .queue();
-                    musicManager.scheduler.queue(tracks.get(0));
-                    for (final AudioTrack track: tracks)
+
+                    for (final AudioTrack track : tracks)
                     {
                         musicManager.scheduler.queue(track);
                     }

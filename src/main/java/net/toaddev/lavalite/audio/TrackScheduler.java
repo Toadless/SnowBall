@@ -36,13 +36,9 @@ import net.toaddev.lavalite.modules.MessageModule;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 
 public class TrackScheduler extends AudioEventAdapter
 {
-    // ################################################################################
-    // ##                     Track Scheduler
-    // ################################################################################
     public final AudioPlayer player;
     public final LinkedList<AudioTrack> queue;
     public final Guild guild;
@@ -65,7 +61,8 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void nextTrack()
     {
-        try {
+        try
+        {
             AudioTrack nextTrack = this.queue.poll();
             if (nextTrack == null)
             {
@@ -79,7 +76,8 @@ public class TrackScheduler extends AudioEventAdapter
                 return;
             }
             latestMessage.getChannel().sendMessage("Now playing: `" + nextTrack.getInfo().title + "`!").queue();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             throw new MusicException("Error skipping to next track.");
         }
     }

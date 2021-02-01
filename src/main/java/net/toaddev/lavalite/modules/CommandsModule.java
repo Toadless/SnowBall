@@ -47,7 +47,8 @@ public class CommandsModule extends Module
         scanCommands();
     }
 
-    public void scanCommands(){
+    public void scanCommands()
+    {
         LOG.info("Loading commands...");
         try(var result = new ClassGraph().acceptPackages(COMMANDS_PACKAGE).enableAnnotationInfo().scan())
         {
@@ -56,10 +57,12 @@ public class CommandsModule extends Module
                     .filter(Command.class::isAssignableFrom)
                     .map(clazz ->
                     {
-                        try{
+                        try
+                        {
                             return (Command) clazz.getDeclaredConstructor().newInstance();
                         }
-                        catch(Exception e){
+                        catch(Exception e)
+                        {
                             LOG.info("Error while registering command: '{}'", clazz.getSimpleName(), e);
                         }
                         return null;
@@ -69,7 +72,8 @@ public class CommandsModule extends Module
         }
         LOG.info("Loaded {} commands", this.commands.size());
 
-        new ArrayList<>(commands.entrySet()).forEach(stringCommandEntry -> {
+        new ArrayList<>(commands.entrySet()).forEach(stringCommandEntry ->
+        {
             stringCommandEntry.getValue().getAlias().forEach(s -> {
                 commands.put(s, commands.get(stringCommandEntry.getKey()));
             });

@@ -55,7 +55,8 @@ public class Modules
         loadModules();
     }
 
-    private void loadModules(){
+    private void loadModules()
+    {
         LOG.info("Loading modules...");
         try(var result = new ClassGraph().acceptPackages(MODULE_PACKAGE).scan())
         {
