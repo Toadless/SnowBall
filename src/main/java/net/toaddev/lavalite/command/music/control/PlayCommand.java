@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.entities.music.SearchProvider;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
@@ -86,19 +87,18 @@ public class PlayCommand extends Command
             final VoiceChannel memberChannel = memberVoiceState.getChannel();
             audioManager.openAudioConnection(memberChannel);
         }
+
+        SearchProvider searchProvider = SearchProvider.URL;
+
         String song = ctx.getArgs()[1];
         if (!MusicUtil.isUrl(song))
         {
-            if (songName == null)
-            {
-                channel.sendMessage("Please provide a query or url.").queue();
-                return;
-            }
-            song = "ytsearch:" + songName;
+            searchProvider = SearchProvider.YOUTUBE;
+            song = songName;
             channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         }
         MusicModule.getInstance()
-                .loadAndPlay(channel, song, ctx.getEvent());
+                .loadAndPlay(channel, song, ctx.getEvent(), searchProvider);
         return;
     }
 }

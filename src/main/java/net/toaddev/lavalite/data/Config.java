@@ -25,7 +25,7 @@
 package net.toaddev.lavalite.data;
 
 import net.toaddev.lavalite.main.Launcher;
-import net.toaddev.lavalite.util.FileUtil;
+import net.toaddev.lavalite.util.IOUtil;
 import org.simpleyaml.configuration.file.FileConfiguration;
 import org.simpleyaml.configuration.file.YamlConfiguration;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -92,7 +92,7 @@ public class Config
         {
             if (!this.config.exists())
             {
-                String appConfig = FileUtil.getResourceFileContents(Launcher.getExampleConfigFile());
+                String appConfig = IOUtil.getResourceFileContents(Launcher.getExampleConfigFile());
                 this.config.createNewFile();
                 FileWriter fileWriter = new FileWriter(this.config.getName());
                 fileWriter.write(appConfig);

@@ -34,7 +34,7 @@ import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
 import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.services.Modules;
 import net.toaddev.lavalite.modules.MusicModule;
-import net.toaddev.lavalite.util.FileUtil;
+import net.toaddev.lavalite.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.agent.ShardAgent;
@@ -119,14 +119,14 @@ public class Launcher
     }
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException
     {
-        String xml = FileUtil.getResourceFileContents("lavalite/lavalite.xml");
-        Document xmlDoc = FileUtil.convertStringToXMLDocument(xml);
+        String xml = IOUtil.getResourceFileContents("lavalite/lavalite.xml");
+        Document xmlDoc = IOUtil.convertStringToXMLDocument(xml);
 
-        version = FileUtil.getXmlVal(xmlDoc, "Version");
-        String configFile = FileUtil.getXmlVal(xmlDoc, "ConfigFile") + ".yml";
-        boolean bot = Boolean.parseBoolean(FileUtil.getXmlVal(xmlDoc, "Bot"));
-        boolean agents = Boolean.parseBoolean(FileUtil.getXmlVal(xmlDoc, "Agents"));
-        exampleConfigFile = FileUtil.getXmlVal(xmlDoc, "ExampleConfigFile");
+        version = IOUtil.getXmlVal(xmlDoc, "Version");
+        String configFile = IOUtil.getXmlVal(xmlDoc, "ConfigFile") + ".yml";
+        boolean bot = Boolean.parseBoolean(IOUtil.getXmlVal(xmlDoc, "Bot"));
+        boolean agents = Boolean.parseBoolean(IOUtil.getXmlVal(xmlDoc, "Agents"));
+        exampleConfigFile = IOUtil.getXmlVal(xmlDoc, "ExampleConfigFile");
 
         Config.init(configFile);
 

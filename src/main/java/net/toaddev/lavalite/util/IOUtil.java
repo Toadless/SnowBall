@@ -31,9 +31,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 
-public class FileUtil
+public class IOUtil
 {
-    private FileUtil()
+    private IOUtil()
     {
         //Overrides the default, public, constructor
     }
@@ -43,7 +43,7 @@ public class FileUtil
         InputStream file;
         try
         {
-            file = FileUtil.class.getClassLoader().getResourceAsStream(fileName);
+            file = IOUtil.class.getClassLoader().getResourceAsStream(fileName);
         }
         catch(Exception exception)
         {

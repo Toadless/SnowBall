@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.entities.module.Module;
+import net.toaddev.lavalite.entities.music.SearchProvider;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.DiscordUtil;
 import net.toaddev.lavalite.util.FormatTimeUtil;
@@ -100,10 +101,15 @@ public class MusicModule extends Module
      * @param trackUrl The track url that has been provided
      * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
      */
-    public void loadAndPlay(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event)
+    public void loadAndPlay(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event, SearchProvider searchProvider)
     {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
-        this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler()
+
+        final String track;
+
+        track = searchProvider.getSearchPrefix() + trackUrl; // This is how we set the song provider. URL, Youtube, Soundcloud
+
+        this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoadResultHandler()
         {
             @Override
             public void trackLoaded(AudioTrack track)
