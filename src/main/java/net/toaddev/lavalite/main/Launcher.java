@@ -24,6 +24,7 @@
 
 package net.toaddev.lavalite.main;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDAInfo;
@@ -69,6 +70,7 @@ public class Launcher
     private static Modules modules;
     private static MusicModule musicModule;
     private static String exampleConfigFile;
+    private static EventWaiter eventWaiter;
 
     private static String getVersionInfo()
     {
@@ -147,6 +149,8 @@ public class Launcher
         Constants.Init();
 
         DATABASE_ENABLED = Config.INS.getDatabase();
+
+        eventWaiter = new EventWaiter();
 
         modules = new Modules(getJda());
         musicModule = modules.get(MusicModule.class);
@@ -316,5 +320,10 @@ public class Launcher
     public static MusicModule getMusicModule()
     {
         return musicModule;
+    }
+
+    public static EventWaiter getEventWaiter()
+    {
+        return eventWaiter;
     }
 }

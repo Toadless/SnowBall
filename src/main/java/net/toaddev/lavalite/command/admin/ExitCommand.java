@@ -24,11 +24,19 @@
 
 package net.toaddev.lavalite.command.admin;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import net.dv8tion.jda.api.entities.Emote;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
+import net.toaddev.lavalite.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ExitCommand extends Command
 {
@@ -42,7 +50,30 @@ public class ExitCommand extends Command
     @Override
     public void run(@NotNull CommandEvent ctx)
     {
-        ctx.getChannel().sendMessage("This will **shut down the whole bot**.").complete();
-        Launcher.shutdown(0);
+        ctx.getChannel().sendMessage("This will **shut down the whole bot**.")
+                .queue(message -> {
+                    message.addReaction("\u2705").queue();
+                    message.addReaction("\u274c").queue();
+
+                    Launcher.getEventWaiter().waitForEvent(
+                            GuildMessageReactionAddEvent.class,
+                            (e) -> e.getMessageIdLong() == message.getIdLong() && !e.getUser().isBot() && DiscordUtil.isOwner(e.getUser()),
+                            (e) ->
+                            {
+                                if (e.getReaction().toString().contains("U+274c"))
+                                {
+                                    message.delete().queue();
+                                }
+                                else if (e.getReaction().toString().contains("U+2705"))
+                                {
+                                    message.delete().queue();
+                                    ctx.getChannel().sendMessage("Shutting down!").queue();
+                                    Launcher.shutdown(0);
+                                }
+                            },
+                            5L, TimeUnit.SECONDS,
+                            () -> ctx.getChannel().sendMessage("You took too long.").queue()
+                    );
+                });
     }
 }

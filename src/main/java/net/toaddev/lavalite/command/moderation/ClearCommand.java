@@ -69,7 +69,7 @@ public class ClearCommand extends Command
                     .flatMap(Message::delete)
                     .queue();
         } catch (IllegalArgumentException e) {
-            ctx.getChannel().sendMessage("I cant delete messages older than 2 weeks!").queue();
+            ctx.getChannel().sendMessage("I cant bulk delete messages older than 2 weeks!").queue();
         }
     }
 }

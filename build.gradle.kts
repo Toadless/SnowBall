@@ -22,6 +22,7 @@ val groovyVersion = "3.0.7"
 val mongoVersion = "3.12.7"
 val jsonVersion = "20180813"
 val caffeineVersion = "2.8.8"
+val utilsVersion = "3.0.5"
 
 dependencies {
     // logback
@@ -29,6 +30,7 @@ dependencies {
 
     // discord
     implementation("net.dv8tion:JDA:$jdaVersion")
+    implementation ("com.jagrosh:jda-utilities:$utilsVersion")
 
     // audio
     implementation ("com.sedmelluq:lavaplayer:$lavaplayerVersion")

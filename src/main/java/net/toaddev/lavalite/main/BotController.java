@@ -56,6 +56,7 @@ public class BotController extends Launcher
                         .setBulkDeleteSplittingEnabled(false)
                         .setCompression(Compression.NONE)
                         .addEventListeners(Launcher.getModules().getModules())
+                        .addEventListeners(Launcher.getEventWaiter())
                         .addEventListeners(shardListener);
                 if (Config.INS.getNumShards() > 1)
                 {
