@@ -26,16 +26,15 @@ package net.toaddev.lavalite.util;
 
 public class MusicUtil
 {
+    private static final String pattern = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+";
+
+    private MusicUtil()
+    {
+        //Overrides the default, public, constructor
+    }
+
     public static boolean isUrl(String url)
     {
-        boolean success;
-        String pattern = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+";
-        if (!url.isEmpty() && url.matches(pattern))
-        {
-            success = true;
-            return success;
-        }
-        success = false;
-        return success;
+        return url.matches(pattern);
     }
 }

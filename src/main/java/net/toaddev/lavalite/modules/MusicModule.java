@@ -109,53 +109,61 @@ public class MusicModule extends Module
 
         track = searchProvider.getSearchPrefix() + trackUrl; // This is how we set the song provider. URL, Youtube, Soundcloud
 
-        this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoadResultHandler()
+        try
         {
-            @Override
-            public void trackLoaded(AudioTrack track)
+            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoadResultHandler()
             {
-                musicManager.scheduler.queue(track);
-                sendAddedEmbed(track, channel, event);
-            }
-
-            @Override
-            public void playlistLoaded(AudioPlaylist playlist)
-            {
-                final List<AudioTrack> tracks = playlist.getTracks();
-                if (playlist.isSearchResult())
+                @Override
+                public void trackLoaded(AudioTrack track)
                 {
-                    sendAddedEmbed(tracks.get(0), channel, event);
-                    musicManager.scheduler.queue(tracks.get(0));
+                    musicManager.scheduler.queue(track);
+                    sendAddedEmbed(track, channel, event);
                 }
-                else
-                {
-                    channel.sendMessage("Adding to queue: `")
-                            .append(String.valueOf(tracks.size()))
-                            .append("` tracks from playlist `")
-                            .append(playlist.getName())
-                            .append("`")
-                            .queue();
 
-                    for (final AudioTrack track : tracks)
+                @Override
+                public void playlistLoaded(AudioPlaylist playlist)
+                {
+                    final List<AudioTrack> tracks = playlist.getTracks();
+                    if (playlist.isSearchResult())
                     {
-                        musicManager.scheduler.queue(track);
+                        sendAddedEmbed(tracks.get(0), channel, event);
+                        musicManager.scheduler.queue(tracks.get(0));
+                    }
+                    else
+                    {
+                        channel.sendMessage("Adding to queue: `")
+                                .append(String.valueOf(tracks.size()))
+                                .append("` tracks from playlist `")
+                                .append(playlist.getName())
+                                .append("`")
+                                .queue();
+
+                        for (final AudioTrack track : tracks)
+                        {
+                            musicManager.scheduler.queue(track);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void noMatches()
-            {
-                channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
-            }
+                @Override
+                public void noMatches()
+                {
+                    channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
+                }
 
-            @Override
-            public void loadFailed(FriendlyException exception)
-            {
-                channel.sendMessage(":x: Failed to load the provided song. Please try again").queue();
-                throw new MusicException("Failed to load a song");
-            }
-        });
+                @Override
+                public void loadFailed(FriendlyException exception)
+                {
+                    channel.sendMessage(":x: Failed to load the provided song. Please try again").queue();
+                    throw new MusicException("Failed to load a song");
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            channel.sendMessage("This is embarrassing. A wild exception has occurred. \n Exception: `" + e + "`. \n We are sorry for the inconvenience. If the exception persists please contact support.").queue();
+            throw new MusicException(e.toString());
+        }
     }
 
     /**
