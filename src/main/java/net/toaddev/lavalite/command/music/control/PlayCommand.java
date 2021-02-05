@@ -68,10 +68,10 @@ public class PlayCommand extends Command
         if (ctx.getArgs().length < 2)
         {
             final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-            if (musicManager.audioPlayer.getPlayingTrack() != null)
+            if (musicManager.getAudioPlayer().getPlayingTrack() != null)
             {
-                boolean paused = musicManager.scheduler.player.isPaused();
-                musicManager.scheduler.player.setPaused(!paused);
+                boolean paused = musicManager.getScheduler().player.isPaused();
+                musicManager.getScheduler().player.setPaused(!paused);
                 String status = paused ? "paused" : "playing";
                 String newStatus = !paused ? "paused" : "playing";
                 channel.sendMessage("Changed the player from **" + status+ "** to **" + newStatus + "**. \n This event occured because a song is and no arguments were provided!").queue();

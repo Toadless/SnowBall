@@ -75,8 +75,8 @@ public class LeaveCommand extends Command
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         AudioManager audioManager = ctx.getGuild().getAudioManager();
         audioManager.closeAudioConnection();
-        musicManager.scheduler.queue.clear();
-        musicManager.audioPlayer.stopTrack();
+        musicManager.getScheduler().getQueue().clear();
+        musicManager.getAudioPlayer().stopTrack();
         channel.sendMessage("Ive left the voice channel!").queue();
     }
 }

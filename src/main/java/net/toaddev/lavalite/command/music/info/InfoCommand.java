@@ -25,16 +25,22 @@
 package net.toaddev.lavalite.command.music.info;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
+import net.toaddev.lavalite.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.util.FormatTimeUtil;
+
+import java.util.Locale;
 
 public class InfoCommand extends Command
 {
@@ -62,46 +68,30 @@ public class InfoCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("I have no current song playing. No info to show.").queue();
             return;
         }
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("```md\n");
-        stringBuilder.append("< ");
-        stringBuilder.append(ctx.getGuild().getName());
-        stringBuilder.append(" Music Info >\n");
-        stringBuilder.append("Current Song:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.audioPlayer.getPlayingTrack().getInfo().title);
-        stringBuilder.append("\n");
-        stringBuilder.append("Queue size:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.scheduler.queue.size());
-        stringBuilder.append("\n");
-        stringBuilder.append("Current Track Position:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.audioPlayer.getPlayingTrack().getPosition()));
-        stringBuilder.append("\n");
-        stringBuilder.append("Duration Left:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.audioPlayer.getPlayingTrack().getDuration() - musicManager.audioPlayer.getPlayingTrack().getPosition()));
-        stringBuilder.append("\n");
-        stringBuilder.append("Looping:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.scheduler.repeating);
-        stringBuilder.append("\n");
-        stringBuilder.append("Volume:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.audioPlayer.getVolume());
-        stringBuilder.append("\n");
-        stringBuilder.append("Paused:\n");
-        stringBuilder.append("# ");
-        stringBuilder.append(musicManager.scheduler.player.isPaused());
-        stringBuilder.append("\n");
-        stringBuilder.append("```");
-        channel.sendMessage(stringBuilder.toString()).queue();
+
+        int queueDur;
+        queueDur = 0;
+
+        queueDur += musicManager.getScheduler().getQueue().stream().mapToInt(track -> (int) track.getDuration()).sum();
+
+        ctx.getChannel().sendMessage(new EmbedBuilder()
+                .setTitle(ctx.getGuild().getName() + " Music Info")
+                .addField("Current Song", musicManager.getAudioPlayer().getPlayingTrack().getInfo().title, true)
+                .addField("Current Song Pos", FormatTimeUtil.formatTime(musicManager.getAudioPlayer().getPlayingTrack().getPosition()), true)
+                .addBlankField(true)
+                .addField("Queue Size", String.valueOf(musicManager.getScheduler().getQueue().size()), true)
+                .addField("Queue Duration", FormatTimeUtil.formatTime(queueDur), true)
+                .addBlankField(true)
+                .addField("Looping", String.valueOf(musicManager.getScheduler().repeating).toUpperCase(), true)
+                .addField("Paused", String.valueOf(musicManager.getScheduler().player.isPaused()).toUpperCase(), true)
+                .addBlankField(true)
+                .setColor(DiscordUtil.getEmbedColor())
+                .build()).queue();
     }
 }

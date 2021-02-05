@@ -30,9 +30,10 @@ import net.dv8tion.jda.api.entities.Guild;
 
 public class GuildMusicManager
 {
-    public final AudioPlayer audioPlayer;
-    public final TrackScheduler scheduler;
+    private final AudioPlayer audioPlayer;
+    private final TrackScheduler scheduler;
     private final AudioPlayerSendHandler sendHandler;
+
     public GuildMusicManager(AudioPlayerManager manager, Guild guild)
     {
         this.audioPlayer = manager.createPlayer();
@@ -44,5 +45,15 @@ public class GuildMusicManager
     public AudioPlayerSendHandler getSendHandler()
     {
         return sendHandler;
+    }
+
+    public AudioPlayer getAudioPlayer()
+    {
+        return audioPlayer;
+    }
+
+    public TrackScheduler getScheduler()
+    {
+        return scheduler;
     }
 }

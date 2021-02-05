@@ -74,7 +74,7 @@ public class SeekCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("No current playing song.").queue();
@@ -89,12 +89,12 @@ public class SeekCommand extends Command
         {
             int amount = Integer.parseInt(ctx.getArgs()[1]);
             amount = (amount * 1000);
-            if (musicManager.scheduler.player.getPlayingTrack().getDuration() < Long.parseLong(String.valueOf(amount)))
+            if (musicManager.getScheduler().player.getPlayingTrack().getDuration() < Long.parseLong(String.valueOf(amount)))
             {
                 ctx.getChannel().sendMessage("The tracks duration is less than: `" + FormatTimeUtil.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
                 return;
             }
-            musicManager.scheduler.player.getPlayingTrack().setPosition(Long.parseLong(String.valueOf(amount)));
+            musicManager.getScheduler().player.getPlayingTrack().setPosition(Long.parseLong(String.valueOf(amount)));
             ctx.getChannel().sendMessage("The tracks position has been set to: `" + FormatTimeUtil.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
         } catch (NumberFormatException e)
         {

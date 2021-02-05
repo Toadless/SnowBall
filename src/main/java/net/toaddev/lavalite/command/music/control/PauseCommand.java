@@ -72,14 +72,14 @@ public class PauseCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("No current playing song.").queue();
             return;
         }
-        boolean paused = musicManager.scheduler.player.isPaused();
-        musicManager.scheduler.player.setPaused(!paused);
+        boolean paused = musicManager.getScheduler().player.isPaused();
+        musicManager.getScheduler().player.setPaused(!paused);
         String status = paused ? "paused" : "playing";
         String newStatus = !paused ? "paused" : "playing";
         channel.sendMessage("Changed the player from **" + status+ "** to **" + newStatus + "**.").queue();

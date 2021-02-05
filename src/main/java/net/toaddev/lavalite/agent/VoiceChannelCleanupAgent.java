@@ -74,7 +74,7 @@ public class VoiceChannelCleanupAgent extends Thread
             long humansInVC = vc.getMembers().stream().filter(member -> !member.getUser().isBot()).count();
             if (humansInVC == 0)
             {
-                musicManager.audioPlayer.destroy();
+                musicManager.getAudioPlayer().destroy();
                 AudioManager audioManager = guild.getAudioManager();
                 audioManager.closeAudioConnection();
             }

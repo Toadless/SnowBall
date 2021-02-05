@@ -73,13 +73,13 @@ public class ShuffleCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("No current playing song.").queue();
             return;
         }
-        musicManager.scheduler.shuffle();
+        musicManager.getScheduler().shuffle();
         channel.sendMessage("The queue has been shuffled.").queue();
     }
 }

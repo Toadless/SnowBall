@@ -72,13 +72,13 @@ public class RestartCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("No current playing song.").queue();
             return;
         }
-        musicManager.scheduler.player.getPlayingTrack().setPosition(0);
-        channel.sendMessage("Restarting the song: `" + musicManager.scheduler.player.getPlayingTrack().getInfo().title + "`.").queue();
+        musicManager.getScheduler().player.getPlayingTrack().setPosition(0);
+        channel.sendMessage("Restarting the song: `" + musicManager.getScheduler().player.getPlayingTrack().getInfo().title + "`.").queue();
     }
 }

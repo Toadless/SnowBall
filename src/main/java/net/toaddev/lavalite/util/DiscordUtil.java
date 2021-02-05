@@ -34,7 +34,7 @@ import net.toaddev.lavalite.data.Config;
 public class DiscordUtil
 {
     private static final Logger log = LoggerFactory.getLogger(DiscordUtil.class);
-    private static final int embedColor = 0xfc0303;
+    private static final int embedColor = 0x685985;
 
     private DiscordUtil() {
 
@@ -49,26 +49,12 @@ public class DiscordUtil
     {
         String userId = user.getId();
         String ownerId = getOwnerId();
-        if (userId.equals(ownerId))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return userId.equals(ownerId);
     }
 
     public static Boolean isServerAdmin(Member member)
     {
-        if (member.hasPermission(Permission.MANAGE_SERVER))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return member.hasPermission(Permission.MANAGE_SERVER);
     }
 
     public static int getEmbedColor()

@@ -73,13 +73,13 @@ public class SkipCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("No current playing song.").queue();
             return;
         }
-        musicManager.scheduler.nextTrack();
+        musicManager.getScheduler().nextTrack();
         channel.sendMessage("The player has skipped to the next song.").queue();
     }
 }

@@ -44,6 +44,7 @@ import net.toaddev.lavalite.entities.command.CommandEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 public class QueueCommand extends Command
 {
@@ -82,42 +83,61 @@ public class QueueCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
+
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("No current playing song.").queue();
             return;
         }
-        final Queue<AudioTrack> queue = musicManager.scheduler.queue;
+
+        final Queue<AudioTrack> queue = musicManager.getScheduler().getQueue();
+
         if (queue.isEmpty())
         {
             channel.sendMessage("The queue is empty.").queue();
             return;
         }
-        final int trackCount = Math.min(queue.size(), 20);
-        final List<AudioTrack> trackList = new ArrayList<>(queue);
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setTitle("Queue for " + Launcher.getJda().getSelfUser().getName());
 
-        embed.setColor(DiscordUtil.getEmbedColor());
-        final AudioTrack currentTrack = audioPlayer.getPlayingTrack();
-        final AudioTrackInfo currentTrackInfo = currentTrack.getInfo();
-        embed.addField("**Now Playing**", "\u200C", false);
-        String currentTrackField = ("by" + " " + currentTrackInfo.author + " `[" + FormatTimeUtil.formatTime(currentTrackInfo.length) + "]`");
-        embed.addField(currentTrackInfo.title, currentTrackField, false);
-        embed.addField("\u200C", "\u200C", false);
-        embed.addField("**Up Next:**", "\u200C", false);
-        for(int i = 0; i < trackCount; i++) {
-            final AudioTrack track = trackList.get(i);
-            final AudioTrackInfo info = track.getInfo();
-            String field1 = ("`" + String.valueOf(i + 1) + ".`" + " " + info.title);
-            String field2 = ("by" + " " + info.author + " `[" + FormatTimeUtil.formatTime(track.getDuration()) + "]`");
-            embed.addField(field1, field2, false);
+        AudioTrack currentTrack = musicManager.getAudioPlayer().getPlayingTrack();
+
+        List<String> tracks = musicManager.getScheduler().getQueue()
+                .stream()
+                .map(track -> track.getInfo().title + " by " + track.getInfo().author)
+                .collect(Collectors.toList());
+
+        int size = tracks.size();
+
+        tracks = tracks.subList(0, Math.min(size, 5));
+
+        String trackString = "";
+
+        if(currentTrack != null)
+        {
+            trackString += "Now Playing: " + currentTrack.getInfo().title + " by " + currentTrack.getInfo().author + "\n\n";
         }
-        if (trackList.size() > trackCount) {
-            embed.addBlankField(false);
-            embed.addField("\u200C", "And" + " `" + String.valueOf(trackList.size() - trackCount) + "` " + "more...", false);
+
+        if(!tracks.isEmpty())
+        {
+            trackString += "In the queue: \n" + String.join("\n\n", tracks);
         }
-        channel.sendMessage(embed.build()).queue();
+
+        if(size > 0)
+        {
+            trackString += "\n\n[" + (size - 4) + " more tracks]";
+        }
+
+        if(trackString.isBlank())
+        {
+            ctx.getChannel().sendMessage("Nothing is queued!").queue();
+            return;
+        }
+
+        ctx.getChannel().sendMessage(new EmbedBuilder()
+                .setTitle("Queue for " + ctx.getGuild().getName())
+                .setDescription(trackString)
+                .setColor(DiscordUtil.getEmbedColor())
+                .build())
+                .queue();
     }
 }

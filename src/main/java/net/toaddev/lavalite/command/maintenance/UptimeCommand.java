@@ -24,31 +24,36 @@
 
 package net.toaddev.lavalite.command.maintenance;
 
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.utils.MiscUtil;
-import net.toaddev.lavalite.entities.command.CommandFlag;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDAInfo;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.main.Launcher;
-import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.main.Launcher;
+import net.toaddev.lavalite.util.DiscordUtil;
 
-public class ShardsCommand extends Command
+import javax.annotation.Nonnull;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+public class UptimeCommand extends Command
 {
-    public ShardsCommand()
+    public UptimeCommand()
     {
-        super("shards", null);
+        super("uptime", null);
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@Nonnull CommandEvent ctx)
     {
-        int sID = MiscUtil.getShardForGuild(ctx.getGuild(), (int) Launcher.getAllShards());
-        sID++;
-        String str;
-        str = "\n\n```java\n";
-        str = str + "Total Shards:           " + Launcher.getAllShards() + "\n";
-        str = str + "Your Shard ID:          " + sID + "\n";
-        str = str + "```";
-        ctx.getChannel().sendMessage(str).queue();
+        Duration uptime = Duration.between(Launcher.getStartTimestamp(), LocalDateTime.now());
+        ctx.getChannel().sendMessage(new EmbedBuilder()
+                .setDescription(
+                        "Uptime: " + uptime.toDaysPart() +
+                                " days, " + uptime.toHoursPart() +
+                                " hours, " + uptime.toSecondsPart() +
+                                " seconds.")
+                .setColor(DiscordUtil.getEmbedColor())
+                .build())
+                .queue();
     }
 }

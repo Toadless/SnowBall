@@ -75,7 +75,7 @@ public class NowPlayingCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         final AudioTrack track = audioPlayer.getPlayingTrack();
         if (audioPlayer.getPlayingTrack() == null) {
             channel.sendMessage("No current playing song.").queue();

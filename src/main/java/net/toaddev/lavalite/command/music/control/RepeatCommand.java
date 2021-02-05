@@ -71,8 +71,8 @@ public class RepeatCommand extends Command
             return;
         }
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final boolean newRepeating = !musicManager.scheduler.repeating;
-        musicManager.scheduler.repeating = newRepeating;
+        final boolean newRepeating = !musicManager.getScheduler().repeating;
+        musicManager.getScheduler().repeating = newRepeating;
         channel.sendMessageFormat(":repeat: **%s!**", newRepeating ? "Enabled" : "Disabled").queue();
     }
 }

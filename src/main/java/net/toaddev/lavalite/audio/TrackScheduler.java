@@ -40,7 +40,7 @@ import java.util.LinkedList;
 public class TrackScheduler extends AudioEventAdapter
 {
     public final AudioPlayer player;
-    public final LinkedList<AudioTrack> queue;
+    private final LinkedList<AudioTrack> queue;
     public final Guild guild;
     public boolean repeating = false;
 
@@ -99,5 +99,10 @@ public class TrackScheduler extends AudioEventAdapter
             }
             nextTrack();
         }
+    }
+
+    public LinkedList<AudioTrack> getQueue()
+    {
+        return queue;
     }
 }

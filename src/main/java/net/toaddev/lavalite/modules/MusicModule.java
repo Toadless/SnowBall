@@ -82,7 +82,7 @@ public class MusicModule extends Module
         {
             return;
         }
-        getInstance().getMusicManager(event.getGuild()).audioPlayer.destroy();
+        getInstance().getMusicManager(event.getGuild()).getAudioPlayer().destroy();
     }
 
     /**
@@ -121,7 +121,7 @@ public class MusicModule extends Module
                 @Override
                 public void trackLoaded(AudioTrack track)
                 {
-                    musicManager.scheduler.queue(track);
+                    musicManager.getScheduler().queue(track);
                     sendAddedEmbed(track, channel, event);
                 }
 
@@ -132,7 +132,7 @@ public class MusicModule extends Module
                     if (playlist.isSearchResult())
                     {
                         sendAddedEmbed(tracks.get(0), channel, event);
-                        musicManager.scheduler.queue(tracks.get(0));
+                        musicManager.getScheduler().queue(tracks.get(0));
                     }
                     else
                     {
@@ -145,7 +145,7 @@ public class MusicModule extends Module
 
                         for (final AudioTrack track : tracks)
                         {
-                            musicManager.scheduler.queue(track);
+                            musicManager.getScheduler().queue(track);
                         }
                     }
                 }

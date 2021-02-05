@@ -72,8 +72,8 @@ public class StopCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        musicManager.scheduler.player.stopTrack();
-        musicManager.scheduler.queue.clear();
+        musicManager.getScheduler().player.stopTrack();
+        musicManager.getScheduler().getQueue().clear();
         channel.sendMessage("The player has stopped.").queue();
     }
 }

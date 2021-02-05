@@ -92,7 +92,7 @@ public class VolumeCommand extends Command
                     return;
                 }
                 final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-                final AudioPlayer audioPlayer = musicManager.audioPlayer;
+                final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
                 audioPlayer.setVolume(volume);
                 channel.sendMessageFormat("Set the volume to: %s", volume).queue();
             } catch (NumberFormatException e)

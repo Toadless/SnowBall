@@ -72,11 +72,11 @@ public class DestroyCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        musicManager.scheduler.player.stopTrack();
-        musicManager.scheduler.queue.clear();
+        musicManager.getScheduler().player.stopTrack();
+        musicManager.getScheduler().getQueue().clear();
         AudioManager audioManager = ctx.getGuild().getAudioManager();
         audioManager.closeAudioConnection();
-        musicManager.audioPlayer.destroy();
+        musicManager.getAudioPlayer().destroy();
         channel.sendMessage("The player has been destroyed.").queue();
     }
 }

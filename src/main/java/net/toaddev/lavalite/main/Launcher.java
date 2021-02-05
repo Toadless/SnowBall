@@ -49,6 +49,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -71,6 +72,7 @@ public class Launcher
     private static MusicModule musicModule;
     private static String exampleConfigFile;
     private static EventWaiter eventWaiter;
+    private static LocalDateTime startTimestamp;
 
     private static String getVersionInfo()
     {
@@ -121,6 +123,8 @@ public class Launcher
     }
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException
     {
+        startTimestamp = LocalDateTime.now();
+
         String xml = IOUtil.getResourceFileContents("lavalite/lavalite.xml");
         Document xmlDoc = IOUtil.convertStringToXMLDocument(xml);
 
@@ -172,8 +176,6 @@ public class Launcher
             shardAgent.setDaemon(true);
             shardAgent.start();
         }
-
-        logger.info("Active Threads:\t" + java.lang.Thread.activeCount());
     }
 
     private static void initBotShards()
@@ -325,5 +327,10 @@ public class Launcher
     public static EventWaiter getEventWaiter()
     {
         return eventWaiter;
+    }
+
+    public static LocalDateTime getStartTimestamp()
+    {
+        return startTimestamp;
     }
 }

@@ -66,8 +66,8 @@ public class ExitCommand extends Command
                                 }
                                 else if (e.getReaction().toString().contains("U+2705"))
                                 {
-                                    message.delete().queue();
-                                    ctx.getChannel().sendMessage("Shutting down!").queue();
+                                    message.clearReactions().queue();
+                                    message.editMessage("Shutting down").queue();
                                     Launcher.shutdown(0);
                                 }
                             },

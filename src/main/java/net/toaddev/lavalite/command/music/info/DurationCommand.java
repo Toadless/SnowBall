@@ -63,7 +63,7 @@ public class DurationCommand extends Command
         }
 
         final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-        final AudioPlayer audioPlayer = musicManager.audioPlayer;
+        final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
             channel.sendMessage("I have no current song playing. No info to show.").queue();
@@ -76,11 +76,11 @@ public class DurationCommand extends Command
         stringBuilder.append(" Song Duration >\n");
         stringBuilder.append("Current Track Position:\n");
         stringBuilder.append("# ");
-        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.audioPlayer.getPlayingTrack().getPosition()));
+        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.getAudioPlayer().getPlayingTrack().getPosition()));
         stringBuilder.append("\n");
         stringBuilder.append("Duration Left:\n");
         stringBuilder.append("# ");
-        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.audioPlayer.getPlayingTrack().getDuration() - musicManager.audioPlayer.getPlayingTrack().getPosition()));
+        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.getAudioPlayer().getPlayingTrack().getDuration() - musicManager.getAudioPlayer().getPlayingTrack().getPosition()));
         stringBuilder.append("\n");
         stringBuilder.append("```");
         channel.sendMessage(stringBuilder.toString()).queue();
