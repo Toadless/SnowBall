@@ -33,10 +33,10 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.music.SearchProvider;
+import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
-import net.toaddev.lavalite.util.MusicUtil;
 
 public class PlayCommand extends Command
 {
@@ -91,7 +91,7 @@ public class PlayCommand extends Command
         SearchProvider searchProvider = SearchProvider.URL;
 
         String song = ctx.getArgs()[1];
-        if (!MusicUtil.isUrl(song))
+        if (!Launcher.getMusicModule().isUrl(song))
         {
             searchProvider = SearchProvider.YOUTUBE;
             song = songName;
@@ -99,6 +99,5 @@ public class PlayCommand extends Command
         }
         MusicModule.getInstance()
                 .loadAndPlay(channel, song, ctx.getEvent(), searchProvider);
-        return;
     }
 }

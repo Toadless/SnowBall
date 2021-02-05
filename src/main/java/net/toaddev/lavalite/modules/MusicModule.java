@@ -48,11 +48,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class MusicModule extends Module
 {
     private Map<Long, GuildMusicManager> musicPlayers;
     private AudioPlayerManager audioPlayerManager;
+
+    private Pattern urlPattern;
 
     @Override
     public void onEnable()
@@ -61,6 +64,8 @@ public class MusicModule extends Module
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
+
+        this.urlPattern = Pattern.compile("^((?:https?:)?\\/\\/)?((?:www|m)\\.)?((?:youtube\\.com|youtu.be))(\\/(?:[\\w\\-]+\\?v=|embed\\/|v\\/)?)([\\w\\-]+)(\\S+)?$");
     }
 
     /**
@@ -183,6 +188,11 @@ public class MusicModule extends Module
         channel.sendMessage(embed.build()).queue();
     }
 
+    public boolean isUrl(String url)
+    {
+        return urlPattern.matcher(url).matches();
+    }
+
     /**
      *
      * @return The instance of this class
@@ -191,6 +201,8 @@ public class MusicModule extends Module
     {
         return Launcher.getMusicModule();
     }
+
+
 
     @Override
     public void onDisable()
