@@ -1,12 +1,11 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     application
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("org.springframework.boot") version "2.4.2"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
 group = "net.toaddev"
-version = "4.0.0"
+version = "4.0.5"
 
 repositories {
     jcenter()
@@ -15,7 +14,6 @@ repositories {
 }
 
 val jdaVersion = "4.2.0_223"
-val logbackVersion = "1.3.0-alpha5"
 val lavaplayerVersion = "1.3.67"
 val yamlVersion = "1.7.2"
 val groovyVersion = "3.0.7"
@@ -25,8 +23,8 @@ val caffeineVersion = "2.8.8"
 val utilsVersion = "3.0.5"
 
 dependencies {
-    // logback
-    implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    // spring boot
+    implementation ("org.springframework.boot:spring-boot-starter")
 
     // discord
     implementation("net.dv8tion:JDA:$jdaVersion")
@@ -53,18 +51,4 @@ dependencies {
 java {
     sourceCompatibility = JavaVersion.VERSION_15
     targetCompatibility = JavaVersion.VERSION_15
-}
-
-application {
-    mainClassName = "net.toaddev.lavalite.main.Launcher"
-}
-
-tasks {
-    named<ShadowJar>("shadowJar") {
-        archiveBaseName.set("app")
-        mergeServiceFiles()
-        manifest {
-            attributes(mapOf("Main-Class" to application.mainClassName))
-        }
-    }
 }

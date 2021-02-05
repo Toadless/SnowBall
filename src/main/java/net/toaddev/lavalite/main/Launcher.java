@@ -43,6 +43,7 @@ import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.event.ShardListener;
 import net.toaddev.lavalite.util.StatusUtil;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -53,6 +54,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SpringBootApplication
 public class Launcher
 {
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
