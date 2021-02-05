@@ -42,6 +42,7 @@ public class EvalCommand extends Command
         super("eval", null);
         addFlags(CommandFlag.DEVELOPER_ONLY);
         addSelfPermissions(Permission.MESSAGE_EMBED_LINKS);
+        addAlias("evaluate");
         this.engine = new GroovyShell();
         this.imports = "import java.io.*\n" +
                 "import java.lang.*\n" +
@@ -68,6 +69,9 @@ public class EvalCommand extends Command
         String messageArgs = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "eval" + " ", "");
         try
         {
+            Object out;
+            String status = "Success";
+
             engine.setProperty("args", messageArgs);
             engine.setProperty("event", ctx.getEvent());
             engine.setProperty("message", ctx.getMessage());
@@ -77,18 +81,28 @@ public class EvalCommand extends Command
             engine.setProperty("member", ctx.getMember());
 
             String script = imports + ctx.getMessage().getContentRaw().split("\\s+", 2)[1];
-            Object out = engine.evaluate(script);
 
-            ctx.getChannel().sendTyping().queue();
+            long start = System.currentTimeMillis();
 
-            String output = out == null ? "Executed without error" : out.toString();
+            try
+            {
+                out = engine.evaluate(script);
+            }
+            catch(Exception exception)
+            {
+                out = exception.getMessage();
+                status = "Failed";
+            }
 
-            EmbedBuilder embedBuilder = new EmbedBuilder()
+            ctx.getChannel().sendMessage(new EmbedBuilder()
+                    .setTitle("Evaluated Result")
+                    .addField("Status:", status, true)
+                    .addField("Duration:", (System.currentTimeMillis() - start) + "ms", true)
+                    .addField("Code:", "```java\n" + ctx.getMessage().getContentRaw().split("\\s+", 2)[1] + "\n```", false)
+                    .addField("Result:", out == null ? "No result." : out.toString(), false)
                     .setColor(DiscordUtil.getEmbedColor())
-                    .setTitle("Eval")
-                    .addField("**Input**", "```java\n" + messageArgs + "\n```", false)
-                    .addField("**Output**", "```java\n" + output + "```", false);
-            ctx.getChannel().sendMessage(embedBuilder.build()).queue();
+                    .build())
+                    .queue();
         }
         catch (Exception e)
         {

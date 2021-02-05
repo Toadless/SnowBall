@@ -26,58 +26,66 @@ package net.toaddev.lavalite.modules;
 
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ScanResult;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.module.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class CommandsModule extends Module
 {
     private static final Logger LOG = LoggerFactory.getLogger(CommandsModule.class);
     private static final String COMMANDS_PACKAGE = "net.toaddev.lavalite.command";
+    private ClassGraph classGraph;
     private Map<String, Command> commands;
 
     @Override
     public void onEnable()
     {
+        this.classGraph = new ClassGraph().acceptPackages(COMMANDS_PACKAGE);
+        this.commands = new HashMap<>();
+
         scanCommands();
     }
 
     public void scanCommands()
     {
         LOG.info("Loading commands...");
-        try(var result = new ClassGraph().acceptPackages(COMMANDS_PACKAGE).enableAnnotationInfo().scan())
-        {
-            this.commands = result.getSubclasses(Command.class.getName()).stream()
-                    .map(ClassInfo::loadClass)
-                    .filter(Command.class::isAssignableFrom)
-                    .map(clazz ->
-                    {
-                        try
-                        {
-                            return (Command) clazz.getDeclaredConstructor().newInstance();
-                        }
-                        catch(Exception e)
-                        {
-                            LOG.info("Error while registering command: '{}'", clazz.getSimpleName(), e);
-                        }
-                        return null;
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toMap(Command::getName, Function.identity()));
-        }
-        LOG.info("Loaded {} commands", this.commands.size());
 
-        new ArrayList<>(commands.entrySet()).forEach(stringCommandEntry ->
+        try(ScanResult result = classGraph.scan())
         {
-            stringCommandEntry.getValue().getAlias().forEach(s -> {
-                commands.put(s, commands.get(stringCommandEntry.getKey()));
-            });
-        });
+            for(ClassInfo clazz : result.getAllClasses())
+            {
+                Constructor<?>[] constructors = clazz.loadClass().getDeclaredConstructors();
+                if(constructors.length == 0)
+                {
+                    LOG.warn("No constructor found for Command class (" + clazz.getSimpleName() + ")!");
+                    continue;
+                }
+                if(constructors[0].getParameterCount() > 0)
+                {
+                    continue;
+                }
+                Object instance = constructors[0].newInstance();
+                if(!(instance instanceof Command))
+                {
+                    LOG.warn("Non Command class (" + clazz.getSimpleName() + ") found in commands package!");
+                    continue;
+                }
+                Command cmd = (Command) instance;
+                commands.put(cmd.getName(), cmd);
+                for(String alias : cmd.getAliases()) commands.put(alias, cmd);
+            }
+
+            LOG.info("Loaded {} commands", this.commands.size());
+        }
+        catch(Exception exception)
+        {
+            LOG.error("A exception occurred whilst loading commands. Exception: ", exception);
+        }
     }
 
     public Map<String, Command> getCommands()

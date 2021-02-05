@@ -202,7 +202,7 @@ public abstract class Command
         this.alias.addAll(List.of(alias));
     }
 
-    public List<String> getAlias()
+    public List<String> getAliases()
     {
         return this.alias;
     }
