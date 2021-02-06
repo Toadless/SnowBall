@@ -48,6 +48,7 @@ val jsonVersion = "20180813"
 val caffeineVersion = "2.8.8"
 val utilsVersion = "3.0.5"
 val springBootVersion = "2.1.8.RELEASE"
+val httpClientVersion = "4.9.0"
 
 dependencies {
     // spring boot
@@ -74,6 +75,7 @@ dependencies {
     // other
     implementation ("io.github.classgraph:classgraph:4.8.98")
     implementation ("com.github.ben-manes.caffeine:caffeine:2.8.8")
+    implementation ("com.squareup.okhttp3:okhttp:$httpClientVersion")
 }
 
 java {

@@ -24,14 +24,18 @@
 
 package net.toaddev.lavalite.main;
 
+import net.dv8tion.jda.api.GatewayEncoding;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.event.ShardListener;
+import net.toaddev.lavalite.services.Modules;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,13 +58,17 @@ public class BotController extends Launcher
                         .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,GatewayIntent.GUILD_EMOJIS)
                         .disableCache(CacheFlag.MEMBER_OVERRIDES)
                         .enableCache(CacheFlag.VOICE_STATE)
-                        .setActivity(Activity.playing("v" + Launcher.version + " " + "Starting"))
+                        .setActivity(Activity.playing("loading..."))
                         .setBulkDeleteSplittingEnabled(false)
                         .setCompression(Compression.NONE)
                         .addEventListeners(Launcher.getModules().getModules())
                         .addEventListeners(Launcher.getEventWaiter())
                         .addEventListeners(shardListener)
-                        .setMemberCachePolicy(MemberCachePolicy.ONLINE);
+                        .setMemberCachePolicy(MemberCachePolicy.VOICE)
+                        .setHttpClient(Launcher.getModules().getHttpClient())
+                        .setStatus(OnlineStatus.DO_NOT_DISTURB)
+                        .setGatewayEncoding(GatewayEncoding.ETF)
+                        .setChunkingFilter(ChunkingFilter.NONE);
                 if (Config.INS.getNumShards() > 1)
                 {
                     builder.useSharding(shardId, Config.INS.getMaxShards());

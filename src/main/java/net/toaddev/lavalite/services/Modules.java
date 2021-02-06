@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.toaddev.lavalite.entities.exception.ModuleNotFoundException;
 import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.util.ThreadFactoryHelper;
+import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,10 +54,12 @@ public class Modules
 
     private final JDA main;
     private final ScheduledExecutorService scheduler;
+    private final OkHttpClient httpClient;
     public final List<Module> modules;
 
     public Modules(JDA main){
         this.main = main;
+        this.httpClient = new OkHttpClient();
         this.modules = new LinkedList<>();
         this.scheduler = new ScheduledThreadPoolExecutor(2, new ThreadFactoryHelper());
         loadModules();
@@ -133,9 +136,12 @@ public class Modules
         }, initDelay, delay, timeUnit);
     }
 
-
     public Guild getGuildById(long guildId)
     {
         return getJDA().getGuildById(guildId);
+    }
+
+    public OkHttpClient getHttpClient(){
+        return this.httpClient;
     }
 }
