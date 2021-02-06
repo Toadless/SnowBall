@@ -55,9 +55,17 @@ public class BotController extends Launcher
             while (!success)
             {
                 JDABuilder builder = JDABuilder.createDefault(Config.INS.getToken())
-                        .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES,GatewayIntent.GUILD_EMOJIS)
-                        .disableCache(CacheFlag.MEMBER_OVERRIDES)
-                        .enableCache(CacheFlag.VOICE_STATE)
+                        .enableIntents(
+                                GatewayIntent.GUILD_MESSAGES,
+                                GatewayIntent.GUILD_VOICE_STATES,
+                                GatewayIntent.GUILD_EMOJIS
+                        )
+                        .disableCache(
+                                CacheFlag.MEMBER_OVERRIDES
+                        )
+                        .enableCache(
+                                CacheFlag.VOICE_STATE
+                        )
                         .setActivity(Activity.playing("loading..."))
                         .setBulkDeleteSplittingEnabled(false)
                         .setCompression(Compression.NONE)

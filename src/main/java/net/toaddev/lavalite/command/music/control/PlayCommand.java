@@ -99,6 +99,6 @@ public class PlayCommand extends Command
             channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         }
         MusicModule.getInstance()
-                .loadAndPlay(channel, song, ctx.getEvent(), searchProvider);
+                .loadAndPlay(channel, song, searchProvider, ctx);
     }
 }

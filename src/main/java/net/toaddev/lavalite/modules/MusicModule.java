@@ -39,7 +39,9 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
+import net.toaddev.lavalite.audio.AudioLoader;
 import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.entities.music.SearchProvider;
@@ -115,10 +117,10 @@ public class MusicModule extends Module
      *
      * @param channel The channel that the message took place in
      * @param trackUrl The track url that has been provided
-     * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
+
      * @param searchProvider The {@link SearchProvider searchProvider} to use.
      */
-    public void loadAndPlay(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event, SearchProvider searchProvider)
+    public void loadAndPlay(TextChannel channel, String trackUrl, SearchProvider searchProvider, CommandContext commandContext)
     {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
 
@@ -128,53 +130,7 @@ public class MusicModule extends Module
 
         try
         {
-            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoadResultHandler()
-            {
-                @Override
-                public void trackLoaded(AudioTrack track)
-                {
-                    musicManager.getScheduler().queue(track);
-                    sendAddedEmbed(track, channel, event);
-                }
-
-                @Override
-                public void playlistLoaded(AudioPlaylist playlist)
-                {
-                    final List<AudioTrack> tracks = playlist.getTracks();
-                    if (playlist.isSearchResult())
-                    {
-                        sendAddedEmbed(tracks.get(0), channel, event);
-                        musicManager.getScheduler().queue(tracks.get(0));
-                    }
-                    else
-                    {
-                        channel.sendMessage("Adding to queue: `")
-                                .append(String.valueOf(tracks.size()))
-                                .append("` tracks from playlist `")
-                                .append(playlist.getName())
-                                .append("`")
-                                .queue();
-
-                        for (final AudioTrack track : tracks)
-                        {
-                            musicManager.getScheduler().queue(track);
-                        }
-                    }
-                }
-
-                @Override
-                public void noMatches()
-                {
-                    channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
-                }
-
-                @Override
-                public void loadFailed(FriendlyException exception)
-                {
-                    channel.sendMessage(":x: Failed to load the provided song. Please try again").queue();
-                    throw new MusicException("Failed to load a song");
-                }
-            });
+            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoader(commandContext, this));
         }
         catch (Exception e)
         {
@@ -187,11 +143,9 @@ public class MusicModule extends Module
      *
      * @param channel The channel that the message took place in
      * @param trackUrl The track url that has been provided
-     * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
      * @param searchProvider The {@link SearchProvider searchProvider} to use.
-     * @param user The {@link User user} to use.
      */
-    public void loadAndPlayForList(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event, SearchProvider searchProvider, User user)
+    public void loadAndPlayForList(TextChannel channel, String trackUrl, SearchProvider searchProvider, CommandContext commandContext)
     {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
         final String track;
@@ -199,101 +153,7 @@ public class MusicModule extends Module
 
         try
         {
-            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoadResultHandler()
-            {
-                @Override
-                public void trackLoaded(AudioTrack track)
-                {
-                    musicManager.getScheduler().queue(track);
-                    sendAddedEmbed(track, channel, event);
-                }
-
-                @Override
-                public void playlistLoaded(AudioPlaylist playlist)
-                {
-                    final List<AudioTrack> tracks = playlist.getTracks();
-
-                    {
-                        EmbedBuilder embedBuilder = new EmbedBuilder();
-                        embedBuilder.setAuthor("Found " + tracks.size() + " tracks: ");
-
-                        {
-                            StringBuilder stringBuilder = new StringBuilder();
-                            int i = 0;
-
-                            for (AudioTrack trackFromList : tracks)
-                            {
-                                i++;
-                                stringBuilder
-                                        .append(i)
-                                        .append(". `")
-                                        .append(trackFromList.getInfo().title)
-                                        .append("` - [")
-                                        .append(FormatTimeUtil.formatTime(trackFromList.getDuration()))
-                                        .append("] \n");
-                            }
-
-                            embedBuilder
-                                    .setDescription(stringBuilder.toString())
-                                    .setColor(DiscordUtil.getEmbedColor())
-                                    .setTimestamp(Instant.now());
-
-                            channel.sendMessage(embedBuilder.build())
-                                    .queue(message -> {
-                                        Launcher.getEventWaiter().waitForEvent(
-                                                GuildMessageReceivedEvent.class,
-                                                (e) -> e.getMember().getIdLong() == user.getIdLong() && e.getGuild().getIdLong() == channel.getGuild().getIdLong() && e.getChannel().getIdLong() == channel.getIdLong(),
-                                                (e) ->
-                                                {
-                                                    String[] args = e.getMessage().getContentRaw().split("\\s+");
-                                                    try
-                                                    {
-                                                        int num = Integer.parseInt(args[0]);
-
-                                                        num = num - 1;
-
-                                                        if (tracks.get(num) == null)
-                                                        {
-                                                            channel.sendMessage("Invalid number!").queue();
-                                                            return;
-                                                        }
-
-                                                        try
-                                                        {
-                                                            sendAddedEmbed(tracks.get(num), channel, event);
-                                                            musicManager.getScheduler().queue(tracks.get(num));
-                                                        }
-                                                        catch (IndexOutOfBoundsException exe)
-                                                        {
-                                                            channel.sendMessage("Invalid number!").queue();
-                                                        }
-                                                    }
-                                                    catch (NumberFormatException ex)
-                                                    {
-                                                        channel.sendMessage("Invalid number.").queue();
-                                                    }
-                                                },
-                                                10L, TimeUnit.SECONDS,
-                                                () -> channel.sendMessage("You took too long.").queue()
-                                        );
-                                    });
-                        }
-                    }
-                }
-
-                @Override
-                public void noMatches()
-                {
-                    channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
-                }
-
-                @Override
-                public void loadFailed(FriendlyException exception)
-                {
-                    channel.sendMessage(":x: Failed to load the provided song. Please try again").queue();
-                    throw new MusicException("Failed to load a song");
-                }
-            });
+            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoader.AudioLoaderList(commandContext, this));
         }
         catch (Exception e)
         {

@@ -77,7 +77,7 @@ public class SoundCloud extends Command
         }
         channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         MusicModule.getInstance()
-                .loadAndPlay(channel, songName, ctx.getEvent(), SearchProvider.SOUNDCLOUD);
+                .loadAndPlay(channel, songName, SearchProvider.SOUNDCLOUD, ctx);
         return;
     }
 }

@@ -82,6 +82,6 @@ public class SearchCommand extends Command
         SearchProvider searchProvider = SearchProvider.YOUTUBE;
 
         MusicModule.getInstance()
-                .loadAndPlayForList(channel, songName, ctx.getEvent(), searchProvider, ctx.getMember().getUser());
+                .loadAndPlayForList(channel, songName, searchProvider, ctx);
     }
 }
