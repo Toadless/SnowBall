@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.Command;
 
+@net.toaddev.lavalite.annotation.Command
 public class HelpCommand extends Command
 {
     public HelpCommand()

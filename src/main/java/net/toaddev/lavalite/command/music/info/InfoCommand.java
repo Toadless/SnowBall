@@ -38,6 +38,7 @@ import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.util.FormatTimeUtil;
 
+@net.toaddev.lavalite.annotation.Command
 public class InfoCommand extends Command
 {
     public InfoCommand()

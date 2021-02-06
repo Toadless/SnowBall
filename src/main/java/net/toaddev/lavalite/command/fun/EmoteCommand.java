@@ -30,6 +30,7 @@ import net.toaddev.lavalite.entities.command.CommandContext;
 
 import javax.annotation.Nonnull;
 
+@net.toaddev.lavalite.annotation.Command
 public class EmoteCommand extends Command
 {
     public EmoteCommand()

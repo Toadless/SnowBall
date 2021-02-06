@@ -32,6 +32,7 @@ import net.toaddev.lavalite.modules.SettingsModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
+@net.toaddev.lavalite.annotation.Command
 public class PrefixCommand extends Command
 {
     public PrefixCommand()

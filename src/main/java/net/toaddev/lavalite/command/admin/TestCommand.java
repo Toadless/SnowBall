@@ -24,11 +24,14 @@
 
 package net.toaddev.lavalite.command.admin;
 
+import net.toaddev.lavalite.annotation.Ignore;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 
+@net.toaddev.lavalite.annotation.Command
+@Ignore
 public class TestCommand extends Command
 {
     public TestCommand()

@@ -28,6 +28,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.Compression;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.event.ShardListener;
@@ -58,7 +59,8 @@ public class BotController extends Launcher
                         .setCompression(Compression.NONE)
                         .addEventListeners(Launcher.getModules().getModules())
                         .addEventListeners(Launcher.getEventWaiter())
-                        .addEventListeners(shardListener);
+                        .addEventListeners(shardListener)
+                        .setMemberCachePolicy(MemberCachePolicy.ONLINE);
                 if (Config.INS.getNumShards() > 1)
                 {
                     builder.useSharding(shardId, Config.INS.getMaxShards());

@@ -32,6 +32,7 @@ import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.data.Config;
 
+@net.toaddev.lavalite.annotation.Command
 public class RegistryCommand extends Command
 {
     public RegistryCommand()

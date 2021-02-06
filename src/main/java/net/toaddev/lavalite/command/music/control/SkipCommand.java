@@ -35,6 +35,7 @@ import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
+@net.toaddev.lavalite.annotation.Command
 public class SkipCommand extends Command
 {
     public SkipCommand()

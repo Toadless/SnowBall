@@ -37,6 +37,7 @@ import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.exception.CommandErrorException;
 import net.toaddev.lavalite.util.FormatTimeUtil;
 
+@net.toaddev.lavalite.annotation.Command
 public class SeekCommand extends Command
 {
     public SeekCommand()

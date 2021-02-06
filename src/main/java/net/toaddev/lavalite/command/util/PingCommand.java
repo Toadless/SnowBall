@@ -29,6 +29,7 @@ import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 
+@net.toaddev.lavalite.annotation.Command
 public class PingCommand extends Command
 {
     public PingCommand()

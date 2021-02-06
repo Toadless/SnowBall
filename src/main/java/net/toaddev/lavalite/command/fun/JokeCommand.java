@@ -30,6 +30,7 @@ import net.toaddev.lavalite.util.WebUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
+@net.toaddev.lavalite.annotation.Command
 public class JokeCommand extends Command
 {
     public JokeCommand()

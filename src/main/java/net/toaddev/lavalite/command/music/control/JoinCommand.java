@@ -34,6 +34,7 @@ import net.toaddev.lavalite.entities.command.Command;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
+@net.toaddev.lavalite.annotation.Command
 public class JoinCommand extends Command
 {
     public JoinCommand()

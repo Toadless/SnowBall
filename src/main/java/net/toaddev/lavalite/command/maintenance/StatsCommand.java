@@ -32,6 +32,7 @@ import net.toaddev.lavalite.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
+@net.toaddev.lavalite.annotation.Command
 public class StatsCommand extends Command
 {
     public StatsCommand()

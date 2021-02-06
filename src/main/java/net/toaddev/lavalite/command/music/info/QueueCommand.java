@@ -43,8 +43,8 @@ import net.toaddev.lavalite.entities.command.CommandContext;
 import java.time.Instant;
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
+@net.toaddev.lavalite.annotation.Command
 public class QueueCommand extends Command
 {
     public QueueCommand()

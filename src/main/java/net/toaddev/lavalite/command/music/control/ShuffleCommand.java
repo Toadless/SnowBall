@@ -35,6 +35,7 @@ import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 
+@net.toaddev.lavalite.annotation.Command
 public class ShuffleCommand extends Command
 {
     public ShuffleCommand()

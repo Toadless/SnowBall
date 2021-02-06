@@ -1,7 +1,7 @@
 /*
- *  MIT License
+ * MIT License
  *
- *  Copyright (c) 2021 Toadless @ toaddev.net
+ * Copyright (c) 2021 Toadless @ toaddev.net
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of Lavalite and associated documentation files (the "Software"), to deal
@@ -22,30 +22,8 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.command.util;
+package net.toaddev.lavalite.annotation;
 
-import net.toaddev.lavalite.entities.command.Command;
-import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandContext;
-import net.toaddev.lavalite.data.Constants;
-
-@net.toaddev.lavalite.annotation.Command
-public class InviteCommand extends Command
+public @interface Ignore
 {
-
-    public InviteCommand()
-    {
-        super("invite", null);
-    }
-
-    @Override
-    public void run(@NotNull CommandContext ctx)
-    {
-        if (!Constants.invite)
-        {
-            return;
-        }
-        String str = "https://discord.com/api/oauth2/authorize?client_id=" + ctx.getJDA().getSelfUser().getId() + "&permissions=267911025&scope=bot";
-        ctx.getChannel().sendMessageFormat("My invite: %s", str).queue();
-    }
 }

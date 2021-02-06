@@ -30,6 +30,7 @@ import net.toaddev.lavalite.main.Launcher;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
+@net.toaddev.lavalite.annotation.Command
 public class ReviveCommand extends Command
 {
     public ReviveCommand()

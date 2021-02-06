@@ -37,6 +37,7 @@ import javax.script.ScriptEngineManager;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@net.toaddev.lavalite.annotation.Command
 public class EvalCommand extends Command
 {
     private final ScriptEngine SCRIPT_ENGINE;

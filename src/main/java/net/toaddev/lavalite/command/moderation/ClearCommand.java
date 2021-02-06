@@ -35,6 +35,7 @@ import net.toaddev.lavalite.entities.command.CommandFlag;
 import javax.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
 
+@net.toaddev.lavalite.annotation.Command
 public class ClearCommand extends Command
 {
     public ClearCommand()

@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.util.FormatTimeUtil;
 
+@net.toaddev.lavalite.annotation.Command
 public class DurationCommand extends Command
 {
     public DurationCommand()

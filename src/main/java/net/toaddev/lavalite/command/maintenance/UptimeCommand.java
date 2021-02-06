@@ -34,6 +34,7 @@ import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+@net.toaddev.lavalite.annotation.Command
 public class UptimeCommand extends Command
 {
     public UptimeCommand()

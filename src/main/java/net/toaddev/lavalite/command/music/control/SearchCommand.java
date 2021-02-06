@@ -38,6 +38,7 @@ import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 
+@net.toaddev.lavalite.annotation.Command
 public class SearchCommand extends Command
 {
     public SearchCommand()

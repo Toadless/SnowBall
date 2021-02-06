@@ -34,6 +34,7 @@ import net.toaddev.lavalite.entities.command.CommandContext;
 
 import java.util.concurrent.TimeUnit;
 
+@net.toaddev.lavalite.annotation.Command
 public class ExitCommand extends Command
 {
     public ExitCommand()

@@ -27,6 +27,7 @@ package net.toaddev.lavalite.modules;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
+import net.toaddev.lavalite.annotation.Ignore;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.module.Module;
 import org.slf4j.Logger;
@@ -48,6 +49,8 @@ public class CommandsModule extends Module
         this.classGraph = new ClassGraph().acceptPackages(COMMANDS_PACKAGE);
         this.commands = new HashMap<>();
 
+        this.classGraph.enableAnnotationInfo();
+
         scanCommands();
     }
 
@@ -59,6 +62,16 @@ public class CommandsModule extends Module
         {
             for(ClassInfo clazz : result.getAllClasses())
             {
+                if (!clazz.hasAnnotation(net.toaddev.lavalite.annotation.Command.class.getName()))
+                {
+                    LOG.warn("Non Command class (" + clazz.getSimpleName() + ") found in commands package!");
+                    continue;
+                }
+
+                if (clazz.hasAnnotation(Ignore.class.getName()))
+                {
+                    continue;
+                }
                 Constructor<?>[] constructors = clazz.loadClass().getDeclaredConstructors();
                 if(constructors.length == 0)
                 {

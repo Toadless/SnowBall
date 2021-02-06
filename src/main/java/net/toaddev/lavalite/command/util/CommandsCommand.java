@@ -37,7 +37,7 @@ import net.toaddev.lavalite.entities.command.CommandContext;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@net.toaddev.lavalite.annotation.Command
 public class CommandsCommand extends Command
 {
     public CommandsCommand()
