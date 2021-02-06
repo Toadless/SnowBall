@@ -1,7 +1,7 @@
 /*
- *  MIT License
+ * MIT License
  *
- *  Copyright (c) 2021 Toadless @ toaddev.net
+ * Copyright (c) 2021 Toadless @ toaddev.net
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of Lavalite and associated documentation files (the "Software"), to deal
@@ -30,26 +30,29 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.music.SearchProvider;
+import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandContext;
 
-public class SoundCloud extends Command
+public class SearchCommand extends Command
 {
-    public SoundCloud() {
-        super("soundcloud", "Plays music from soundcloud");
+    public SearchCommand()
+    {
+        super("search", "Searches for a list of songs.");
+        addAlias("find");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("sc");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx)
     {
-        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "soundcloud" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "sc" + " ", "");
+        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "search" + " ", "");
+        songName = songName.replaceFirst("^" + ctx.getPrefix() + "find" + " ", "");
         final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -64,7 +67,7 @@ public class SoundCloud extends Command
 
         if (ctx.getArgs().length < 2)
         {
-            channel.sendMessage("Please provide a search query.").queue();
+            channel.sendMessage("Please provide a url or search query.").queue();
             return;
         }
 
@@ -74,9 +77,10 @@ public class SoundCloud extends Command
             final VoiceChannel memberChannel = memberVoiceState.getChannel();
             audioManager.openAudioConnection(memberChannel);
         }
-        channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
+
+        SearchProvider searchProvider = SearchProvider.YOUTUBE;
+
         MusicModule.getInstance()
-                .loadAndPlay(channel, songName, ctx.getEvent(), SearchProvider.SOUNDCLOUD);
-        return;
+                .loadAndPlayForList(channel, songName, ctx.getEvent(), searchProvider, ctx.getMember().getUser());
     }
 }

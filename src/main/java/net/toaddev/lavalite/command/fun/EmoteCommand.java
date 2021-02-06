@@ -26,7 +26,7 @@ package net.toaddev.lavalite.command.fun;
 
 import net.dv8tion.jda.api.entities.Emote;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 import javax.annotation.Nonnull;
 
@@ -38,7 +38,7 @@ public class EmoteCommand extends Command
     }
 
     @Override
-    public void run(@Nonnull CommandEvent ctx)
+    public void run(@Nonnull CommandContext ctx)
     {
         if (!ctx.getMessage().getEmotes().isEmpty())
         {

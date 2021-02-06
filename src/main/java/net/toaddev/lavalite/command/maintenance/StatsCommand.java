@@ -30,7 +30,7 @@ import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 public class StatsCommand extends Command
 {
@@ -40,7 +40,7 @@ public class StatsCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         ctx.getChannel().sendMessage(new EmbedBuilder()
                 .setTitle(ctx.getJDA().getSelfUser().getAsTag() + " information")

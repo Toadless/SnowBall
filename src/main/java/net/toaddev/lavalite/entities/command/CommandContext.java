@@ -37,7 +37,7 @@ import java.util.List;
 /**
  *  A class representing an event for a {@link Command command}.
  */
-public class CommandEvent
+public class CommandContext
 {
     private final GuildMessageReceivedEvent event;
     private final JDA jda;
@@ -49,13 +49,13 @@ public class CommandEvent
     private final Guild guild;
 
     /**
-     *  Constructs a new {@link CommandEvent event}.
+     *  Constructs a new {@link CommandContext event}.
      *
      * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
      * @param args The {@link net.toaddev.lavalite.modules.InteractionsModule args} to use.
      * @param prefix The {@link net.toaddev.lavalite.modules.SettingsModule prefix} to use.
      */
-    public CommandEvent(GuildMessageReceivedEvent event, String[] args, String prefix)
+    public CommandContext(GuildMessageReceivedEvent event, String[] args, String prefix)
     {
         this.event = event;
         this.jda = event.getJDA();
@@ -116,7 +116,7 @@ public class CommandEvent
 
     /**
      *
-     * @return The {@link net.dv8tion.jda.api.entities.Member member} for this {@link CommandEvent event}.
+     * @return The {@link net.dv8tion.jda.api.entities.Member member} for this {@link CommandContext event}.
      *
      * @throws java.lang.NullPointerException if the member is null.
      */

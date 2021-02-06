@@ -26,11 +26,9 @@ package net.toaddev.lavalite.modules;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.main.Launcher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class InteractionsModule extends Module
 {
@@ -80,7 +78,7 @@ public class InteractionsModule extends Module
             return;
         }
 
-        CommandEvent commandEvent = new CommandEvent(event, args, prefix);
+        CommandContext commandEvent = new CommandContext(event, args, prefix);
         command.process(commandEvent);
     }
 }

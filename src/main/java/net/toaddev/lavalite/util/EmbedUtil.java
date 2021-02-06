@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.main.Launcher;
 
 import java.awt.*;
@@ -58,7 +58,7 @@ public class EmbedUtil
                 .setTimestamp(Instant.now()));
     }
 
-    public static void sendDisabledError(CommandEvent ctx)
+    public static void sendDisabledError(CommandContext ctx)
     {
         sendDeletingEmbed(ctx.getChannel(), new EmbedBuilder()
                 .setDescription("This command is currently disabled!")

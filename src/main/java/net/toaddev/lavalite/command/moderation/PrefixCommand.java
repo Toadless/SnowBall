@@ -30,7 +30,7 @@ import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.DatabaseModule;
 import net.toaddev.lavalite.modules.SettingsModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 public class PrefixCommand extends Command
 {
@@ -41,7 +41,7 @@ public class PrefixCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         long guildId = Long.parseLong(ctx.getGuild().getId());
         if (!Launcher.DATABASE_ENABLED)

@@ -36,7 +36,7 @@ import net.toaddev.lavalite.entities.music.SearchProvider;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 public class PlayCommand extends Command
 {
@@ -49,7 +49,7 @@ public class PlayCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "play" + " ", "");
         songName = songName.replaceFirst("^" + ctx.getPrefix() + "p" + " ", "");

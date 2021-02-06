@@ -32,7 +32,7 @@ import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class CommandsCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         StringBuilder helpString = new StringBuilder();
         helpString.append("```md\n");

@@ -27,7 +27,7 @@ package net.toaddev.lavalite.command.admin;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.data.Config;
@@ -41,7 +41,7 @@ public class RegistryCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         if (!Config.INS.getDevelopment())
         {

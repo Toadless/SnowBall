@@ -24,9 +24,8 @@
 
 package net.toaddev.lavalite.command.admin;
 
-import net.dv8tion.jda.api.Permission;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 
@@ -38,7 +37,7 @@ public class TestCommand extends Command
         addFlags(CommandFlag.DISABLED);
     }
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         ctx.getChannel().sendMessage("Test indeed").queue();
     }

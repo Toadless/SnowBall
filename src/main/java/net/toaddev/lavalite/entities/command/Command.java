@@ -71,10 +71,10 @@ public abstract class Command
      * <p>
      * This will consider the {@link CommandFlag flags} of this {@link net.toaddev.lavalite.modules.CommandsModule command}
      * <p>
-     * This will only {@link #run(CommandEvent) run} the command if all checks pass.
+     * This will only {@link #run(CommandContext) run} the command if all checks pass.
      * @param event The command event to process with.
      */
-    public void process(CommandEvent event)
+    public void process(CommandContext event)
     {
         if (hasFlag(CommandFlag.DISABLED))
         {
@@ -147,9 +147,9 @@ public abstract class Command
 
     /**
      *
-     * @param ctx The {@link CommandEvent event} to use.
+     * @param ctx The {@link CommandContext event} to use.
      */
-    public abstract void run(@Nonnull CommandEvent ctx);
+    public abstract void run(@Nonnull CommandContext ctx);
 
     /**
      * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.toaddev.lavalite.modules.CommandsModule command} {@link net.dv8tion.jda.api.entities.Member author} to execute.

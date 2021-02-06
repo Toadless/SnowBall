@@ -30,7 +30,7 @@ import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -67,7 +67,7 @@ public class EvalCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         if (ctx.getArgs().length < 2)
         {

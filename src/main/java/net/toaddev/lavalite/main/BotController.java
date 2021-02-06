@@ -38,6 +38,7 @@ public class BotController extends Launcher
 {
     private static final Logger log = LoggerFactory.getLogger(BotController.class);
     private final int shardId;
+
     public BotController(int shardId)
     {
         this.shardId = shardId;

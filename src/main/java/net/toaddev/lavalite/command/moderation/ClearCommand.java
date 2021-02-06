@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageHistory;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.CommandFlag;
 
 import javax.annotation.Nonnull;
@@ -47,7 +47,7 @@ public class ClearCommand extends Command
     }
 
     @Override
-    public void run(@Nonnull CommandEvent ctx)
+    public void run(@Nonnull CommandContext ctx)
     {
         if (ctx.getArgs().length < 2)
         {

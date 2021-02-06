@@ -25,9 +25,8 @@
 package net.toaddev.lavalite.command.maintenance;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDAInfo;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.DiscordUtil;
 
@@ -43,7 +42,7 @@ public class UptimeCommand extends Command
     }
 
     @Override
-    public void run(@Nonnull CommandEvent ctx)
+    public void run(@Nonnull CommandContext ctx)
     {
         Duration uptime = Duration.between(Launcher.getStartTimestamp(), LocalDateTime.now());
         ctx.getChannel().sendMessage(new EmbedBuilder()

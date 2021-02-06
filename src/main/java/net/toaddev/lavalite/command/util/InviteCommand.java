@@ -24,10 +24,9 @@
 
 package net.toaddev.lavalite.command.util;
 
-import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.data.Constants;
 
 public class InviteCommand extends Command
@@ -39,7 +38,7 @@ public class InviteCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         if (!Constants.invite)
         {

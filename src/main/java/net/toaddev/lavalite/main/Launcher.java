@@ -83,17 +83,15 @@ public class Launcher
         String startTime = format.format(new Date());
         int Cores = Runtime.getRuntime().availableProcessors();
         String versionInfo = new StringBuilder()
-                .append(indentation + "Version:        ") .append(Launcher.version + "\n")
-                .append(indentation + "Development:    ") .append(Config.INS.getDevelopment() + "\n")
-                .append(indentation + "Cores:          ") .append(Cores + "\n")
-                .append(indentation + "Author:         ") .append("Toadless" + "\n")
-                .append(indentation + "StartTime:      ") .append(startTime + "\n")
-                .append(indentation + "JVM:            ") .append(System.getProperty("java.version") + "\n")
-                .append(indentation + "Lavaplayer      ") .append(PlayerLibrary.VERSION + "\n")
-                .append(indentation + "JDA             ") .append(JDAInfo.VERSION + "\n")
+                .append(indentation + "Version:        ").append(Launcher.version + "\n")
+                .append(indentation + "Cores:          ").append(Cores + "\n")
+                .append(indentation + "Author:         ").append("Toadless" + "\n")
+                .append(indentation + "StartTime:      ").append(startTime + "\n")
+                .append(indentation + "JVM:            ").append(System.getProperty("java.version") + "\n")
+                .append(indentation + "Lavaplayer      ").append(PlayerLibrary.VERSION + "\n")
+                .append(indentation + "JDA             ").append(JDAInfo.VERSION + "\n")
                 .append("\n")
-                .toString()
-        ;
+                .toString();
         if (vanity)
         {
             versionInfo =

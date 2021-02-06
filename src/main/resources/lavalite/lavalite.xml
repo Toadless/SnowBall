@@ -22,7 +22,7 @@
   ~ SOFTWARE
   -->
 <LavaLite>
-    <Version>4.0.8</Version>
+    <Version>4.1.0</Version>
 
     <ConfigFile>application</ConfigFile>
     <ExampleConfigFile>lavalite/example.application.yml</ExampleConfigFile>

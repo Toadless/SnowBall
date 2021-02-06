@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.utils.data.DataObject;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.util.WebUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 public class JokeCommand extends Command
 {
@@ -38,7 +38,7 @@ public class JokeCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         String joke = WebUtil.getReq("http://api.icndb.com/jokes/random");
         if (joke == null)

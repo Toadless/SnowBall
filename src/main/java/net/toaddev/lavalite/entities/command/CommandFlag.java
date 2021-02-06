@@ -32,13 +32,13 @@ public enum CommandFlag
     /**
      * If the {@link net.toaddev.lavalite.modules.CommandsModule command} can only be used by developers.
      *
-     * @see CommandEvent#isDeveloper().
+     * @see CommandContext#isDeveloper().
      */
     DEVELOPER_ONLY,
     /**
      * If the {@link net.toaddev.lavalite.modules.CommandsModule command} can only be used by server admins.
      *
-     * @see CommandEvent#isServerAdmin().
+     * @see CommandContext#isServerAdmin().
      */
     SERVER_ADMIN_ONLY,
     /**

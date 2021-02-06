@@ -24,12 +24,10 @@
 
 package net.toaddev.lavalite.command.maintenance;
 
-import net.dv8tion.jda.api.Permission;
-import net.toaddev.lavalite.entities.command.CommandFlag;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandEvent;
+import net.toaddev.lavalite.entities.command.CommandContext;
 
 public class VersionCommand extends Command
 {
@@ -39,7 +37,7 @@ public class VersionCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandEvent ctx)
+    public void run(@NotNull CommandContext ctx)
     {
         ctx.getChannel().sendMessage("v" + Launcher.version).queue();
     }
