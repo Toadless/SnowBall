@@ -30,8 +30,6 @@ config:
   development:          false                      # Only true if is in development
 
   prefix:               ';;'                       # Bots prefix
-  game:                 'Lavalite | ;;help'        # What the bots playing
-  status:               'playing'                  # The status type "playing" or "listening" or "watching" or "competing"
   ownerid:              '582560658575589381'       # The bots owner id
   shardStart:           0                          # Leave this at zero unless you know what you are doing and hosting over multiple servers
   shardCount:           1                          # The number of shards this bot supports. Leave at one unless you know what you are doing.

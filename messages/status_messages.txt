@@ -1,0 +1,6 @@
+watching you 👀
+watching ${total_guilds} guilds 👀
+watching ${total_users} users 👀
+playing JDA
+watching JDA
+watching Discord

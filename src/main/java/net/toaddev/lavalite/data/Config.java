@@ -52,8 +52,6 @@ public class Config
     private String Token;
     private Boolean Development;
     private String OwnerID;
-    private String Game;
-    private String Status;
     private Boolean Invite;
     private String Join;
     private int numShards;
@@ -108,8 +106,6 @@ public class Config
         this.Prefix = config.getString("config.prefix");
         this.Development = config.getBoolean("config.development");
         this.OwnerID = config.getString("config.ownerid");
-        this.Game = config.getString("config.game");
-        this.Status = config.getString("config.status");
         this.Invite = config.getBoolean("config.invite");
         this.Join = config.getString("config.join");
         this.numShards = config.getInt("config.shardCount");
@@ -154,24 +150,6 @@ public class Config
     public String getOwnerID()
     {
         return OwnerID;
-    }
-
-    /**
-     *
-     * @return The discord bots status
-     */
-    public String getGame()
-    {
-        return Game;
-    }
-
-    /**
-     *
-     * @return The discord bots status type
-     */
-    public String getStatus()
-    {
-        return Status;
     }
 
     /**

@@ -40,7 +40,6 @@ import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.event.ShardListener;
-import net.toaddev.lavalite.util.StatusUtil;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -175,7 +174,6 @@ public class Launcher
 
         /* Init JDA */
         initBotShards();
-        StatusUtil.SetActivity(jda);
 
         logger.info("You can safely ignore the big red warning about illegal reflection.");
     }

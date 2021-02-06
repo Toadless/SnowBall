@@ -30,12 +30,17 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.toaddev.lavalite.entities.exception.ModuleNotFoundException;
 import net.toaddev.lavalite.entities.module.Module;
+import net.toaddev.lavalite.util.ThreadFactoryHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -47,11 +52,13 @@ public class Modules
     private static final Logger LOG = LoggerFactory.getLogger(Modules.class);
 
     private final JDA main;
+    private final ScheduledExecutorService scheduler;
     public final List<Module> modules;
 
     public Modules(JDA main){
         this.main = main;
         this.modules = new LinkedList<>();
+        this.scheduler = new ScheduledThreadPoolExecutor(2, new ThreadFactoryHelper());
         loadModules();
     }
 
@@ -114,6 +121,18 @@ public class Modules
     {
         return this.main;
     }
+
+    public ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long initDelay, long delay, TimeUnit timeUnit){
+        return this.scheduler.scheduleAtFixedRate(() -> {
+            try{
+                runnable.run();
+            }
+            catch(Exception e){
+                LOG.error("Unexpected error in scheduler", e);
+            }
+        }, initDelay, delay, timeUnit);
+    }
+
 
     public Guild getGuildById(long guildId)
     {

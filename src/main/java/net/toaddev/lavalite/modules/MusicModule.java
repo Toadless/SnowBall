@@ -116,6 +116,7 @@ public class MusicModule extends Module
      * @param channel The channel that the message took place in
      * @param trackUrl The track url that has been provided
      * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
+     * @param searchProvider The {@link SearchProvider searchProvider} to use.
      */
     public void loadAndPlay(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event, SearchProvider searchProvider)
     {
@@ -182,21 +183,18 @@ public class MusicModule extends Module
         }
     }
 
-
-
-
     /**
      *
      * @param channel The channel that the message took place in
      * @param trackUrl The track url that has been provided
      * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
+     * @param searchProvider The {@link SearchProvider searchProvider} to use.
+     * @param user The {@link User user} to use.
      */
     public void loadAndPlayForList(TextChannel channel, String trackUrl, GuildMessageReceivedEvent event, SearchProvider searchProvider, User user)
     {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
-
         final String track;
-
         track = searchProvider.getSearchPrefix() + trackUrl; // This is how we set the song provider. URL, Youtube, Soundcloud
 
         try
@@ -250,25 +248,25 @@ public class MusicModule extends Module
                                                     String[] args = e.getMessage().getContentRaw().split("\\s+");
                                                     try
                                                     {
-                                                       int num = Integer.parseInt(args[0]);
+                                                        int num = Integer.parseInt(args[0]);
 
-                                                       num = num - 1;
+                                                        num = num - 1;
 
-                                                       if (tracks.get(num) == null)
-                                                       {
-                                                           channel.sendMessage("Invalid number!").queue();
-                                                           return;
-                                                       }
+                                                        if (tracks.get(num) == null)
+                                                        {
+                                                            channel.sendMessage("Invalid number!").queue();
+                                                            return;
+                                                        }
 
-                                                       try
-                                                       {
-                                                           sendAddedEmbed(tracks.get(num), channel, event);
-                                                           musicManager.getScheduler().queue(tracks.get(num));
-                                                       }
-                                                       catch (IndexOutOfBoundsException exe)
-                                                       {
-                                                           channel.sendMessage("Invalid number!").queue();
-                                                       }
+                                                        try
+                                                        {
+                                                            sendAddedEmbed(tracks.get(num), channel, event);
+                                                            musicManager.getScheduler().queue(tracks.get(num));
+                                                        }
+                                                        catch (IndexOutOfBoundsException exe)
+                                                        {
+                                                            channel.sendMessage("Invalid number!").queue();
+                                                        }
                                                     }
                                                     catch (NumberFormatException ex)
                                                     {
@@ -303,14 +301,6 @@ public class MusicModule extends Module
             throw new MusicException(e.toString());
         }
     }
-
-
-
-
-
-
-
-
 
     /**
      *

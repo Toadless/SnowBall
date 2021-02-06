@@ -24,15 +24,23 @@
 
 package net.toaddev.lavalite.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class IOUtil
 {
+    private static final Logger LOG = LoggerFactory.getLogger(IOUtil.class);
+
     private IOUtil()
     {
         //Overrides the default, public, constructor
@@ -99,5 +107,31 @@ public class IOUtil
     public static String getXmlVal(Document xmlDoc, String xmlVal)
     {
         return xmlDoc.getElementsByTagName(xmlVal).item(0).getFirstChild().getNodeValue();
+    }
+
+    public static List<String> loadMessageFile(String fileName)
+    {
+        var file = new File("messages/" + fileName + "_messages.txt");
+        try
+        {
+            InputStream inputStream = new FileInputStream(file);
+            var reader = new BufferedReader(new InputStreamReader((inputStream), StandardCharsets.UTF_8));
+            List<String> set = new ArrayList<>();
+            try{
+                String line;
+                while((line = reader.readLine()) != null){
+                    set.add(line);
+                }
+                reader.close();
+            }
+            catch(IOException e){
+                LOG.error("Error reading message file", e);
+            }
+            return set;
+        } catch (FileNotFoundException e)
+        {
+            LOG.error("Message file not found");
+            return Collections.emptyList();
+        }
     }
 }

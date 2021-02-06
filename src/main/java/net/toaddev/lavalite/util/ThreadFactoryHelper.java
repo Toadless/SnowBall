@@ -1,7 +1,7 @@
 /*
- *  MIT License
+ * MIT License
  *
- *  Copyright (c) 2021 Toadless @ toaddev.net
+ * Copyright (c) 2021 Toadless @ toaddev.net
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of Lavalite and associated documentation files (the "Software"), to deal
@@ -22,16 +22,23 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.data;
+package net.toaddev.lavalite.util;
 
-public class Constants
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ThreadFactory;
+
+public class ThreadFactoryHelper implements ThreadFactory
 {
-    public static String GUILD_PREFIX;
-    public static String ownerid;
-    public static Boolean invite;
-    public static void Init()
-    {
-        GUILD_PREFIX = Config.INS.getPrefix();
-        ownerid = Config.INS.getOwnerID();
+    private static final Logger LOG = LoggerFactory.getLogger(ThreadFactoryHelper.class);
+
+    @Override
+    public Thread newThread(@NotNull Runnable r){
+        var thread = new Thread(r, "Lavalite Scheduler");
+        thread.setDaemon(true);
+        thread.setUncaughtExceptionHandler((t, e) -> LOG.error("Caught an unexpected Exception in scheduler", e));
+        return thread;
     }
 }
