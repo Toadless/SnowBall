@@ -26,6 +26,7 @@ package net.toaddev.lavalite.command.music.info;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -35,9 +36,11 @@ import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.DiscordUtil;
+import net.toaddev.lavalite.util.FormatTimeUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -95,45 +98,42 @@ public class QueueCommand extends Command
             return;
         }
 
-        AudioTrack currentTrack = musicManager.getAudioPlayer().getPlayingTrack();
+        final StringBuilder stringBuilder = new StringBuilder();
 
-        List<String> tracks = musicManager.getScheduler().getQueue()
-                .stream()
-                .map(track -> track.getInfo().title + " by " + track.getInfo().author)
-                .collect(Collectors.toList());
+        List<AudioTrack> tracks = musicManager.getScheduler().getQueue();
+        final int size = tracks.size();
+        final int trackCount = Math.min(size, 20);
 
-        int size = tracks.size();
-
-        tracks = tracks.subList(0, Math.min(size, 5));
-
-        String trackString = "";
-
-        if(currentTrack != null)
         {
-            trackString += "Now Playing: " + currentTrack.getInfo().title + " by " + currentTrack.getInfo().author + "\n\n";
-        }
+            for (int i = 0; i < trackCount; i++)
+            {
+                final AudioTrack track = tracks.get(i);
+                final AudioTrackInfo info = track.getInfo();
+                stringBuilder
+                        .append(i + 1)
+                        .append(". `")
+                        .append(info.title)
+                        .append("` - [")
+                        .append(FormatTimeUtil.formatTime(track.getDuration()))
+                        .append("] \n");
+            }
 
-        if(!tracks.isEmpty())
-        {
-            trackString += "In the queue: \n" + String.join("\n\n", tracks);
-        }
+            if (size > trackCount)
+            {
+                stringBuilder.append("And `" + (size - trackCount) + "` more...");
+            }
 
-        if(size > 0)
-        {
-            trackString += "\n\n[" + (size - 4) + " more tracks]";
-        }
+            EmbedBuilder embedBuilder = new EmbedBuilder();
 
-        if(trackString.isBlank())
-        {
-            ctx.getChannel().sendMessage("Nothing is queued!").queue();
-            return;
-        }
+            {
+                embedBuilder
+                        .setAuthor("Currently " + tracks.size() + " tracks are queued: ")
+                        .setDescription(stringBuilder.toString())
+                        .setColor(DiscordUtil.getEmbedColor())
+                        .setTimestamp(Instant.now());
+            }
 
-        ctx.getChannel().sendMessage(new EmbedBuilder()
-                .setTitle("Queue for " + ctx.getGuild().getName())
-                .setDescription(trackString)
-                .setColor(DiscordUtil.getEmbedColor())
-                .build())
-                .queue();
+            channel.sendMessage(embedBuilder.build()).queue();
+        }
     }
 }

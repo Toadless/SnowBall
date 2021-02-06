@@ -244,7 +244,7 @@ public class MusicModule extends Module
                                     .queue(message -> {
                                         Launcher.getEventWaiter().waitForEvent(
                                                 GuildMessageReceivedEvent.class,
-                                                (e) -> e.getMember().getIdLong() == user.getIdLong(),
+                                                (e) -> e.getMember().getIdLong() == user.getIdLong() && e.getGuild().getIdLong() == channel.getGuild().getIdLong() && e.getChannel().getIdLong() == channel.getIdLong(),
                                                 (e) ->
                                                 {
                                                     String[] args = e.getMessage().getContentRaw().split("\\s+");
