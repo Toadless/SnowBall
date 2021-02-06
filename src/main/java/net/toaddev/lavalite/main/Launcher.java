@@ -31,18 +31,19 @@ import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
 import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.services.Modules;
 import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.toaddev.lavalite.agent.ShardAgent;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.event.ShardListener;
 import net.toaddev.lavalite.util.StatusUtil;
+import org.springframework.boot.Banner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -53,6 +54,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@SpringBootApplication
 public class Launcher
 {
     public static final Logger logger = LoggerFactory.getLogger(Launcher.class);
@@ -121,8 +123,25 @@ public class Launcher
         vanity = vanity.replace("d", defaultC);
         return vanity;
     }
+
+
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException
     {
+        var javaVersionMajor = Runtime.version().feature();
+        if (javaVersionMajor != 15)
+        {
+            logger.warn("\n\t\t __      ___   ___ _  _ ___ _  _  ___ \n" +
+                    "\t\t \\ \\    / /_\\ | _ \\ \\| |_ _| \\| |/ __|\n" +
+                    "\t\t  \\ \\/\\/ / _ \\|   / .` || || .` | (_ |\n" +
+                    "\t\t   \\_/\\_/_/ \\_\\_|_\\_|\\_|___|_|\\_|\\___|\n" +
+                    "\t\t                                      ");
+            logger.warn("Lavalite only officially supports Java 15. You are running Java {}", Runtime.version());
+        }
+
+        var sa = new SpringApplication(Launcher.class);
+        sa.setBannerMode(Banner.Mode.OFF);
+        sa.run(args);
+
         startTimestamp = LocalDateTime.now();
 
         String xml = IOUtil.getResourceFileContents("lavalite/lavalite.xml");
@@ -130,8 +149,6 @@ public class Launcher
 
         version = IOUtil.getXmlVal(xmlDoc, "Version");
         String configFile = IOUtil.getXmlVal(xmlDoc, "ConfigFile") + ".yml";
-        boolean bot = Boolean.parseBoolean(IOUtil.getXmlVal(xmlDoc, "Bot"));
-        boolean agents = Boolean.parseBoolean(IOUtil.getXmlVal(xmlDoc, "Agents"));
         exampleConfigFile = IOUtil.getXmlVal(xmlDoc, "ExampleConfigFile");
 
         Config.init(configFile);
@@ -148,7 +165,6 @@ public class Launcher
             return;
         }
         logger.info(getVersionInfo());
-        logger.info("Starting lavalite v" + version + ".");
 
         Constants.Init();
 
@@ -159,23 +175,11 @@ public class Launcher
         modules = new Modules(getJda());
         musicModule = modules.get(MusicModule.class);
 
-        if (bot)
-        {
-            /* Init JDA */
-            initBotShards();
-            StatusUtil.SetActivity(jda);
-        }
+        /* Init JDA */
+        initBotShards();
+        StatusUtil.SetActivity(jda);
 
-        if (agents)
-        {
-            VoiceChannelCleanupAgent voiceChannelCleanupAgent = new VoiceChannelCleanupAgent();
-            voiceChannelCleanupAgent.setDaemon(true);
-            voiceChannelCleanupAgent.start();
-
-            ShardAgent shardAgent = new ShardAgent();
-            shardAgent.setDaemon(true);
-            shardAgent.start();
-        }
+        logger.info("You can safely ignore the big red warning about illegal reflection.");
     }
 
     private static void initBotShards()

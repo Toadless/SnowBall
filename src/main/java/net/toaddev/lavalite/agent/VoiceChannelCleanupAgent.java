@@ -33,17 +33,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.lavalite.main.Launcher;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class VoiceChannelCleanupAgent extends Thread
 {
     private static final Logger log = LoggerFactory.getLogger(VoiceChannelCleanupAgent.class);
     private static final int INTERVAL_MILLIS = 60000;
+    private static boolean running = true;
+
     @Override
     public void run()
     {
         log.info("Started VoiceChannelCleanupAgent");
-        while (true)
+        while (running)
         {
             try
             {
@@ -61,6 +61,7 @@ public class VoiceChannelCleanupAgent extends Thread
             }
         }
     }
+
     private static void cleanup()
     {
         JDA jda = Launcher.getJda();
@@ -79,5 +80,10 @@ public class VoiceChannelCleanupAgent extends Thread
                 audioManager.closeAudioConnection();
             }
         }));
+    }
+
+    public void exit()
+    {
+        running = false;
     }
 }

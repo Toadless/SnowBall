@@ -24,7 +24,6 @@
 
 package net.toaddev.lavalite.command.admin;
 
-import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.toaddev.lavalite.entities.command.CommandFlag;
@@ -33,17 +32,26 @@ import net.toaddev.lavalite.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandEvent;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class EvalCommand extends Command
 {
-    private GroovyShell engine;
+    private final ScriptEngine SCRIPT_ENGINE;
     private final String imports;
+
+    private final ExecutorService EVAL_EXECUTOR;
+
     public EvalCommand()
     {
         super("eval", null);
         addFlags(CommandFlag.DEVELOPER_ONLY);
         addSelfPermissions(Permission.MESSAGE_EMBED_LINKS);
         addAlias("evaluate");
-        this.engine = new GroovyShell();
+        this.EVAL_EXECUTOR = Executors.newFixedThreadPool(4);
+        this.SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("groovy");
         this.imports = "import java.io.*\n" +
                 "import java.lang.*\n" +
                 "import java.util.*\n" +
@@ -69,40 +77,42 @@ public class EvalCommand extends Command
         String messageArgs = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "eval" + " ", "");
         try
         {
-            Object out;
-            String status = "Success";
+            EVAL_EXECUTOR.submit(() -> {
+                Object out;
+                String status = "Success";
 
-            engine.setProperty("args", messageArgs);
-            engine.setProperty("event", ctx.getEvent());
-            engine.setProperty("message", ctx.getMessage());
-            engine.setProperty("channel", ctx.getChannel());
-            engine.setProperty("jda", ctx.getJDA());
-            engine.setProperty("guild", ctx.getGuild());
-            engine.setProperty("member", ctx.getMember());
+                SCRIPT_ENGINE.put("args", messageArgs);
+                SCRIPT_ENGINE.put("event", ctx.getEvent());
+                SCRIPT_ENGINE.put("message", ctx.getMessage());
+                SCRIPT_ENGINE.put("channel", ctx.getChannel());
+                SCRIPT_ENGINE.put("jda", ctx.getJDA());
+                SCRIPT_ENGINE.put("guild", ctx.getGuild());
+                SCRIPT_ENGINE.put("member", ctx.getMember());
 
-            String script = imports + ctx.getMessage().getContentRaw().split("\\s+", 2)[1];
+                String script = imports + ctx.getMessage().getContentRaw().split("\\s+", 2)[1];
 
-            long start = System.currentTimeMillis();
+                long start = System.currentTimeMillis();
 
-            try
-            {
-                out = engine.evaluate(script);
-            }
-            catch(Exception exception)
-            {
-                out = exception.getMessage();
-                status = "Failed";
-            }
+                try
+                {
+                    out = SCRIPT_ENGINE.eval(script);
+                }
+                catch(Exception exception)
+                {
+                    out = exception.getMessage();
+                    status = "Failed";
+                }
 
-            ctx.getChannel().sendMessage(new EmbedBuilder()
-                    .setTitle("Evaluated Result")
-                    .addField("Status:", status, true)
-                    .addField("Duration:", (System.currentTimeMillis() - start) + "ms", true)
-                    .addField("Code:", "```java\n" + ctx.getMessage().getContentRaw().split("\\s+", 2)[1] + "\n```", false)
-                    .addField("Result:", out == null ? "No result." : out.toString(), false)
-                    .setColor(DiscordUtil.getEmbedColor())
-                    .build())
-                    .queue();
+                ctx.getChannel().sendMessage(new EmbedBuilder()
+                        .setTitle("Evaluated Result")
+                        .addField("Status:", status, true)
+                        .addField("Duration:", (System.currentTimeMillis() - start) + "ms", true)
+                        .addField("Code:", "```java\n" + ctx.getMessage().getContentRaw().split("\\s+", 2)[1] + "\n```", false)
+                        .addField("Result:", out == null ? "No result." : out.toString(), false)
+                        .setColor(DiscordUtil.getEmbedColor())
+                        .build())
+                        .queue();
+            });
         }
         catch (Exception e)
         {

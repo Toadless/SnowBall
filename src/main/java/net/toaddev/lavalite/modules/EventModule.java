@@ -26,9 +26,11 @@ package net.toaddev.lavalite.modules;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
+import net.toaddev.lavalite.agent.ShardAgent;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.entities.module.Module;
@@ -39,6 +41,14 @@ public class EventModule extends Module
 {
     public static JDA jda;
     public static final Logger log = LoggerFactory.getLogger(EventModule.class);
+
+    @Override
+    public void onReady(ReadyEvent event)
+    {
+        ShardAgent shardAgent = new ShardAgent();
+        shardAgent.setDaemon(true);
+        shardAgent.start();
+    }
 
     @Override
     public void onGuildJoin(GuildJoinEvent event)

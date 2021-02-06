@@ -36,6 +36,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.entities.module.Module;
@@ -55,6 +56,8 @@ public class MusicModule extends Module
     private Map<Long, GuildMusicManager> musicPlayers;
     private AudioPlayerManager audioPlayerManager;
 
+    private VoiceChannelCleanupAgent voiceChannelCleanupAgent;
+
     private Pattern urlPattern;
 
     @Override
@@ -64,6 +67,10 @@ public class MusicModule extends Module
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
+
+        voiceChannelCleanupAgent = new VoiceChannelCleanupAgent();
+        voiceChannelCleanupAgent.setDaemon(true);
+        voiceChannelCleanupAgent.start();
 
         this.urlPattern = Pattern.compile("^((?:https?:)?\\/\\/)?((?:www|m)\\.)?((?:youtube\\.com|youtu.be))(\\/(?:[\\w\\-]+\\?v=|embed\\/|v\\/)?)([\\w\\-]+)(\\S+)?$");
     }
@@ -202,11 +209,10 @@ public class MusicModule extends Module
         return Launcher.getMusicModule();
     }
 
-
-
     @Override
     public void onDisable()
     {
         this.musicPlayers.clear();
+        voiceChannelCleanupAgent.exit();
     }
 }
