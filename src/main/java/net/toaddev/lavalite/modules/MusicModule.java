@@ -24,22 +24,17 @@
 
 package net.toaddev.lavalite.modules;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
-import net.toaddev.lavalite.audio.AudioLoader;
+import net.toaddev.lavalite.entities.music.AudioLoader;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.exception.MusicException;
@@ -50,11 +45,8 @@ import net.toaddev.lavalite.util.DiscordUtil;
 import net.toaddev.lavalite.util.FormatTimeUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.time.Instant;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 public class MusicModule extends Module

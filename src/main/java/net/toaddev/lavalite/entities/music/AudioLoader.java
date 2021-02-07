@@ -22,7 +22,7 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.audio;
+package net.toaddev.lavalite.entities.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.main.Launcher;
@@ -48,23 +49,17 @@ import static net.toaddev.lavalite.modules.MusicModule.sendAddedEmbed;
 
 public class AudioLoader implements AudioLoadResultHandler
 {
-    private final CommandContext ctx;
-    private final MusicModule musicModule;
     private final GuildMusicManager musicManager;
 
     private final TextChannel channel;
     private final GuildMessageReceivedEvent event;
-    private final User user;
 
     public AudioLoader(CommandContext ctx, MusicModule musicModule)
     {
-        this.ctx = ctx;
-        this.musicModule = musicModule;
         this.musicManager = musicModule.getMusicManager(ctx.getGuild());
 
         this.channel = ctx.getChannel();
         this.event = ctx.getEvent();
-        this.user = ctx.getMember().getUser();
     }
 
     @Override
@@ -161,6 +156,8 @@ public class AudioLoader implements AudioLoadResultHandler
                                 .append("] \n");
                     }
 
+                    stringBuilder.append("***Reply with the number you want to queue!***\n");
+
                     embedBuilder
                             .setDescription(stringBuilder.toString())
                             .setColor(DiscordUtil.getEmbedColor())
@@ -178,7 +175,7 @@ public class AudioLoader implements AudioLoadResultHandler
                                             {
                                                 int num = Integer.parseInt(args[0]);
 
-                                                num = num - 1;
+                                                num = (num - 1);
 
                                                 if (tracks.get(num) == null)
                                                 {

@@ -34,6 +34,7 @@ import net.toaddev.lavalite.agent.ShardAgent;
 import net.toaddev.lavalite.data.Config;
 import net.toaddev.lavalite.data.Constants;
 import net.toaddev.lavalite.entities.module.Module;
+import net.toaddev.lavalite.main.Launcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,9 +46,7 @@ public class EventModule extends Module
     @Override
     public void onReady(ReadyEvent event)
     {
-        ShardAgent shardAgent = new ShardAgent();
-        shardAgent.setDaemon(true);
-        shardAgent.start();
+        Launcher.onInit(event);
     }
 
     @Override

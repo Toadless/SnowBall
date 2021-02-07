@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.toaddev.lavalite.agent.ShardAgent;
 import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.services.Modules;
 import net.toaddev.lavalite.modules.MusicModule;
@@ -68,7 +69,7 @@ public class Launcher
     private static final ArrayList<Launcher> shards = new ArrayList<>();
     private static AtomicInteger numShardsReady = new AtomicInteger(0);
     private static boolean vanity = true;
-    private boolean hasReadiedOnce = false;
+    private static boolean hasReadiedOnce = false;
     private static Modules modules;
     private static MusicModule musicModule;
     private static String exampleConfigFile;
@@ -202,7 +203,7 @@ public class Launcher
         logger.info("Lavalite ready in {}ms", System.currentTimeMillis() - START_TIME);
     }
 
-    public void onInit(ReadyEvent readyEvent)
+    public static void onInit(ReadyEvent readyEvent)
     {
         if (!hasReadiedOnce)
         {
@@ -216,6 +217,10 @@ public class Launcher
         if (ready == Config.INS.getNumShards())
         {
             logger.info("All " + ready + " shards are ready.");
+
+            ShardAgent shardAgent = new ShardAgent();
+            shardAgent.setDaemon(true);
+            shardAgent.start();
         }
     }
 
