@@ -44,7 +44,8 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
-public class SpotifyModule extends Module{
+public class SpotifyModule extends Module
+{
 
     private static final Logger LOG = LoggerFactory.getLogger(SpotifyModule.class);
 
@@ -53,21 +54,25 @@ public class SpotifyModule extends Module{
     private int hits;
 
     @Override
-    public void onEnable(){
+    public void onEnable()
+    {
         this.spotify = new SpotifyApi.Builder().setClientId(Config.INS.getSpotifyId()).setClientSecret(Config.INS.getSpotifyApiKey()).build();
         this.clientCredentialsRequest = this.spotify.clientCredentials().build();
         this.modules.scheduleAtFixedRate(this::refreshAccessToken, 0, 1, TimeUnit.HOURS);
         this.hits = 0;
     }
 
-    private void refreshAccessToken(){
+    private void refreshAccessToken()
+    {
         try{
             this.spotify.setAccessToken(this.clientCredentialsRequest.execute().getAccessToken());
             this.hits = 0;
         }
-        catch(Exception e){
+        catch(Exception e)
+        {
             this.hits++;
-            if(this.hits < 10){
+            if(this.hits < 10)
+            {
                 LOG.warn("Updating the access token failed. Retrying in 10 seconds", e);
                 this.modules.schedule(this::refreshAccessToken, 10, TimeUnit.SECONDS);
                 return;
@@ -77,8 +82,10 @@ public class SpotifyModule extends Module{
         }
     }
 
-    public void load(CommandContext ctx, MusicManager manager, Matcher matcher){
-        switch(matcher.group(3)){
+    public void load(CommandContext ctx, MusicManager manager, Matcher matcher)
+    {
+        switch(matcher.group(3))
+        {
             case "album":
                 loadAlbum(matcher.group(4), ctx, manager);
                 break;
@@ -91,21 +98,25 @@ public class SpotifyModule extends Module{
         }
     }
 
-    private void loadAlbum(String id, CommandContext ctx, MusicManager manager){
-        this.spotify.getAlbumsTracks(id).build().executeAsync().thenAcceptAsync(tracks -> {
+    private void loadAlbum(String id, CommandContext ctx, MusicManager manager)
+    {
+        this.spotify.getAlbumsTracks(id).build().executeAsync().thenAcceptAsync(tracks ->
+        {
             var items = tracks.getItems();
             var toLoad = new ArrayList<String>();
             for(var track : items){
                 toLoad.add(track.getArtists()[0].getName() + " " + track.getName());
             }
             loadTracks(id, ctx, manager, toLoad);
-        }).exceptionally(throwable -> {
+        }).exceptionally(throwable ->
+        {
             ctx.getChannel().sendMessage(throwable.getMessage().contains("invalid id") ? "Album not found" : "There was an error while loading the album").queue();
             return null;
         });
     }
 
-    private void loadTrack(String id, CommandContext ctx, MusicManager manager){
+    private void loadTrack(String id, CommandContext ctx, MusicManager manager)
+    {
         this.spotify.getTrack(id).build().executeAsync().thenAcceptAsync(track -> this.modules.get(MusicModule.class).play(ctx, track.getArtists()[0].getName() + " " + track.getName(), SearchProvider.YOUTUBE, false, false))
                 .exceptionally(throwable -> {
                     ctx.getChannel().sendMessage(throwable.getMessage().contains("invalid id") ? "Track not found" : "There was an error while loading the track").queue();
@@ -113,8 +124,10 @@ public class SpotifyModule extends Module{
                 });
     }
 
-    private void loadPlaylist(String id, CommandContext ctx, MusicManager manager){
-        this.spotify.getPlaylistsItems(id).build().executeAsync().thenAcceptAsync(tracks -> {
+    private void loadPlaylist(String id, CommandContext ctx, MusicManager manager)
+    {
+        this.spotify.getPlaylistsItems(id).build().executeAsync().thenAcceptAsync(tracks ->
+        {
             var items = tracks.getItems();
             var toLoad = new ArrayList<String>();
             for(var item : items){
@@ -122,13 +135,15 @@ public class SpotifyModule extends Module{
                 toLoad.add(track.getArtists()[0].getName() + " " + track.getName());
             }
             loadTracks(id, ctx, manager, toLoad);
-        }).exceptionally(throwable -> {
+        }).exceptionally(throwable ->
+        {
             ctx.getChannel().sendMessage(throwable.getMessage().contains("Invalid playlist Id") ? "Playlist not found" : "There was an error while loading the playlist").queue();
             return null;
         });
     }
 
-    private void loadTracks(String id, CommandContext ctx, MusicManager manager, List<String> toLoad){
+    private void loadTracks(String id, CommandContext ctx, MusicManager manager, List<String> toLoad)
+    {
         ctx.getChannel().sendMessage("Loading...\nThis may take a while").queue();
 
         String[] args = ctx.getMessage().getContentRaw().split("\\s+");
