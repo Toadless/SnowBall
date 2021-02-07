@@ -43,7 +43,6 @@ import java.util.regex.Matcher;
 @SuppressWarnings("unused")
 public class SpotifyModule extends Module
 {
-
     private static final Logger LOG = LoggerFactory.getLogger(SpotifyModule.class);
 
     private SpotifyApi spotify;
