@@ -75,7 +75,7 @@ public class PlayCommand extends Command
                 musicManager.getScheduler().player.setPaused(!paused);
                 String status = paused ? "paused" : "playing";
                 String newStatus = !paused ? "paused" : "playing";
-                channel.sendMessage("Changed the player from **" + status+ "** to **" + newStatus + "**. \n This event occured because a song is and no arguments were provided!").queue();
+                channel.sendMessage("Changed the player from **" + status+ "** to **" + newStatus + "**. \nThis event occured because a song is and no arguments were provided!").queue();
                 return;
             }
             channel.sendMessage("Please provide a url or search query.").queue();
@@ -99,6 +99,6 @@ public class PlayCommand extends Command
             channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         }
         MusicModule.getInstance()
-                .loadAndPlay(channel, song, searchProvider, ctx);
+                .loadAndPlay(channel, song, searchProvider, ctx, false, true);
     }
 }

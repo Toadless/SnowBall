@@ -1,7 +1,7 @@
 /*
- *  MIT License
+ * MIT License
  *
- *  Copyright (c) 2021 Toadless @ toaddev.net
+ * Copyright (c) 2021 Toadless @ toaddev.net
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of Lavalite and associated documentation files (the "Software"), to deal
@@ -28,29 +28,26 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.managers.AudioManager;
+import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.Emoji;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.entities.music.SearchProvider;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.lavalite.entities.command.CommandContext;
 
 @net.toaddev.lavalite.annotation.Command
-public class SoundCloud extends Command
+public class WipeCommand extends Command
 {
-    public SoundCloud() {
-        super("soundcloud", "Plays music from soundcloud");
+    public WipeCommand()
+    {
+        super("wipe", "Wipes the queue");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("sc");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx)
     {
-        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "soundcloud" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "sc" + " ", "");
         final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -58,26 +55,25 @@ public class SoundCloud extends Command
         final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if (!memberVoiceState.inVoiceChannel()) {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
-            return;
-        }
-
-        if (ctx.getArgs().length < 2)
+        if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("Please provide a search query.").queue();
+            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            final AudioManager audioManager = ctx.getGuild().getAudioManager();
-            final VoiceChannel memberChannel = memberVoiceState.getChannel();
-            audioManager.openAudioConnection(memberChannel);
+            channel.sendMessage("I need to be in a voice channel for this to work.").queue();
+            return;
         }
-        channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
-        MusicModule.getInstance()
-                .loadAndPlay(channel, songName, SearchProvider.SOUNDCLOUD, ctx, false, true);
-        return;
+        if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
+        {
+            channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
+            return;
+        }
+        final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
+
+        musicManager.getScheduler().getQueue().clear();
+        channel.sendMessage(Emoji.CHECK.get() + " Wiped the queue!").queue();
     }
 }

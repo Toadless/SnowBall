@@ -34,6 +34,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
+import net.toaddev.lavalite.entities.Emoji;
 import net.toaddev.lavalite.entities.music.AudioLoader;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.CommandContext;
@@ -57,6 +58,7 @@ public class MusicModule extends Module
     private VoiceChannelCleanupAgent voiceChannelCleanupAgent;
 
     private Pattern urlPattern;
+    public static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile("^(https?://)?(www\\.)?open\\.spotify\\.com/(track|album|playlist)/([a-zA-Z0-9-_]+)(\\?si=[a-zA-Z0-9-_]+)?");
 
     @Override
     public void onEnable()
@@ -112,9 +114,22 @@ public class MusicModule extends Module
 
      * @param searchProvider The {@link SearchProvider searchProvider} to use.
      */
-    public void loadAndPlay(TextChannel channel, String trackUrl, SearchProvider searchProvider, CommandContext commandContext)
+    public void loadAndPlay(TextChannel channel, String trackUrl, SearchProvider searchProvider, CommandContext commandContext, boolean spotify, boolean messages)
     {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
+
+        if (spotify)
+        {
+            var matcher = SPOTIFY_URL_PATTERN.matcher(trackUrl);
+            if(matcher.matches()){
+                this.modules.get(SpotifyModule.class).load(commandContext, this, matcher);
+                return;
+            }
+            else {
+                channel.sendMessage(Emoji.X.get() + " Please provide a valid spotify url!").queue();
+            }
+            return;
+        }
 
         final String track;
 
@@ -122,7 +137,7 @@ public class MusicModule extends Module
 
         try
         {
-            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoader(commandContext, this));
+            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoader(commandContext, this, messages));
         }
         catch (Exception e)
         {

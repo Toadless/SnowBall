@@ -1,7 +1,7 @@
 /*
- *  MIT License
+ * MIT License
  *
- *  Copyright (c) 2021 Toadless @ toaddev.net
+ * Copyright (c) 2021 Toadless @ toaddev.net
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of Lavalite and associated documentation files (the "Software"), to deal
@@ -24,33 +24,33 @@
 
 package net.toaddev.lavalite.command.music.control;
 
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.entities.music.SearchProvider;
-import net.toaddev.lavalite.modules.MusicModule;
-import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
+import net.toaddev.lavalite.entities.music.SearchProvider;
+import net.toaddev.lavalite.main.Launcher;
+import net.toaddev.lavalite.modules.MusicModule;
+import net.toaddev.lavalite.modules.SpotifyModule;
+import org.jetbrains.annotations.NotNull;
 
 @net.toaddev.lavalite.annotation.Command
-public class SoundCloud extends Command
+public class SpotifyCommand extends Command
 {
-    public SoundCloud() {
-        super("soundcloud", "Plays music from soundcloud");
-        addMemberPermissions(Permission.VOICE_CONNECT);
-        addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("sc");
+    public SpotifyCommand()
+    {
+        super("spotify", "Plays a song from spotify");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx)
     {
-        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "soundcloud" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "sc" + " ", "");
+        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "spotify" + " ", "");
+        songName = songName.replaceFirst("^" + ctx.getPrefix() + "p" + " ", "");
         final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -65,7 +65,17 @@ public class SoundCloud extends Command
 
         if (ctx.getArgs().length < 2)
         {
-            channel.sendMessage("Please provide a search query.").queue();
+            final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
+            if (musicManager.getAudioPlayer().getPlayingTrack() != null)
+            {
+                boolean paused = musicManager.getScheduler().player.isPaused();
+                musicManager.getScheduler().player.setPaused(!paused);
+                String status = paused ? "paused" : "playing";
+                String newStatus = !paused ? "paused" : "playing";
+                channel.sendMessage("Changed the player from **" + status+ "** to **" + newStatus + "**. \n This event occured because a song is and no arguments were provided!").queue();
+                return;
+            }
+            channel.sendMessage("Please provide a url or search query.").queue();
             return;
         }
 
@@ -75,9 +85,7 @@ public class SoundCloud extends Command
             final VoiceChannel memberChannel = memberVoiceState.getChannel();
             audioManager.openAudioConnection(memberChannel);
         }
-        channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
-        MusicModule.getInstance()
-                .loadAndPlay(channel, songName, SearchProvider.SOUNDCLOUD, ctx, false, true);
-        return;
+
+        Launcher.getMusicModule().loadAndPlay(channel, songName, SearchProvider.URL, ctx, true, false);
     }
 }

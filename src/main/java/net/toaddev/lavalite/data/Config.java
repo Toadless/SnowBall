@@ -60,6 +60,8 @@ public class Config
     private Boolean database;
     private String mongoUri;
     private String mongoName;
+    private String spotifyId;
+    private String spotifyApiKey;
 
     /**
      *
@@ -114,6 +116,8 @@ public class Config
         this.mongoName = config.getString("credentials.mongoDBName");
         this.shardStart = config.getInt("config.shardStart");
         this.maxShards = config.getInt("config.maxShards");
+        this.spotifyId = config.getString("credentials.spotifyId");
+        this.spotifyApiKey = config.getString("credentials.spotifySecret");
     }
 
     /**
@@ -222,5 +226,15 @@ public class Config
     public int getMaxShards()
     {
         return maxShards;
+    }
+
+    public String getSpotifyId()
+    {
+        return spotifyId;
+    }
+
+    public String getSpotifyApiKey()
+    {
+        return spotifyApiKey;
     }
 }

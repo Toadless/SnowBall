@@ -49,6 +49,7 @@ val caffeineVersion = "2.8.8"
 val utilsVersion = "3.0.5"
 val springBootVersion = "2.1.8.RELEASE"
 val httpClientVersion = "4.9.0"
+val spotifyVersion = "6.3.0"
 
 dependencies {
     // spring boot
@@ -61,6 +62,7 @@ dependencies {
 
     // audio
     implementation ("com.sedmelluq:lavaplayer:$lavaplayerVersion")
+    implementation ("se.michaelthelin.spotify:spotify-web-api-java:$spotifyVersion")
 
     // yaml config
     implementation ("me.carleslc.Simple-YAML:Simple-Yaml:$yamlVersion")

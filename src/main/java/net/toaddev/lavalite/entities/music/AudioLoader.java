@@ -56,19 +56,27 @@ public class AudioLoader implements AudioLoadResultHandler
     private final TextChannel channel;
     private final GuildMessageReceivedEvent event;
 
-    public AudioLoader(CommandContext ctx, MusicModule musicModule)
+    private final boolean messages;
+
+    public AudioLoader(CommandContext ctx, MusicModule musicModule, boolean messages)
     {
         this.musicManager = musicModule.getMusicManager(ctx.getGuild());
 
         this.channel = ctx.getChannel();
         this.event = ctx.getEvent();
+
+        this.messages = messages;
     }
 
     @Override
     public void trackLoaded(AudioTrack track)
     {
         musicManager.getScheduler().queue(track);
-        sendAddedEmbed(track, channel, event);
+
+        if (messages)
+        {
+            sendAddedEmbed(track, channel, event);
+        }
     }
 
     @Override
@@ -77,8 +85,12 @@ public class AudioLoader implements AudioLoadResultHandler
         final List<AudioTrack> tracks = playlist.getTracks();
         if (playlist.isSearchResult())
         {
-            sendAddedEmbed(tracks.get(0), channel, event);
             musicManager.getScheduler().queue(tracks.get(0));
+
+            if (messages)
+            {
+                sendAddedEmbed(tracks.get(0), channel, event);
+            }
         }
         else
         {

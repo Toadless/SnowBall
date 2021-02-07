@@ -135,6 +135,17 @@ public class Modules
         }, initDelay, delay, timeUnit);
     }
 
+    public ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit timeUnit){
+        return this.scheduler.schedule(() -> {
+            try{
+                runnable.run();
+            }
+            catch(Exception e){
+                LOG.error("Unexpected error in scheduler", e);
+            }
+        }, delay, timeUnit);
+    }
+
     public Guild getGuildById(long guildId)
     {
         return getJDA().getGuildById(guildId);
