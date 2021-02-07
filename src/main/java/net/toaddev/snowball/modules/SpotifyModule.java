@@ -60,7 +60,8 @@ public class SpotifyModule extends Module
 
     private void refreshAccessToken()
     {
-        try{
+        try
+        {
             this.spotify.setAccessToken(this.clientCredentialsRequest.execute().getAccessToken());
             this.hits = 0;
         }
