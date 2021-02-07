@@ -48,7 +48,8 @@ public class UptimeCommand extends Command
                 .setDescription(
                         "Uptime: " + uptime.toDaysPart() +
                                 " days, " + uptime.toHoursPart() +
-                                " hours, " + uptime.toSecondsPart() +
+                                " hours, " + uptime.toMinutesPart() +
+                                " minutes, " + uptime.toSecondsPart() +
                                 " seconds.")
                 .setColor(DiscordUtil.getEmbedColor())
                 .build())
