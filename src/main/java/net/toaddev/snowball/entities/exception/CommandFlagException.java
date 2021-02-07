@@ -20,4 +20,12 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.entities.exception;
+
+public class CommandFlagException extends CommandException
+{
+    public CommandFlagException(String text)
+    {
+        super(text);
+    }
+}

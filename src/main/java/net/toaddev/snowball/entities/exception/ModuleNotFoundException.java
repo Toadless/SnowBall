@@ -20,4 +20,12 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.entities.exception;
+
+public class ModuleNotFoundException extends RuntimeException
+{
+    public ModuleNotFoundException(Class clazz)
+    {
+        super("Failed to load the '" + clazz.getName() + "' module.");
+    }
+}

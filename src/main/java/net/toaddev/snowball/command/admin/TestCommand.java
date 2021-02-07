@@ -20,4 +20,26 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.command.admin;
+
+import net.toaddev.snowball.annotation.Ignore;
+import org.jetbrains.annotations.NotNull;
+import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.entities.command.CommandFlag;
+import net.toaddev.snowball.entities.command.Command;
+
+@net.toaddev.snowball.annotation.Command
+@Ignore
+public class TestCommand extends Command
+{
+    public TestCommand()
+    {
+        super("test", null);
+        addFlags(CommandFlag.DISABLED);
+    }
+    @Override
+    public void run(@NotNull CommandContext ctx)
+    {
+        ctx.getChannel().sendMessage("Test indeed").queue();
+    }
+}

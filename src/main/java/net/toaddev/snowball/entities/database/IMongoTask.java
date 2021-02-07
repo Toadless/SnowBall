@@ -20,4 +20,15 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.entities.database;
+
+import com.mongodb.client.MongoDatabase;
+
+public interface IMongoTask
+{
+    /**
+     *
+     * @param database The {@link net.toaddev.snowball.modules.DatabaseModule database} to use.
+     */
+    public void run(MongoDatabase database);
+}

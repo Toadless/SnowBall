@@ -20,4 +20,37 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.modules;
+
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.toaddev.snowball.entities.module.Module;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MessageModule extends Module
+{
+    private Map<Long, Message> latestMessage;
+
+    @Override
+    public void onEnable()
+    {
+        this.latestMessage = new HashMap<>();
+    }
+
+    @Override
+    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event){
+        if(event.getMessage().getContentRaw().isBlank()){
+            return;
+        }
+        latestMessage.remove(event.getGuild().getIdLong());
+        latestMessage.put(event.getGuild().getIdLong(), event.getMessage());
+    }
+
+    public Map<Long, Message> getLatestMessage()
+    {
+        return latestMessage;
+    }
+}

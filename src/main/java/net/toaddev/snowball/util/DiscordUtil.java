@@ -20,4 +20,43 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.util;
+
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import net.toaddev.snowball.data.Config;
+
+public class DiscordUtil
+{
+    private static final Logger log = LoggerFactory.getLogger(DiscordUtil.class);
+    private static final int embedColor = 0x4c50c1;
+
+    private DiscordUtil() {
+
+    }
+
+    public static String getOwnerId()
+    {
+        return Config.INS.getOwnerID();
+    }
+
+    public static Boolean isOwner(User user)
+    {
+        String userId = user.getId();
+        String ownerId = getOwnerId();
+        return userId.equals(ownerId);
+    }
+
+    public static Boolean isServerAdmin(Member member)
+    {
+        return member.hasPermission(Permission.MANAGE_SERVER);
+    }
+
+    public static int getEmbedColor()
+    {
+        return embedColor;
+    }
+}

@@ -20,4 +20,38 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.entities.music;
+
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import net.dv8tion.jda.api.entities.Guild;
+
+public class MusicManager
+{
+    private final AudioPlayer audioPlayer;
+    private final TrackScheduler scheduler;
+    private final AudioPlayerSendHandler sendHandler;
+
+    public MusicManager(AudioPlayerManager manager, Guild guild)
+    {
+        this.audioPlayer = manager.createPlayer();
+        this.scheduler = new TrackScheduler(this.audioPlayer, guild);
+        this.audioPlayer.addListener(this.scheduler);
+        this.sendHandler = new AudioPlayerSendHandler(this.audioPlayer);
+    }
+
+    public AudioPlayerSendHandler getSendHandler()
+    {
+        return sendHandler;
+    }
+
+    public AudioPlayer getAudioPlayer()
+    {
+        return audioPlayer;
+    }
+
+    public TrackScheduler getScheduler()
+    {
+        return scheduler;
+    }
+}

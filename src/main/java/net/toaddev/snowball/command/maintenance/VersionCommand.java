@@ -20,4 +20,24 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.command.maintenance;
+
+import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.main.Launcher;
+import org.jetbrains.annotations.NotNull;
+import net.toaddev.snowball.entities.command.CommandContext;
+
+@net.toaddev.snowball.annotation.Command
+public class VersionCommand extends Command
+{
+    public VersionCommand()
+    {
+        super("version", null);
+    }
+
+    @Override
+    public void run(@NotNull CommandContext ctx)
+    {
+        ctx.getChannel().sendMessage("v" + Launcher.version).queue();
+    }
+}

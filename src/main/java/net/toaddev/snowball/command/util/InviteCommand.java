@@ -20,4 +20,30 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.command.util;
+
+import net.toaddev.snowball.entities.command.Command;
+import org.jetbrains.annotations.NotNull;
+import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.data.Constants;
+
+@net.toaddev.snowball.annotation.Command
+public class InviteCommand extends Command
+{
+
+    public InviteCommand()
+    {
+        super("invite", null);
+    }
+
+    @Override
+    public void run(@NotNull CommandContext ctx)
+    {
+        if (!Constants.invite)
+        {
+            return;
+        }
+        String str = "https://discord.com/api/oauth2/authorize?client_id=" + ctx.getJDA().getSelfUser().getId() + "&permissions=267911025&scope=bot";
+        ctx.getChannel().sendMessageFormat("My invite: %s", str).queue();
+    }
+}

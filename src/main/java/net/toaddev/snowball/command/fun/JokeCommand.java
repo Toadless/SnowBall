@@ -20,4 +20,38 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.command.fun;
+
+import net.dv8tion.jda.api.utils.data.DataObject;
+import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.util.WebUtil;
+import org.jetbrains.annotations.NotNull;
+import net.toaddev.snowball.entities.command.CommandContext;
+
+@net.toaddev.snowball.annotation.Command
+public class JokeCommand extends Command
+{
+    public JokeCommand()
+    {
+        super("joke", null);
+    }
+
+    @Override
+    public void run(@NotNull CommandContext ctx)
+    {
+        String joke = WebUtil.getReq("http://api.icndb.com/jokes/random");
+        if (joke == null)
+        {
+            ctx.getChannel().sendMessage("Unable to request a joke.").queue();
+            return;
+        }
+        DataObject object = DataObject.fromJson(joke);
+        DataObject value = object.getObject("value");
+        Object result = value.get("joke");
+
+        result = result.toString().replaceAll("Chuck Norris", ctx.getMember().getUser().getName());
+        result = result.toString().replaceAll("&quot;", "\"");
+
+        ctx.getChannel().sendMessage(result.toString()).queue();
+    }
+}

@@ -20,4 +20,24 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.entities.music;
+
+public enum SearchProvider
+{
+    YOUTUBE("ytsearch:"), // Simple yt support
+    SOUNDCLOUD("scsearch:"), // Yes soundcloud support
+
+    URL(""); // This is for urls not searches
+
+    private final String searchPrefix;
+
+    SearchProvider(String searchPrefix)
+    {
+        this.searchPrefix = searchPrefix;
+    }
+
+    public String getSearchPrefix()
+    {
+        return searchPrefix;
+    }
+}

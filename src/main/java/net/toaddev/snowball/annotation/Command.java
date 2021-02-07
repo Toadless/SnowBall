@@ -20,4 +20,8 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.annotation;
+
+public @interface Command
+{
+}

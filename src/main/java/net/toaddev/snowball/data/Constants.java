@@ -20,4 +20,16 @@
  *  SOFTWARE.
  */
 
-rootProject.name = "Snowball"
+package net.toaddev.snowball.data;
+
+public class Constants
+{
+    public static String GUILD_PREFIX;
+    public static String ownerid;
+    public static Boolean invite;
+    public static void Init()
+    {
+        GUILD_PREFIX = Config.INS.getPrefix();
+        ownerid = Config.INS.getOwnerID();
+    }
+}
