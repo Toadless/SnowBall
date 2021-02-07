@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.toaddev.lavalite.entities.exception.ModuleNotFoundException;
 import net.toaddev.lavalite.entities.module.Module;
+import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.ThreadFactoryHelper;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
@@ -52,13 +53,11 @@ public class Modules
     private static final String MODULE_PACKAGE = "net.toaddev.lavalite.modules";
     private static final Logger LOG = LoggerFactory.getLogger(Modules.class);
 
-    private final JDA main;
     private final ScheduledExecutorService scheduler;
     private final OkHttpClient httpClient;
     public final List<Module> modules;
 
-    public Modules(JDA main){
-        this.main = main;
+    public Modules(){
         this.httpClient = new OkHttpClient();
         this.modules = new LinkedList<>();
         this.scheduler = new ScheduledThreadPoolExecutor(2, new ThreadFactoryHelper());
@@ -122,7 +121,7 @@ public class Modules
 
     public JDA getJDA()
     {
-        return this.main;
+        return Launcher.getJda();
     }
 
     public ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long initDelay, long delay, TimeUnit timeUnit){

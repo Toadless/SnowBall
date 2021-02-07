@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.exception.CommandErrorException;
-import net.toaddev.lavalite.util.FormatTimeUtil;
+import net.toaddev.lavalite.util.TimeUtils;
 
 @net.toaddev.lavalite.annotation.Command
 public class SeekCommand extends Command
@@ -92,11 +92,11 @@ public class SeekCommand extends Command
             amount = (amount * 1000);
             if (musicManager.getScheduler().player.getPlayingTrack().getDuration() < Long.parseLong(String.valueOf(amount)))
             {
-                ctx.getChannel().sendMessage("The tracks duration is less than: `" + FormatTimeUtil.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
+                ctx.getChannel().sendMessage("The tracks duration is less than: `" + TimeUtils.formatDuration(Long.parseLong(String.valueOf(amount))) + "`.").queue();
                 return;
             }
             musicManager.getScheduler().player.getPlayingTrack().setPosition(Long.parseLong(String.valueOf(amount)));
-            ctx.getChannel().sendMessage("The tracks position has been set to: `" + FormatTimeUtil.formatTime(Long.parseLong(String.valueOf(amount))) + "`.").queue();
+            ctx.getChannel().sendMessage("The tracks position has been set to: `" + TimeUtils.formatDuration(Long.parseLong(String.valueOf(amount))) + "`.").queue();
         } catch (NumberFormatException e)
         {
             ctx.getChannel().sendMessage("Please provide a valid number.").queue();

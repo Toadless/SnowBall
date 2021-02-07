@@ -29,6 +29,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -39,7 +40,8 @@ import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.DatabaseModule;
 import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.DiscordUtil;
-import net.toaddev.lavalite.util.FormatTimeUtil;
+import net.toaddev.lavalite.util.MusicUtils;
+import net.toaddev.lavalite.util.TimeUtils;
 
 import java.time.Instant;
 import java.util.List;
@@ -141,67 +143,44 @@ public class AudioLoader implements AudioLoadResultHandler
                 embedBuilder.setAuthor("Found " + tracks.size() + " tracks: ");
 
                 {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    int i = 0;
+                    MusicUtils.sendTracks(tracks, Launcher.getModules(), channel, user.getIdLong(), "Found " + tracks.size() + " tracks:");
 
-                    for (AudioTrack trackFromList : tracks)
-                    {
-                        i++;
-                        stringBuilder
-                                .append(i)
-                                .append(". `")
-                                .append(trackFromList.getInfo().title)
-                                .append("` - [")
-                                .append(FormatTimeUtil.formatTime(trackFromList.getDuration()))
-                                .append("] \n");
-                    }
+                    Launcher.getEventWaiter().waitForEvent(
+                            GuildMessageReceivedEvent.class,
+                            (e) -> e.getMember().getIdLong() == user.getIdLong() && e.getGuild().getIdLong() == channel.getGuild().getIdLong() && e.getChannel().getIdLong() == channel.getIdLong(),
+                            (e) ->
+                            {
+                                String[] args = e.getMessage().getContentRaw().split("\\s+");
+                                try
+                                {
+                                    int num = Integer.parseInt(args[0]);
 
-                    stringBuilder.append("***Reply with the number you want to queue!***\n");
+                                    num = (num - 1);
 
-                    embedBuilder
-                            .setDescription(stringBuilder.toString())
-                            .setColor(DiscordUtil.getEmbedColor())
-                            .setTimestamp(Instant.now());
+                                    if (tracks.get(num) == null)
+                                    {
+                                        channel.sendMessage("Invalid number!").queue();
+                                        return;
+                                    }
 
-                    channel.sendMessage(embedBuilder.build())
-                            .queue(message -> {
-                                Launcher.getEventWaiter().waitForEvent(
-                                        GuildMessageReceivedEvent.class,
-                                        (e) -> e.getMember().getIdLong() == user.getIdLong() && e.getGuild().getIdLong() == channel.getGuild().getIdLong() && e.getChannel().getIdLong() == channel.getIdLong(),
-                                        (e) ->
-                                        {
-                                            String[] args = e.getMessage().getContentRaw().split("\\s+");
-                                            try
-                                            {
-                                                int num = Integer.parseInt(args[0]);
-
-                                                num = (num - 1);
-
-                                                if (tracks.get(num) == null)
-                                                {
-                                                    channel.sendMessage("Invalid number!").queue();
-                                                    return;
-                                                }
-
-                                                try
-                                                {
-                                                    sendAddedEmbed(tracks.get(num), channel, event);
-                                                    musicManager.getScheduler().queue(tracks.get(num));
-                                                }
-                                                catch (IndexOutOfBoundsException exe)
-                                                {
-                                                    channel.sendMessage("Invalid number!").queue();
-                                                }
-                                            }
-                                            catch (NumberFormatException ex)
-                                            {
-                                                channel.sendMessage("Invalid number.").queue();
-                                            }
-                                        },
-                                        10L, TimeUnit.SECONDS,
-                                        () -> channel.sendMessage("You took too long.").queue()
-                                );
-                            });
+                                    try
+                                    {
+                                        sendAddedEmbed(tracks.get(num), channel, event);
+                                        musicManager.getScheduler().queue(tracks.get(num));
+                                    }
+                                    catch (IndexOutOfBoundsException exe)
+                                    {
+                                        channel.sendMessage("Invalid number!").queue();
+                                    }
+                                }
+                                catch (NumberFormatException ex)
+                                {
+                                    channel.sendMessage("Invalid number.").queue();
+                                }
+                            },
+                            10L, TimeUnit.SECONDS,
+                            () -> channel.sendMessage("You took too long.").queue()
+                    );
                 }
             }
         }

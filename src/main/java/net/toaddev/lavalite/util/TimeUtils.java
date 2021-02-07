@@ -24,16 +24,27 @@
 
 package net.toaddev.lavalite.util;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
-public class FormatTimeUtil
+public class TimeUtils
 {
-    public static String formatTime(long timeInMillis)
+    private TimeUtils()
     {
-        final long hours = timeInMillis / TimeUnit.HOURS.toMillis(1);
-        final long minutes = timeInMillis / TimeUnit.MINUTES.toMillis(1);
-        final long seconds = timeInMillis % TimeUnit.MINUTES.toMillis(1) / TimeUnit.SECONDS.toMillis(1);
+        // override, default, constructor
+    }
 
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+
+    public static String fTime(int time){
+        return time > 9 ? String.valueOf(time) : "0" + time;
+    }
+
+    public static String formatDuration(long length){
+        var duration = Duration.ofMillis(length);
+        var hours = duration.toHours();
+        if(hours > 0){
+            return String.format("%s:%s:%s", fTime((int) hours), fTime(duration.toMinutesPart()), fTime(duration.toSecondsPart()));
+        }
+        return String.format("%s:%s", fTime((int) duration.toMinutes()), fTime(duration.toSecondsPart()));
     }
 }

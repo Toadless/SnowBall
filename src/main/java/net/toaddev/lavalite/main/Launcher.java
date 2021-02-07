@@ -170,7 +170,7 @@ public class Launcher
 
         eventWaiter = new EventWaiter();
 
-        modules = new Modules(getJda());
+        modules = new Modules();
         musicModule = modules.get(MusicModule.class);
 
         /* Init JDA */

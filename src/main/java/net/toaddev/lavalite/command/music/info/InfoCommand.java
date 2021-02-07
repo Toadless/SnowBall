@@ -36,7 +36,7 @@ import net.toaddev.lavalite.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.command.Command;
-import net.toaddev.lavalite.util.FormatTimeUtil;
+import net.toaddev.lavalite.util.TimeUtils;
 
 @net.toaddev.lavalite.annotation.Command
 public class InfoCommand extends Command
@@ -80,10 +80,10 @@ public class InfoCommand extends Command
         ctx.getChannel().sendMessage(new EmbedBuilder()
                 .setTitle(ctx.getGuild().getName() + " Music Info")
                 .addField("Current Song", musicManager.getAudioPlayer().getPlayingTrack().getInfo().title, true)
-                .addField("Current Song Pos", FormatTimeUtil.formatTime(musicManager.getAudioPlayer().getPlayingTrack().getPosition()), true)
+                .addField("Current Song Pos", TimeUtils.formatDuration(musicManager.getAudioPlayer().getPlayingTrack().getPosition()), true)
                 .addBlankField(true)
                 .addField("Queue Size", String.valueOf(musicManager.getScheduler().getQueue().size()), true)
-                .addField("Queue Duration", FormatTimeUtil.formatTime(queueDur), true)
+                .addField("Queue Duration", TimeUtils.formatDuration(queueDur), true)
                 .addBlankField(true)
                 .addField("Looping", String.valueOf(musicManager.getScheduler().repeating).toUpperCase(), true)
                 .addField("Paused", String.valueOf(musicManager.getScheduler().player.isPaused()).toUpperCase(), true)

@@ -106,6 +106,8 @@ public abstract class Command
             try {
                 run(event);
             } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println(e);
                 EmbedUtil.sendError(event.getChannel(), "An error occurred whilst executing this command. This is most likely a self permission exception.");
             }
         }

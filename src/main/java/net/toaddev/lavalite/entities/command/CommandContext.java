@@ -29,6 +29,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.toaddev.lavalite.main.Launcher;
+import net.toaddev.lavalite.services.Modules;
 import net.toaddev.lavalite.util.DiscordUtil;
 
 import javax.annotation.Nonnull;
@@ -183,5 +185,10 @@ public class CommandContext
     public Boolean memberPermissionCheck(List<Permission> permissions)
     {
         return (event.getMember() != null && event.getMember().hasPermission((GuildChannel) event.getChannel(), permissions));
+    }
+
+    public Modules getModules()
+    {
+        return Launcher.getModules();
     }
 }

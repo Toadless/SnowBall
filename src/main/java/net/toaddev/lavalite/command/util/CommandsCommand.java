@@ -24,18 +24,15 @@
 
 package net.toaddev.lavalite.command.util;
 
-import net.dv8tion.jda.api.entities.PrivateChannel;
-import net.dv8tion.jda.api.exceptions.ErrorHandler;
-import net.dv8tion.jda.api.requests.ErrorResponse;
-import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.CommandsModule;
+import net.toaddev.lavalite.util.MessageUtils;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @net.toaddev.lavalite.annotation.Command
 public class CommandsCommand extends Command
@@ -48,36 +45,23 @@ public class CommandsCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx)
     {
-        StringBuilder helpString = new StringBuilder();
-        helpString.append("```md\n");
-        String title = "< {name} Music Commands >\n";
-        title = title.replace("{name}", ctx.getJDA().getSelfUser().getName());
-        helpString.append(title);
+        Map<String, Command> commandMap = Launcher.getModules().get(CommandsModule.class).getCommands();
+        Collection<Command> cmds = new LinkedList<>();
 
-        List<String> helpList = new ArrayList<>();
-        Launcher.getModules().get(CommandsModule.class).getCommands().forEach(((s, command) ->
-        {
-            String help = command.getDescription();
-            if (helpList.contains(help)) {
+        commandMap.forEach((s, command) -> {
+            if (command.getDescription() == null)
+            {
                 return;
             }
-            if (help == null) {
-                return;
-            }
-            helpString.append(ctx.getPrefix() + s + "\n");
-            helpString.append("#" + help + "\n");
-            helpList.add(help);
-        }));
 
-        helpString.append("\n```");
+            cmds.add(command);
+        });
 
-        RestAction<PrivateChannel> privateChannel = ctx.getMember().getUser().openPrivateChannel();
-        privateChannel
-                .flatMap(channel -> channel.sendMessage(helpString))
-                .flatMap(channel -> ctx.getChannel().sendMessage(ctx.getMember().getUser().getName() + ": Documentation has been sent to your DMs!"))
-                .queue(null, new ErrorHandler().ignore(ErrorResponse.UNKNOWN_MESSAGE).handle(ErrorResponse.CANNOT_SEND_TO_USER, (e) ->
-                {
-                    ctx.getChannel().sendMessage(helpString.toString()).queue();
-                }));
+        processMessage(cmds, ctx.getChannel(), ctx);
+    }
+
+    public void processMessage(Collection<Command> cmds, TextChannel channel, CommandContext ctx)
+    {
+        MessageUtils.sendCommands(cmds, ctx.getModules(), channel, ctx.getMember().getUser().getIdLong(), "Commands: ");
     }
 }

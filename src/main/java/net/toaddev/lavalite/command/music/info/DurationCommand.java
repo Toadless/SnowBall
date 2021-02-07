@@ -34,7 +34,7 @@ import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
-import net.toaddev.lavalite.util.FormatTimeUtil;
+import net.toaddev.lavalite.util.TimeUtils;
 
 @net.toaddev.lavalite.annotation.Command
 public class DurationCommand extends Command
@@ -77,11 +77,11 @@ public class DurationCommand extends Command
         stringBuilder.append(" Song Duration >\n");
         stringBuilder.append("Current Track Position:\n");
         stringBuilder.append("# ");
-        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.getAudioPlayer().getPlayingTrack().getPosition()));
+        stringBuilder.append(TimeUtils.formatDuration(musicManager.getAudioPlayer().getPlayingTrack().getPosition()));
         stringBuilder.append("\n");
         stringBuilder.append("Duration Left:\n");
         stringBuilder.append("# ");
-        stringBuilder.append(FormatTimeUtil.formatTime(musicManager.getAudioPlayer().getPlayingTrack().getDuration() - musicManager.getAudioPlayer().getPlayingTrack().getPosition()));
+        stringBuilder.append(TimeUtils.formatDuration(musicManager.getAudioPlayer().getPlayingTrack().getDuration() - musicManager.getAudioPlayer().getPlayingTrack().getPosition()));
         stringBuilder.append("\n");
         stringBuilder.append("```");
         channel.sendMessage(stringBuilder.toString()).queue();

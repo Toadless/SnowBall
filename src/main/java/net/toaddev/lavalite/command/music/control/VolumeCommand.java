@@ -30,6 +30,7 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.Emoji;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.exception.CommandErrorException;
 import net.toaddev.lavalite.modules.MusicModule;
@@ -87,6 +88,7 @@ public class VolumeCommand extends Command
                     channel.sendMessage("Please provide a valid volume to set between `0 - 200`.").queue();
                     return;
                 }
+
                 if (volume > 200)
                 {
                     channel.sendMessage("Please provide a valid volume to set between `0 - 200`.").queue();
@@ -95,7 +97,13 @@ public class VolumeCommand extends Command
                 final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
                 final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
                 audioPlayer.setVolume(volume);
-                channel.sendMessageFormat("Set the volume to: %s", volume).queue();
+
+                if (volume < 100)
+                {
+                    channel.sendMessageFormat(Emoji.VOLUME_DOWN.get() + " Set the volume to: %s", volume).queue();
+                    return;
+                }
+                channel.sendMessageFormat(Emoji.VOLUME_UP.get() + " Set the volume to: %s", volume).queue();
             } catch (NumberFormatException e)
             {
                 ctx.getChannel().sendMessage("Please provide a valid number.").queue();

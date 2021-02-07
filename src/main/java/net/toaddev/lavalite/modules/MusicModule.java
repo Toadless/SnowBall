@@ -42,7 +42,7 @@ import net.toaddev.lavalite.entities.module.Module;
 import net.toaddev.lavalite.entities.music.SearchProvider;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.util.DiscordUtil;
-import net.toaddev.lavalite.util.FormatTimeUtil;
+import net.toaddev.lavalite.util.TimeUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -166,7 +166,7 @@ public class MusicModule extends Module
         embed.setAuthor("Added to queue", track.getInfo().uri, event.getAuthor().getAvatarUrl());
         embed.setDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")");
         embed.addField("**Channel**", track.getInfo().author, true);
-        embed.addField("**Song Duration**", FormatTimeUtil.formatTime(track.getDuration()), true);
+        embed.addField("**Song Duration**", TimeUtils.formatDuration(track.getDuration()), true);
         embed.setColor(DiscordUtil.getEmbedColor());
         channel.sendMessage(embed.build()).queue();
     }

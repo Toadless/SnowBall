@@ -34,9 +34,12 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
+import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
 import net.toaddev.lavalite.util.DiscordUtil;
-import net.toaddev.lavalite.util.FormatTimeUtil;
+import net.toaddev.lavalite.util.MessageUtils;
+import net.toaddev.lavalite.util.MusicUtils;
+import net.toaddev.lavalite.util.TimeUtils;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
@@ -98,42 +101,8 @@ public class QueueCommand extends Command
             return;
         }
 
-        final StringBuilder stringBuilder = new StringBuilder();
-
         List<AudioTrack> tracks = musicManager.getScheduler().getQueue();
-        final int size = tracks.size();
-        final int trackCount = Math.min(size, 20);
 
-        {
-            for (int i = 0; i < trackCount; i++)
-            {
-                final AudioTrack track = tracks.get(i);
-                final AudioTrackInfo info = track.getInfo();
-                stringBuilder
-                        .append(i + 1)
-                        .append(". `")
-                        .append(info.title)
-                        .append("` - [")
-                        .append(FormatTimeUtil.formatTime(track.getDuration()))
-                        .append("] \n");
-            }
-
-            if (size > trackCount)
-            {
-                stringBuilder.append("And `" + (size - trackCount) + "` more...");
-            }
-
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-
-            {
-                embedBuilder
-                        .setAuthor("Currently " + tracks.size() + " tracks are queued: ")
-                        .setDescription(stringBuilder.toString())
-                        .setColor(DiscordUtil.getEmbedColor())
-                        .setTimestamp(Instant.now());
-            }
-
-            channel.sendMessage(embedBuilder.build()).queue();
-        }
+        MusicUtils.sendTracks(tracks, Launcher.getModules(), ctx.getChannel(), ctx.getMember().getUser().getIdLong(), "Currently " + tracks.size() + " " + MessageUtils.pluralize("track", tracks) + " are queued");
     }
 }
