@@ -1,7 +1,7 @@
 /*
- *  MIT License
+ * MIT License
  *
- *  Copyright (c) 2021 Toadless @ toaddev.net
+ * Copyright (c) 2021 Toadless @ toaddev.net
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of Lavalite and associated documentation files (the "Software"), to deal
@@ -22,19 +22,19 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.audio;
+package net.toaddev.lavalite.entities.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import net.dv8tion.jda.api.entities.Guild;
 
-public class GuildMusicManager
+public class MusicManager
 {
     private final AudioPlayer audioPlayer;
     private final TrackScheduler scheduler;
     private final AudioPlayerSendHandler sendHandler;
 
-    public GuildMusicManager(AudioPlayerManager manager, Guild guild)
+    public MusicManager(AudioPlayerManager manager, Guild guild)
     {
         this.audioPlayer = manager.createPlayer();
         this.scheduler = new TrackScheduler(this.audioPlayer, guild);

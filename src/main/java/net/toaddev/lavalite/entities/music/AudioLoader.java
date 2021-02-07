@@ -29,21 +29,16 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.DatabaseModule;
 import net.toaddev.lavalite.modules.MusicModule;
-import net.toaddev.lavalite.util.DiscordUtil;
 import net.toaddev.lavalite.util.MusicUtils;
-import net.toaddev.lavalite.util.TimeUtils;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,12 +46,13 @@ import static net.toaddev.lavalite.modules.MusicModule.sendAddedEmbed;
 
 public class AudioLoader implements AudioLoadResultHandler
 {
-    private final GuildMusicManager musicManager;
+    private final MusicManager musicManager;
 
     private final TextChannel channel;
     private final GuildMessageReceivedEvent event;
 
     private final boolean messages;
+    private final CommandContext ctx;
 
     public AudioLoader(CommandContext ctx, MusicModule musicModule, boolean messages)
     {
@@ -66,6 +62,7 @@ public class AudioLoader implements AudioLoadResultHandler
         this.event = ctx.getEvent();
 
         this.messages = messages;
+        this.ctx = ctx;
     }
 
     @Override
@@ -111,7 +108,8 @@ public class AudioLoader implements AudioLoadResultHandler
     @Override
     public void noMatches()
     {
-        channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
+        if (!ctx.getArgs()[1].contains("spotify."))
+            channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
     }
 
     @Override
@@ -123,7 +121,7 @@ public class AudioLoader implements AudioLoadResultHandler
 
     public static class AudioLoaderList implements AudioLoadResultHandler
     {
-        private final GuildMusicManager musicManager;
+        private final MusicManager musicManager;
 
         private final TextChannel channel;
         private final GuildMessageReceivedEvent event;

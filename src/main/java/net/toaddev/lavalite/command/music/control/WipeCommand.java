@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.music.MusicManager;
 import net.toaddev.lavalite.entities.Emoji;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.command.CommandContext;
@@ -71,7 +71,7 @@ public class WipeCommand extends Command
             channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
             return;
         }
-        final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
+        final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
 
         musicManager.getScheduler().getQueue().clear();
         channel.sendMessage(Emoji.CHECK.get() + " Wiped the queue!").queue();

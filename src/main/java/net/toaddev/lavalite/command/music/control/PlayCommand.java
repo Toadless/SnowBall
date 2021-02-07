@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.music.MusicManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.music.SearchProvider;
 import net.toaddev.lavalite.main.Launcher;
@@ -68,7 +68,7 @@ public class PlayCommand extends Command
 
         if (ctx.getArgs().length < 2)
         {
-            final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
+            final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
             if (musicManager.getAudioPlayer().getPlayingTrack() != null)
             {
                 boolean paused = musicManager.getScheduler().player.isPaused();
@@ -99,6 +99,6 @@ public class PlayCommand extends Command
             channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
         }
         MusicModule.getInstance()
-                .loadAndPlay(channel, song, searchProvider, ctx, false, true);
+                .play(ctx, song, searchProvider, true, false);
     }
 }

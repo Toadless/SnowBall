@@ -34,9 +34,8 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.lavalite.agent.VoiceChannelCleanupAgent;
-import net.toaddev.lavalite.entities.Emoji;
 import net.toaddev.lavalite.entities.music.AudioLoader;
-import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.music.MusicManager;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.entities.module.Module;
@@ -52,12 +51,13 @@ import java.util.regex.Pattern;
 
 public class MusicModule extends Module
 {
-    private Map<Long, GuildMusicManager> musicPlayers;
+    private Map<Long, MusicManager> musicPlayers;
     private AudioPlayerManager audioPlayerManager;
 
     private VoiceChannelCleanupAgent voiceChannelCleanupAgent;
 
     private Pattern urlPattern;
+    public static final Pattern URL_PATTERN = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?");
     public static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile("^(https?://)?(www\\.)?open\\.spotify\\.com/(track|album|playlist)/([a-zA-Z0-9-_]+)(\\?si=[a-zA-Z0-9-_]+)?");
 
     @Override
@@ -95,76 +95,55 @@ public class MusicModule extends Module
     /**
      *
      * @param guild The {@link net.dv8tion.jda.api.entities.Guild guild} to fetch the music manager from.
-     * @return The {@link GuildMusicManager musicManager}.
+     * @return The {@link MusicManager musicManager}.
      */
-    public GuildMusicManager getMusicManager(Guild guild)
+    public MusicManager getMusicManager(Guild guild)
     {
         return this.musicPlayers.computeIfAbsent(guild.getIdLong(), (guildId) ->
         {
-            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager, guild);
+            final MusicManager guildMusicManager = new MusicManager(this.audioPlayerManager, guild);
             guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
             return guildMusicManager;
         });
     }
 
-    /**
-     *
-     * @param channel The channel that the message took place in
-     * @param trackUrl The track url that has been provided
-
-     * @param searchProvider The {@link SearchProvider searchProvider} to use.
-     */
-    public void loadAndPlay(TextChannel channel, String trackUrl, SearchProvider searchProvider, CommandContext commandContext, boolean spotify, boolean messages)
+    public void play(CommandContext ctx, String query, SearchProvider searchProvider, boolean messages, boolean search)
     {
-        final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
+        var manager = getMusicManager(ctx.getGuild());
 
-        if (spotify)
+        var matcher = SPOTIFY_URL_PATTERN.matcher(query);
+        if (matcher.matches())
         {
-            var matcher = SPOTIFY_URL_PATTERN.matcher(trackUrl);
-            if(matcher.matches()){
-                this.modules.get(SpotifyModule.class).load(commandContext, this, matcher);
-                return;
-            }
-            else {
-                channel.sendMessage(Emoji.X.get() + " Please provide a valid spotify url!").queue();
-            }
+            this.modules.get(SpotifyModule.class).load(ctx, getMusicManager(ctx.getGuild()), matcher);
             return;
         }
 
-        final String track;
-
-        track = searchProvider.getSearchPrefix() + trackUrl; // This is how we set the song provider. URL, Youtube, Soundcloud
+        if (!URL_PATTERN.matcher(query).matches())
+        {
+            switch (searchProvider)
+            {
+                case YOUTUBE:
+                    query = "ytsearch:" + query;
+                    break;
+                case SOUNDCLOUD:
+                    query = "scsearch:" + query;
+                    break;
+            }
+        }
 
         try
         {
-            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoader(commandContext, this, messages));
+            if (!search)
+            {
+                manager.getScheduler().loadItem(query, manager, ctx, messages);
+            } else if (search)
+            {
+                manager.getScheduler().loadItemList(query, manager, ctx);
+            }
         }
         catch (Exception e)
         {
-            channel.sendMessage("This is embarrassing. A wild exception has occurred. \n Exception: `" + e + "`. \n We are sorry for the inconvenience. If the exception persists please contact support.").queue();
-            throw new MusicException(e.toString());
-        }
-    }
-
-    /**
-     *
-     * @param channel The channel that the message took place in
-     * @param trackUrl The track url that has been provided
-     * @param searchProvider The {@link SearchProvider searchProvider} to use.
-     */
-    public void loadAndPlayForList(TextChannel channel, String trackUrl, SearchProvider searchProvider, CommandContext commandContext)
-    {
-        final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
-        final String track;
-        track = searchProvider.getSearchPrefix() + trackUrl; // This is how we set the song provider. URL, Youtube, Soundcloud
-
-        try
-        {
-            this.audioPlayerManager.loadItemOrdered(musicManager, track, new AudioLoader.AudioLoaderList(commandContext, this));
-        }
-        catch (Exception e)
-        {
-            channel.sendMessage("This is embarrassing. A wild exception has occurred. \n Exception: `" + e + "`. \n We are sorry for the inconvenience. If the exception persists please contact support.").queue();
+            ctx.getChannel().sendMessage("This is embarrassing. A wild exception has occurred. \n Exception: `" + e + "`. \n We are sorry for the inconvenience. If the exception persists please contact support.").queue();
             throw new MusicException(e.toString());
         }
     }
@@ -198,6 +177,11 @@ public class MusicModule extends Module
     public static MusicModule getInstance()
     {
         return Launcher.getMusicModule();
+    }
+
+    public AudioPlayerManager getAudioPlayerManager()
+    {
+        return audioPlayerManager;
     }
 
     @Override

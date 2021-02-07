@@ -1,7 +1,7 @@
 /*
- *  MIT License
+ * MIT License
  *
- *  Copyright (c) 2021 Toadless @ toaddev.net
+ * Copyright (c) 2021 Toadless @ toaddev.net
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of Lavalite and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * SOFTWARE
  */
 
-package net.toaddev.lavalite.audio;
+package net.toaddev.lavalite.entities.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
@@ -30,6 +30,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
+import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.exception.MusicException;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MessageModule;
@@ -99,6 +100,16 @@ public class TrackScheduler extends AudioEventAdapter
             }
             nextTrack();
         }
+    }
+
+    public void loadItem(String query,  MusicManager manager, CommandContext ctx, boolean messages)
+    {
+        Launcher.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader(ctx, Launcher.getMusicModule(), messages));
+    }
+
+    public void loadItemList(String query, MusicManager manager, CommandContext ctx)
+    {
+        Launcher.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader.AudioLoaderList(ctx, Launcher.getMusicModule()));
     }
 
     public LinkedList<AudioTrack> getQueue()

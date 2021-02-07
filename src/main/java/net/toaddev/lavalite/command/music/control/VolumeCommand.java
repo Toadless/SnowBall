@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.music.MusicManager;
 import net.toaddev.lavalite.entities.Emoji;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.exception.CommandErrorException;
@@ -94,7 +94,7 @@ public class VolumeCommand extends Command
                     channel.sendMessage("Please provide a valid volume to set between `0 - 200`.").queue();
                     return;
                 }
-                final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
+                final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
                 final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
                 audioPlayer.setVolume(volume);
 

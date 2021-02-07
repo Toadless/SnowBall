@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.music.MusicManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +72,7 @@ public class RestartCommand extends Command
             return;
         }
 
-        final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
+        final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {

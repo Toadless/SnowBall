@@ -30,11 +30,9 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.music.SearchProvider;
-import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,6 +80,6 @@ public class SearchCommand extends Command
         SearchProvider searchProvider = SearchProvider.YOUTUBE;
 
         MusicModule.getInstance()
-                .loadAndPlayForList(channel, songName, searchProvider, ctx);
+                .play(ctx, songName, searchProvider, true, true);
     }
 }

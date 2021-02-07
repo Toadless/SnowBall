@@ -24,18 +24,16 @@
 
 package net.toaddev.lavalite.command.music.control;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.lavalite.audio.GuildMusicManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.entities.command.CommandContext;
 import net.toaddev.lavalite.entities.music.SearchProvider;
 import net.toaddev.lavalite.main.Launcher;
-import net.toaddev.lavalite.modules.MusicModule;
-import net.toaddev.lavalite.modules.SpotifyModule;
 import org.jetbrains.annotations.NotNull;
 
 @net.toaddev.lavalite.annotation.Command
@@ -44,14 +42,17 @@ public class SpotifyCommand extends Command
     public SpotifyCommand()
     {
         super("spotify", "Plays a song from spotify");
+        addMemberPermissions(Permission.VOICE_CONNECT);
+        addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("sp");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx)
     {
         String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "spotify" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "p" + " ", "");
-        final TextChannel channel = (TextChannel) ctx.getChannel();
+        songName = songName.replaceFirst("^" + ctx.getPrefix() + "sp" + " ", "");
+        final TextChannel channel = ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
@@ -65,16 +66,6 @@ public class SpotifyCommand extends Command
 
         if (ctx.getArgs().length < 2)
         {
-            final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
-            if (musicManager.getAudioPlayer().getPlayingTrack() != null)
-            {
-                boolean paused = musicManager.getScheduler().player.isPaused();
-                musicManager.getScheduler().player.setPaused(!paused);
-                String status = paused ? "paused" : "playing";
-                String newStatus = !paused ? "paused" : "playing";
-                channel.sendMessage("Changed the player from **" + status+ "** to **" + newStatus + "**. \n This event occured because a song is and no arguments were provided!").queue();
-                return;
-            }
             channel.sendMessage("Please provide a url or search query.").queue();
             return;
         }
@@ -86,6 +77,6 @@ public class SpotifyCommand extends Command
             audioManager.openAudioConnection(memberChannel);
         }
 
-        Launcher.getMusicModule().loadAndPlay(channel, songName, SearchProvider.URL, ctx, true, false);
+        Launcher.getMusicModule().play(ctx, songName, SearchProvider.URL, false, false);
     }
 }

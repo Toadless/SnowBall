@@ -55,3 +55,10 @@ credentials:
   mongoDBUri:      "DB_URI"
   # This name can be anything you like
   mongoDBName:     "lavalite"
+  # This is how we connect to the spotify api
+  # To obtain a token and a secret go to
+  # developer.spotify.com/dashboard
+  # Add you spotify id between the quotation makes
+  spotifyId: "SPOTIFY_ID"
+  # This is your spotify secret (Dont Share This)
+  spotifySecret: "SPOTIFY_SECRET"

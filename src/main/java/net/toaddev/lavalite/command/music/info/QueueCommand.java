@@ -26,24 +26,19 @@ package net.toaddev.lavalite.command.music.info;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.lavalite.audio.GuildMusicManager;
+import net.toaddev.lavalite.entities.music.MusicManager;
 import net.toaddev.lavalite.entities.command.Command;
 import net.toaddev.lavalite.main.Launcher;
 import net.toaddev.lavalite.modules.MusicModule;
-import net.toaddev.lavalite.util.DiscordUtil;
 import net.toaddev.lavalite.util.MessageUtils;
 import net.toaddev.lavalite.util.MusicUtils;
-import net.toaddev.lavalite.util.TimeUtils;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.lavalite.entities.command.CommandContext;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Queue;
 
@@ -84,7 +79,7 @@ public class QueueCommand extends Command
             return;
         }
 
-        final GuildMusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
+        final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
 
         if (audioPlayer.getPlayingTrack() == null)
