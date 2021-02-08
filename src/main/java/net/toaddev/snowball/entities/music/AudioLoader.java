@@ -66,6 +66,7 @@ public class AudioLoader implements AudioLoadResultHandler
     @Override
     public void trackLoaded(AudioTrack track)
     {
+        Launcher.getMusicModule().getMusicManager(ctx.getGuild()).cancelDestroy();
         musicManager.getScheduler().queue(track);
 
         if (messages)
@@ -77,6 +78,7 @@ public class AudioLoader implements AudioLoadResultHandler
     @Override
     public void playlistLoaded(AudioPlaylist playlist)
     {
+        Launcher.getMusicModule().getMusicManager(ctx.getGuild()).cancelDestroy();
         final List<AudioTrack> tracks = playlist.getTracks();
         if (playlist.isSearchResult())
         {
@@ -137,6 +139,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void trackLoaded(AudioTrack track)
         {
+            Launcher.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
             musicManager.getScheduler().queue(track);
             sendAddedEmbed(track, channel, event);
         }
@@ -144,6 +147,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void playlistLoaded(AudioPlaylist playlist)
         {
+            Launcher.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
             final List<AudioTrack> tracks = playlist.getTracks();
 
             {

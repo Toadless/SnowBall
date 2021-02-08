@@ -51,6 +51,8 @@
 
     <logger name="org.mongodb.driver" level="ERROR"/>
 
+    <logger name="com.sedmelluq.lava.common" level="WARN"/>
+
     <!--Root logger-->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

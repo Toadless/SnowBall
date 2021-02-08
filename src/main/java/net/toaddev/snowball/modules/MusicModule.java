@@ -91,7 +91,6 @@ public class MusicModule extends Module
 
             var scheduler = manager.getScheduler();
             var member = event.getMember();
-            AudioManager audioManager = event.getGuild().getAudioManager();
 
             var voiceState = member.getVoiceState();
 
@@ -113,7 +112,7 @@ public class MusicModule extends Module
                 case "\uD83D\uDD00" -> scheduler.shuffle();
                 case "\uD83D\uDD09" -> scheduler.player.setVolume(scheduler.player.getVolume() - 50);
                 case "\uD83D\uDD0A" -> scheduler.player.setVolume(scheduler.player.getVolume() + 50);
-                case "\u274C" -> destroy(event.getGuild().getIdLong(), event.getMember().getIdLong());
+                case "\u274C" -> destroy(event.getGuild().getIdLong(), event.getMember().getIdLong(), true);
             }
             if(event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE)){
                 event.getReaction().removeReaction(event.getUser()).queue();
@@ -150,13 +149,15 @@ public class MusicModule extends Module
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event)
     {
-        if(event instanceof GuildVoiceLeaveEvent || event instanceof GuildVoiceMoveEvent){
+        if(event instanceof GuildVoiceLeaveEvent || event instanceof GuildVoiceMoveEvent)
+        {
             var manager = getMusicManager(event.getEntity().getGuild());
             if(manager == null){
                 return;
             }
-            if(event.getEntity().getIdLong() == Launcher.getJda().getSelfUser().getIdLong()){
-                this.modules.get(MusicModule.class).destroy(manager, -1L);
+            if(event.getEntity().getIdLong() == Launcher.getJda().getSelfUser().getIdLong())
+            {
+                this.modules.get(MusicModule.class).destroy(manager, -1L, false);
                 return;
             }
             var channel = event.getChannelLeft();
@@ -185,11 +186,11 @@ public class MusicModule extends Module
     }
 
 
-    public void destroy(long guildId, long userId)
+    public void destroy(long guildId, long userId, boolean message)
     {
         try
         {
-            destroy(this.musicPlayers.get(guildId), userId);
+            destroy(this.musicPlayers.get(guildId), userId, message);
         }
         catch (Exception ignored)
         {
@@ -197,7 +198,7 @@ public class MusicModule extends Module
         }
     }
 
-    public void destroy(MusicManager musicManager, long userId)
+    public void destroy(MusicManager musicManager, long userId, boolean msg)
     {
         var scheduler = musicManager.getScheduler();
 
@@ -207,6 +208,11 @@ public class MusicModule extends Module
         AudioManager audioManager = scheduler.guild.getAudioManager();
         audioManager.closeAudioConnection();
         musicManager.removeMusicController();
+
+        if (!msg)
+        {
+            return;
+        }
 
         var channel = Launcher.getModules().get(MessageModule.class).getLatestMessage().get(scheduler.guild.getIdLong()).getTextChannel();
         if(channel == null || !channel.canTalk())

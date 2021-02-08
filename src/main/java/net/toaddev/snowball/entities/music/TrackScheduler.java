@@ -65,8 +65,12 @@ public class TrackScheduler extends AudioEventAdapter
             AudioTrack nextTrack = this.queue.poll();
             if (nextTrack == null)
             {
+                Launcher.getMusicModule().getMusicManager(guild).planDestroy();
                 return;
             }
+
+            Launcher.getMusicModule().getMusicManager(guild).cancelDestroy();
+
             this.player.startTrack(nextTrack, false);
 
             Message latestMessage = Launcher.getModules().get(MessageModule.class).getLatestMessage().get(guild.getIdLong());

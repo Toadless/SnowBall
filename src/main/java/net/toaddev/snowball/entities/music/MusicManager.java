@@ -167,7 +167,7 @@ public class MusicManager
         if(this.future != null){
             return;
         }
-        this.future = Launcher.getModules().schedule(() -> Launcher.getModules().get(MusicModule.class).destroy(this, -1L), 2, TimeUnit.MINUTES);
+        this.future = Launcher.getModules().schedule(() -> Launcher.getModules().get(MusicModule.class).destroy(this, -1L, true), 2, TimeUnit.MINUTES);
     }
 
     public void cancelDestroy(){
