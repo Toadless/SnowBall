@@ -64,7 +64,7 @@ public class SearchCommand extends Command
 
         if (ctx.getArgs().length < 2)
         {
-            channel.sendMessage("Please provide a url or search query.").queue();
+            channel.sendMessage("Please provide a search query.").queue();
             return;
         }
 

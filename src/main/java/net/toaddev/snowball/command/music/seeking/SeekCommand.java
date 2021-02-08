@@ -43,6 +43,7 @@ public class SeekCommand extends Command
         super("seek", "Seeks to a provided position in the track");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
+        addAlias("pos");
     }
 
     @Override

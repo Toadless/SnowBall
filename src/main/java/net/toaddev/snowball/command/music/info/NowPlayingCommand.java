@@ -75,12 +75,11 @@ public class NowPlayingCommand extends Command
 
         final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
-        final AudioTrack track = audioPlayer.getPlayingTrack();
         if (audioPlayer.getPlayingTrack() == null) {
             channel.sendMessage("No current playing song.").queue();
             return;
         }
-        final AudioTrackInfo info = track.getInfo();
-        channel.sendMessage("Now playing" + " **" + info.title + "** " + "by" + " __" + info.author + "__" + "!").queue();
+
+        musicManager.sendMusicController();
     }
 }

@@ -114,7 +114,14 @@ public class PaginatorModule extends Module
         {
             return;
         }
-        channel.clearReactionsById(paginator.getMessageId()).queue();
+        try
+        {
+            channel.clearReactionsById(paginator.getMessageId()).queue();
+        }
+        catch (Exception ignored)
+        {
+
+        }
     }
 
     public void create(TextChannel channel, long authorId, int maxPages, BiFunction<Integer, EmbedBuilder, EmbedBuilder> embedFunction)

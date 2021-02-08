@@ -29,7 +29,6 @@ import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.toaddev.snowball.agent.ShardAgent;
 import net.toaddev.snowball.entities.module.Module;
 import net.toaddev.snowball.services.Modules;
 import net.toaddev.snowball.modules.MusicModule;
@@ -38,7 +37,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
-import net.toaddev.snowball.event.ShardListener;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -63,7 +61,6 @@ public class Launcher
     public static int shutdownCode = UNKNOWN_SHUTDOWN_CODE;
     public static final int SHARD_CREATION_SLEEP_INTERVAL = 5100;
     public static JDA jda;
-    public ShardListener shardListener = null;
     private static final ArrayList<Launcher> shards = new ArrayList<>();
     private static AtomicInteger numShardsReady = new AtomicInteger(0);
     private static boolean vanity = true;
@@ -119,7 +116,6 @@ public class Launcher
         vanity = vanity.replace("d", defaultC);
         return vanity;
     }
-
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException
     {
@@ -215,10 +211,6 @@ public class Launcher
         if (ready == Config.INS.getNumShards())
         {
             logger.info("All " + ready + " shards are ready.");
-
-            ShardAgent shardAgent = new ShardAgent();
-            shardAgent.setDaemon(true);
-            shardAgent.start();
         }
     }
 
@@ -305,11 +297,6 @@ public class Launcher
     {
         long size = getJda().getShardInfo().getShardTotal();
         return size;
-    }
-
-    public ShardListener getShardListener()
-    {
-        return shardListener;
     }
 
     public static String getExampleConfigFile()

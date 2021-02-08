@@ -74,7 +74,7 @@ public class TrackScheduler extends AudioEventAdapter
             {
                 return;
             }
-            latestMessage.getChannel().sendMessage("Now playing: `" + nextTrack.getInfo().title + "`!").queue();
+            Launcher.getMusicModule().getMusicManager(latestMessage.getGuild()).sendMusicController();
         } catch (Exception e)
         {
             throw new MusicException("Error skipping to next track.");

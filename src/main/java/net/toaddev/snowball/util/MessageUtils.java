@@ -22,6 +22,7 @@
 
 package net.toaddev.snowball.util;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.snowball.entities.command.Command;
 import net.toaddev.snowball.modules.PaginatorModule;
@@ -30,6 +31,8 @@ import net.toaddev.snowball.services.Modules;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MessageUtils
 {
@@ -63,6 +66,16 @@ public class MessageUtils
         return "[" + title + "](" + url + ")";
     }
 
+    public static void sendEmbed(String content, TextChannel channel)
+    {
+        channel.sendMessage(new EmbedBuilder()
+                .setDescription(content)
+                .setTimestamp(Instant.now())
+                .setColor(DiscordUtil.getEmbedColor())
+                .build())
+                .queue();
+    }
+
     public static void sendCommands(Collection<Command> commands, Modules modules, TextChannel channel, long authorId, String baseMessage){
         if(channel == null){
             return;
@@ -70,8 +83,36 @@ public class MessageUtils
         var cmdMessage = new StringBuilder("**").append(baseMessage).append(":**\n");
         var pages = new ArrayList<String>();
 
-        for(var command : commands){
+        for(var command : commands)
+        {
+            if (cmdMessage.toString().contains(command.getName()))
+            {
+                continue;
+            }
+
+            AtomicBoolean shouldContinue = new AtomicBoolean(true);
+
+            pages.forEach(s -> {
+                if (s.contains(command.getName()))
+                {
+                    shouldContinue.set(false);
+                }
+            });
+
+            if (!shouldContinue.get())
+            {
+                continue;
+            }
+
             var formattedCmd = "`" + command.getName() + "` - `" + command.getDescription() + "`\n";
+
+            List<String> alias = command.getAliases();
+
+            for (String a : alias)
+            {
+                formattedCmd = formattedCmd + "`" + a + "` - `" + command.getDescription() + "`\n";
+            }
+
             if(cmdMessage.length() + formattedCmd.length() >= 516){
                 pages.add(cmdMessage.toString());
                 cmdMessage = new StringBuilder();

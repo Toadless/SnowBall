@@ -79,6 +79,5 @@ public class SkipCommand extends Command
             return;
         }
         musicManager.getScheduler().nextTrack();
-        channel.sendMessage("The player has skipped to the next song.").queue();
     }
 }

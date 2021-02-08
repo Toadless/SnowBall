@@ -32,7 +32,6 @@ import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.toaddev.snowball.data.Config;
-import net.toaddev.snowball.event.ShardListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +43,6 @@ public class BotController extends Launcher
     public BotController(int shardId)
     {
         this.shardId = shardId;
-        shardListener = new ShardListener();
 
         log.info("Building shard " + shardId);
         try {
@@ -68,7 +66,6 @@ public class BotController extends Launcher
                         .setCompression(Compression.NONE)
                         .addEventListeners(Launcher.getModules().getModules())
                         .addEventListeners(Launcher.getEventWaiter())
-                        .addEventListeners(shardListener)
                         .setMemberCachePolicy(MemberCachePolicy.VOICE)
                         .setHttpClient(Launcher.getModules().getHttpClient())
                         .setStatus(OnlineStatus.DO_NOT_DISTURB)

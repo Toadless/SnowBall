@@ -48,7 +48,6 @@ public class EvalCommand extends Command
         super("eval", null);
         addFlags(CommandFlag.DEVELOPER_ONLY);
         addSelfPermissions(Permission.MESSAGE_EMBED_LINKS);
-        addAlias("evaluate");
         this.EVAL_EXECUTOR = Executors.newFixedThreadPool(4);
         this.SCRIPT_ENGINE = new ScriptEngineManager().getEngineByName("groovy");
         this.imports = "import java.io.*\n" +
@@ -88,7 +87,7 @@ public class EvalCommand extends Command
                 SCRIPT_ENGINE.put("guild", ctx.getGuild());
                 SCRIPT_ENGINE.put("member", ctx.getMember());
 
-                String script = imports + ctx.getMessage().getContentRaw().split("\\s+", 2)[1];
+                String script = imports + messageArgs;
 
                 long start = System.currentTimeMillis();
 

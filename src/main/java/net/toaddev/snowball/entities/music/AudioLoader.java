@@ -186,7 +186,7 @@ public class AudioLoader implements AudioLoadResultHandler
                                     channel.sendMessage("Invalid number.").queue();
                                 }
                             },
-                            10L, TimeUnit.SECONDS,
+                            30L, TimeUnit.SECONDS,
                             () -> channel.sendMessage("You took too long.").queue()
                     );
                 }
