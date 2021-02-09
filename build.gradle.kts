@@ -47,7 +47,7 @@ val caffeineVersion = "2.8.8"
 val utilsVersion = "3.0.5"
 val springBootVersion = "2.1.8.RELEASE"
 val httpClientVersion = "4.9.1"
-val spotifyVersion = "6.3.0"
+val spotifyVersion = "6.5.1"
 
 dependencies {
     // spring boot
