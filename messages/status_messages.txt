@@ -1,6 +1,7 @@
-watching you 👀
 watching ${total_guilds} guilds 👀
 watching ${total_users} users 👀
-playing JDA
-watching JDA
-watching Discord
+watching the world burn
+watching dreams die
+playing games
+listening music
+playing music

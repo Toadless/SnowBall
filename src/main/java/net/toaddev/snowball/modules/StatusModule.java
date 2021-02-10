@@ -49,13 +49,16 @@ public class StatusModule extends Module
         this.modules.scheduleAtFixedRate(this::newRandomStatus, 0, 2, TimeUnit.MINUTES);
     }
 
-    public void newRandomStatus(){
+    public void newRandomStatus()
+    {
         var JDA = Launcher.getJda();
         JDA.getPresence().setPresence(OnlineStatus.ONLINE, generateRandomMessage());
     }
 
-    private Activity generateRandomMessage(){
-        if(statusMessages.isEmpty()){
+    private Activity generateRandomMessage()
+    {
+        if(statusMessages.isEmpty())
+        {
             return Activity.watching("you \uD83D\uDC40");
         }
         var randomMessage = statusMessages.get(ThreadLocalRandom.current().nextInt(statusMessages.size() - 1));

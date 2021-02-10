@@ -53,3 +53,8 @@ credentials:
   spotifyId: "SPOTIFY_ID"
   # This is your spotify secret (Dont Share This)
   spotifySecret: "SPOTIFY_SECRET"
+    # This is the token for top.gg if your bot is listed
+    # If your bot isnt listed then leave this blank and
+    # the bot will still function properly.
+    # Place your token inbetween the quotes
+    topggtoken: ""
