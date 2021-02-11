@@ -63,6 +63,7 @@ public class TrackScheduler extends AudioEventAdapter
         try
         {
             AudioTrack nextTrack = this.queue.poll();
+
             if (nextTrack == null)
             {
                 Launcher.getMusicModule().getMusicManager(guild).planDestroy();
@@ -72,13 +73,6 @@ public class TrackScheduler extends AudioEventAdapter
             Launcher.getMusicModule().getMusicManager(guild).cancelDestroy();
 
             this.player.startTrack(nextTrack, false);
-
-            Message latestMessage = Launcher.getModules().get(MessageModule.class).getLatestMessage().get(guild.getIdLong());
-            if (latestMessage == null)
-            {
-                return;
-            }
-            Launcher.getMusicModule().getMusicManager(latestMessage.getGuild()).sendMusicController();
         } catch (Exception e)
         {
             throw new MusicException("Error skipping to next track.");
@@ -107,10 +101,7 @@ public class TrackScheduler extends AudioEventAdapter
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track)
     {
-        if (queue.isEmpty() || !queue.contains(track))
-        {
-            Launcher.getMusicModule().getMusicManager(guild).sendMusicController();
-        }
+        Launcher.getMusicModule().getMusicManager(guild).sendMusicController();
     }
 
     public void loadItem(String query,  MusicManager manager, CommandContext ctx, boolean messages)
