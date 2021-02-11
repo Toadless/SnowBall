@@ -261,12 +261,8 @@ public class MusicModule extends Module
         {
             switch (searchProvider)
             {
-                case YOUTUBE:
-                    query = "ytsearch:" + query;
-                    break;
-                case SOUNDCLOUD:
-                    query = "scsearch:" + query;
-                    break;
+                case YOUTUBE -> query = "ytsearch:" + query;
+                case SOUNDCLOUD -> query = "scsearch:" + query;
             }
         }
 

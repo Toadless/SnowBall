@@ -84,7 +84,6 @@ public class MusicManager
        {
            var embed = new EmbedBuilder();
            var track = this.scheduler.player.getPlayingTrack();
-           var info = track.getInfo();
            embed.setColor(DiscordUtil.getEmbedColor())
                    .addField("Playing", Emoji.FORWARD.get() + " " + MusicUtils.formatTrack(track), false)
                    .addField("Length", TimeUtils.formatDuration(track.getDuration()), true)
