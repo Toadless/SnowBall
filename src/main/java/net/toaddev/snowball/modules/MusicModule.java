@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.*;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -185,6 +186,16 @@ public class MusicModule extends Module
         }
     }
 
+    @Override
+    public void onGuildMessageDelete(GuildMessageDeleteEvent event)
+    {
+        MusicManager manager = getMusicManager(event.getGuild());
+
+        if (manager.getMusicController() == event.getMessageIdLong())
+        {
+            manager.removeMusicController(); // Here we will remove the music controller because the message has been deleted
+        }
+    }
 
     public void destroy(long guildId, long userId, boolean message)
     {

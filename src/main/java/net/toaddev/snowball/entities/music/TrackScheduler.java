@@ -104,6 +104,15 @@ public class TrackScheduler extends AudioEventAdapter
         }
     }
 
+    @Override
+    public void onTrackStart(AudioPlayer player, AudioTrack track)
+    {
+        if (queue.isEmpty() || !queue.contains(track))
+        {
+            Launcher.getMusicModule().getMusicManager(guild).sendMusicController();
+        }
+    }
+
     public void loadItem(String query,  MusicManager manager, CommandContext ctx, boolean messages)
     {
         Launcher.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader(ctx, Launcher.getMusicModule(), messages));
