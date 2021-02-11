@@ -83,32 +83,6 @@ public class RequestModule extends Module
         });
     }
 
-    public String executeRequest(Request request, API api)
-    {
-        var requestUrl = request.url();
-        try(var response = this.modules.getHttpClient().newCall(request).execute())
-        {
-            var body = response.body();
-            var code = response.code();
-            if(code != 200 || body == null)
-            {
-                var string = body == null ? null : body.string();
-                LOG.warn("Failed to send a request to {} | code: {} | response: {}", requestUrl, code, string);
-                return string;
-            }
-            if(api != null)
-            {
-                LOG.info("Successfully executed a stats update request to {} API", api.getName());
-            }
-            return body.string();
-        }
-        catch(Exception e)
-        {
-            LOG.error("There was an error while sending a request to {}", requestUrl, e);
-        }
-        return "";
-    }
-
     public void updateStats(API api, int guildCount, String token)
     {
         var requestBody = RequestBody.create(
