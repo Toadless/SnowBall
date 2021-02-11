@@ -22,7 +22,7 @@
 
 plugins {
     application
-    id ("org.springframework.boot") version "2.4.2"
+    id ("org.springframework.boot") version "2.4.1"
     id ("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
@@ -36,18 +36,18 @@ repositories {
     maven { setUrl ("http://repo.spring.io/plugins-release") }
 }
 
-val jdaVersion = "4.2.0_227"
+val jdaVersion = "4.2.0_228"
 val logbackVersion = "1.3.0-alpha5"
 val lavaplayerVersion = "1.3.67"
 val yamlVersion = "1.7.2"
 val groovyVersion = "3.0.7"
 val mongoVersion = "3.12.7"
-val jsonVersion = "20180813"
+val jsonVersion = "20201115"
 val caffeineVersion = "2.8.8"
 val utilsVersion = "3.0.5"
-val springBootVersion = "2.4.2"
-val httpClientVersion = "4.9.0"
-val spotifyVersion = "6.3.0"
+val springBootVersion = "2.1.8.RELEASE"
+val httpClientVersion = "4.9.1"
+val spotifyVersion = "6.5.1"
 
 dependencies {
     // spring boot
@@ -73,7 +73,7 @@ dependencies {
     implementation ("org.json:json:$jsonVersion")
 
     // other
-    implementation ("io.github.classgraph:classgraph:4.8.98")
+    implementation ("io.github.classgraph:classgraph:4.8.102")
     implementation ("com.github.ben-manes.caffeine:caffeine:2.8.8")
     implementation ("com.squareup.okhttp3:okhttp:$httpClientVersion")
 }

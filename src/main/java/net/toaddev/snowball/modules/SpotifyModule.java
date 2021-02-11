@@ -114,7 +114,7 @@ public class SpotifyModule extends Module
 
     private void loadTrack(String id, CommandContext ctx, MusicManager manager)
     {
-        this.spotify.getTrack(id).build().executeAsync().thenAcceptAsync(track -> this.modules.get(MusicModule.class).play(ctx, track.getArtists()[0].getName() + " " + track.getName(), SearchProvider.YOUTUBE, false, false))
+        this.spotify.getTrack(id).build().executeAsync().thenAcceptAsync(track -> this.modules.get(MusicModule.class).play(ctx, track.getArtists()[0].getName() + " " + track.getName(), SearchProvider.YOUTUBE, true, false))
                 .exceptionally(throwable -> {
                     ctx.getChannel().sendMessage(throwable.getMessage().contains("invalid id") ? "Track not found" : "There was an error while loading the track").queue();
                     return null;

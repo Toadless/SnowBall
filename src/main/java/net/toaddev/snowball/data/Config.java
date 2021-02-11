@@ -60,6 +60,7 @@ public class Config
     private String mongoName;
     private String spotifyId;
     private String spotifyApiKey;
+    private String topGGToken;
 
     /**
      *
@@ -116,6 +117,7 @@ public class Config
         this.maxShards = config.getInt("config.maxShards");
         this.spotifyId = config.getString("credentials.spotifyId");
         this.spotifyApiKey = config.getString("credentials.spotifySecret");
+        this.topGGToken = config.getString("credentials.topggtoken");
     }
 
     /**
@@ -234,5 +236,10 @@ public class Config
     public String getSpotifyApiKey()
     {
         return spotifyApiKey;
+    }
+
+    public String getTopGGToken()
+    {
+        return topGGToken;
     }
 }
