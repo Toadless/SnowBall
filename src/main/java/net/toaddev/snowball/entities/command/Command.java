@@ -25,8 +25,11 @@ package net.toaddev.snowball.entities.command;
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.Permission;
 import net.toaddev.snowball.util.EmbedUtil;
+import org.xml.sax.SAXException;
 
 import javax.annotation.Nonnull;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,7 +152,7 @@ public abstract class Command
      *
      * @param ctx The {@link CommandContext event} to use.
      */
-    public abstract void run(@Nonnull CommandContext ctx);
+    public abstract void run(@Nonnull CommandContext ctx) throws ParserConfigurationException, SAXException, IOException;
 
     /**
      * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.toaddev.snowball.modules.CommandsModule command} {@link net.dv8tion.jda.api.entities.Member author} to execute.

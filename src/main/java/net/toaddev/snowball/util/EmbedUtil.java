@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 
 import java.awt.*;
 import java.time.Instant;
@@ -74,7 +74,7 @@ public class EmbedUtil
             try {
                 channel.sendMessage("I do not have any permissions. My lowest required permissions is `MESSAGE_EMBED_LINKS`.").queue();
             } catch (PermissionException exception) {
-                Guild guild = Launcher.getJda().getGuildChannelById(channel.getId()).getGuild();
+                Guild guild = BotController.getJda().getGuildChannelById(channel.getId()).getGuild();
                 if (guild == null) {
                     return;
                 }

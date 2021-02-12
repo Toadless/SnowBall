@@ -26,7 +26,7 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.IOUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,7 +51,7 @@ public class StatusModule extends Module
 
     public void newRandomStatus()
     {
-        var JDA = Launcher.getJda();
+        var JDA = BotController.getJda();
         JDA.getPresence().setPresence(OnlineStatus.ONLINE, generateRandomMessage());
     }
 
@@ -67,8 +67,8 @@ public class StatusModule extends Module
         var type = activityMessage[0].toUpperCase();
         var message = activityMessage[1];
 
-        message = message.replace("${total_users}", String.valueOf(Launcher.getAllUsersAsMap().size()));
-        message = message.replace("${total_guilds}", String.valueOf(Launcher.getAllGuilds().size()));
+        message = message.replace("${total_users}", String.valueOf(BotController.getAllUsersAsMap().size()));
+        message = message.replace("${total_guilds}", String.valueOf(BotController.getAllGuilds().size()));
         return Activity.of(Activity.ActivityType.valueOf(type.equals("PLAYING") ? "DEFAULT" : type), message);
     }
 

@@ -1,22 +1,16 @@
 package net.toaddev.snowball.modules;
 
-import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.toaddev.snowball.api.API;
-import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import okhttp3.*;
-import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class RequestModule extends Module
 {
@@ -91,7 +85,7 @@ public class RequestModule extends Module
                         .toString(),
                 MediaType.parse("application/json; charset=utf-8")
         );
-        this.requestBuilder.url(String.format(api.getUrl(), Launcher.getJda().getSelfUser().getIdLong()));
+        this.requestBuilder.url(String.format(api.getUrl(), BotController.getJda().getSelfUser().getIdLong()));
         this.requestBuilder.header("Authorization", token);
         this.requestBuilder.post(requestBody);
         executeAsync(requestBuilder.build(), api);

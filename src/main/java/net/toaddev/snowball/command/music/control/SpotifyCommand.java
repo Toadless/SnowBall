@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import net.toaddev.snowball.entities.command.Command;
 import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.music.SearchProvider;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import org.jetbrains.annotations.NotNull;
 
 @net.toaddev.snowball.annotation.Command
@@ -75,6 +75,6 @@ public class SpotifyCommand extends Command
             audioManager.openAudioConnection(memberChannel);
         }
 
-        Launcher.getMusicModule().play(ctx, songName, SearchProvider.URL, false, false);
+        BotController.getMusicModule().play(ctx, songName, SearchProvider.URL, false, false);
     }
 }

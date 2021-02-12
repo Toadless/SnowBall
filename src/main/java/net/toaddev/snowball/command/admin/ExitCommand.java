@@ -25,7 +25,7 @@ package net.toaddev.snowball.command.admin;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.snowball.entities.command.CommandContext;
@@ -50,7 +50,7 @@ public class ExitCommand extends Command
                     message.addReaction("\u2705").queue();
                     message.addReaction("\u274c").queue();
 
-                    Launcher.getEventWaiter().waitForEvent(
+                    BotController.getEventWaiter().waitForEvent(
                             GuildMessageReactionAddEvent.class,
                             (e) -> e.getMessageIdLong() == message.getIdLong() && !e.getUser().isBot() && DiscordUtil.isOwner(e.getUser()),
                             (e) ->
@@ -63,7 +63,7 @@ public class ExitCommand extends Command
                                 {
                                     message.clearReactions().queue();
                                     message.editMessage("Shutting down").queue();
-                                    Launcher.shutdown(0);
+                                    BotController.shutdown(0);
                                 }
                             },
                             5L, TimeUnit.SECONDS,

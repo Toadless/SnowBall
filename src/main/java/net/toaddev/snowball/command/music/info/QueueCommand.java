@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.snowball.entities.music.MusicManager;
 import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.util.MessageUtils;
 import net.toaddev.snowball.util.MusicUtils;
@@ -96,6 +96,6 @@ public class QueueCommand extends Command
 
         List<AudioTrack> tracks = musicManager.getScheduler().getQueue();
 
-        MusicUtils.sendTracks(tracks, Launcher.getModules(), ctx.getChannel(), ctx.getMember().getUser().getIdLong(), "Currently " + tracks.size() + " " + MessageUtils.pluralize("track", tracks) + " are queued");
+        MusicUtils.sendTracks(tracks, BotController.getModules(), ctx.getChannel(), ctx.getMember().getUser().getIdLong(), "Currently " + tracks.size() + " " + MessageUtils.pluralize("track", tracks) + " are queued");
     }
 }

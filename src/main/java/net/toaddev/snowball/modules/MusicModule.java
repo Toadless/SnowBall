@@ -41,7 +41,7 @@ import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.exception.MusicException;
 import net.toaddev.snowball.entities.module.Module;
 import net.toaddev.snowball.entities.music.SearchProvider;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import net.toaddev.snowball.util.MessageUtils;
 import net.toaddev.snowball.util.TimeUtils;
@@ -115,7 +115,8 @@ public class MusicModule extends Module
                 case "\uD83D\uDD0A" -> scheduler.player.setVolume(scheduler.player.getVolume() + 50);
                 case "\u274C" -> destroy(event.getGuild().getIdLong(), event.getMember().getIdLong(), true);
             }
-            if(event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE)){
+            if(event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE))
+            {
                 event.getReaction().removeReaction(event.getUser()).queue();
             }
         }
@@ -156,7 +157,7 @@ public class MusicModule extends Module
             if(manager == null){
                 return;
             }
-            if(event.getEntity().getIdLong() == Launcher.getJda().getSelfUser().getIdLong())
+            if(event.getEntity().getIdLong() == BotController.getJda().getSelfUser().getIdLong())
             {
                 this.modules.get(MusicModule.class).destroy(manager, -1L, false);
                 return;
@@ -225,7 +226,7 @@ public class MusicModule extends Module
             return;
         }
 
-        var channel = Launcher.getModules().get(MessageModule.class).getLatestMessage().get(scheduler.guild.getIdLong()).getTextChannel();
+        var channel = BotController.getModules().get(MessageModule.class).getLatestMessage().get(scheduler.guild.getIdLong()).getTextChannel();
         if(channel == null || !channel.canTalk())
         {
             return;
@@ -322,7 +323,7 @@ public class MusicModule extends Module
      */
     public static MusicModule getInstance()
     {
-        return Launcher.getMusicModule();
+        return BotController.getMusicModule();
     }
 
     public AudioPlayerManager getAudioPlayerManager()

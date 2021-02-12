@@ -24,7 +24,6 @@ package net.toaddev.snowball.entities.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
@@ -33,7 +32,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.toaddev.snowball.entities.Emoji;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.MessageModule;
 import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.util.DiscordUtil;
@@ -102,7 +101,7 @@ public class MusicManager
     {
         try
         {
-            Map<Long, Message> latestMessages = Launcher.getModules().get(MessageModule.class).getLatestMessage();
+            Map<Long, Message> latestMessages = BotController.getModules().get(MessageModule.class).getLatestMessage();
             Message latestMessage = latestMessages.get(this.scheduler.guild.getIdLong());
 
             if (latestMessage == null)
@@ -167,7 +166,7 @@ public class MusicManager
         if(this.future != null){
             return;
         }
-        this.future = Launcher.getModules().schedule(() -> Launcher.getModules().get(MusicModule.class).destroy(this, -1L, true), 2, TimeUnit.MINUTES);
+        this.future = BotController.getModules().schedule(() -> BotController.getModules().get(MusicModule.class).destroy(this, -1L, true), 2, TimeUnit.MINUTES);
     }
 
     public void cancelDestroy(){

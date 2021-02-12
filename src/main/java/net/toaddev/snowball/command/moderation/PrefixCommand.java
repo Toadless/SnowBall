@@ -24,7 +24,7 @@ package net.toaddev.snowball.command.moderation;
 
 import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.DatabaseModule;
 import net.toaddev.snowball.modules.SettingsModule;
 import org.jetbrains.annotations.NotNull;
@@ -43,13 +43,13 @@ public class PrefixCommand extends Command
     public void run(@NotNull CommandContext ctx)
     {
         long guildId = Long.parseLong(ctx.getGuild().getId());
-        if (!Launcher.DATABASE_ENABLED)
+        if (!BotController.DATABASE_ENABLED)
         {
             return;
         }
         else if (ctx.getArgs().length < 2)
         {
-            ctx.getChannel().sendMessageFormat("Your prefix is: `%s`", Launcher.getModules().get(DatabaseModule.class).getPrefix(guildId)).queue();
+            ctx.getChannel().sendMessageFormat("Your prefix is: `%s`", BotController.getModules().get(DatabaseModule.class).getPrefix(guildId)).queue();
             return;
         }
         else if (ctx.getArgs()[1].length() > 5)
@@ -59,7 +59,7 @@ public class PrefixCommand extends Command
         }
         else
         {
-            Launcher.getModules().get(SettingsModule.class).setGuildPrefix(guildId, ctx.getArgs()[1]);
+            BotController.getModules().get(SettingsModule.class).setGuildPrefix(guildId, ctx.getArgs()[1]);
             ctx.getChannel().sendMessageFormat("Set the guilds prefix to: `%s`", ctx.getArgs()[1]).queue();
         }
     }

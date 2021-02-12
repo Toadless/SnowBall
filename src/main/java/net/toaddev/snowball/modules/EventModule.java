@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class EventModule extends Module
     @Override
     public void onReady(ReadyEvent event)
     {
-        Launcher.onInit(event);
+        BotController.onInit(event);
     }
 
     @Override

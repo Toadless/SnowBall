@@ -22,7 +22,7 @@
 
 package net.toaddev.snowball.data;
 
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.IOUtil;
 import org.simpleyaml.configuration.file.FileConfiguration;
 import org.simpleyaml.configuration.file.YamlConfiguration;
@@ -91,7 +91,7 @@ public class Config
         {
             if (!this.config.exists())
             {
-                String appConfig = IOUtil.getResourceFileContents(Launcher.getExampleConfigFile());
+                String appConfig = IOUtil.getResourceFileContents(BotController.getExampleConfigFile());
                 this.config.createNewFile();
                 FileWriter fileWriter = new FileWriter(this.config.getName());
                 fileWriter.write(appConfig);

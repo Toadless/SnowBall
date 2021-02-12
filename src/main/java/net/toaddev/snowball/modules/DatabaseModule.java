@@ -32,7 +32,7 @@ import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
 import net.toaddev.snowball.entities.database.IMongoTask;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,7 +118,7 @@ public class DatabaseModule extends Module
         }
 
         Document guildDocument = new Document("id", id);
-        FindIterable<Document> guild = Launcher.getModules().get(DatabaseModule.class).getDatabase().getCollection(COLLECTION).find(guildDocument);
+        FindIterable<Document> guild = BotController.getModules().get(DatabaseModule.class).getDatabase().getCollection(COLLECTION).find(guildDocument);
         if (guild.first() == null)
         {
             createGuild(id);
@@ -146,7 +146,7 @@ public class DatabaseModule extends Module
             return;
         }
         Document guildDocument = new Document("id", id);
-        FindIterable<Document> guild = Launcher.getModules().get(DatabaseModule.class).getDatabase().getCollection(COLLECTION).find(guildDocument);
+        FindIterable<Document> guild = BotController.getModules().get(DatabaseModule.class).getDatabase().getCollection(COLLECTION).find(guildDocument);
         if (guild.first() == null)
         {
             createGuild(id);
@@ -161,7 +161,7 @@ public class DatabaseModule extends Module
      * @param object The new object to insert
      */
     public void insert(Document object) {
-        Launcher.getModules().get(DatabaseModule.class).runTask(database ->
+        BotController.getModules().get(DatabaseModule.class).runTask(database ->
         {
             database.getCollection(COLLECTION).insertOne(object);
         });
@@ -174,7 +174,7 @@ public class DatabaseModule extends Module
      */
     public void replace(long id, Document object)
     {
-        Launcher.getModules().get(DatabaseModule.class).runTask(database ->
+        BotController.getModules().get(DatabaseModule.class).runTask(database ->
         {
             database.getCollection(COLLECTION).replaceOne(eq("id", id), object);
         });
@@ -182,7 +182,7 @@ public class DatabaseModule extends Module
 
     public void remove(long id)
     {
-        Launcher.getModules().get(DatabaseModule.class).runTask(database ->
+        BotController.getModules().get(DatabaseModule.class).runTask(database ->
         {
             database.getCollection(COLLECTION).deleteOne(eq("id", id));
         });

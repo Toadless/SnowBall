@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,13 +85,13 @@ public class SettingsModule extends Module
     public void cleanupAllSettings(long guildId)
     {
         LOG.info("Cleaning up guild: {}", guildId);
-        DatabaseModule databaseModule = Launcher.getModules().get(DatabaseModule.class);
+        DatabaseModule databaseModule = BotController.getModules().get(DatabaseModule.class);
         databaseModule.remove(guildId);
     }
 
     public void insertSettingsIfNotExists(Guild guild)
     {
-        DatabaseModule databaseModule = Launcher.getModules().get(DatabaseModule.class);
+        DatabaseModule databaseModule = BotController.getModules().get(DatabaseModule.class);
         databaseModule.insertSettingsIfNotExists(guild.getIdLong());
     }
 
@@ -105,7 +105,7 @@ public class SettingsModule extends Module
         String prefix = guildSettings.getIfPresent(id);
         if (prefix == null)
         {
-            DatabaseModule databaseModule = Launcher.getModules().get(DatabaseModule.class);
+            DatabaseModule databaseModule = BotController.getModules().get(DatabaseModule.class);
             String p = databaseModule.getPrefix(id);
             guildSettings.put(id, p);
             return p;
@@ -127,7 +127,7 @@ public class SettingsModule extends Module
 
         guildSettings.put(id, prefix);
 
-        DatabaseModule databaseModule = Launcher.getModules().get(DatabaseModule.class);
+        DatabaseModule databaseModule = BotController.getModules().get(DatabaseModule.class);
 
         databaseModule.setPrefix(id, prefix);
         return;

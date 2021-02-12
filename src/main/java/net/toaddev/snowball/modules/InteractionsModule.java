@@ -26,7 +26,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.snowball.entities.command.Command;
 import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 
 public class InteractionsModule extends Module
 {
@@ -54,7 +54,7 @@ public class InteractionsModule extends Module
         {
             return;
         }
-        String guildPrefix = Launcher.getModules().get(SettingsModule.class).getGuildPrefix(guildId);
+        String guildPrefix = BotController.getModules().get(SettingsModule.class).getGuildPrefix(guildId);
         if (event.getMessage().getContentRaw().startsWith(guildPrefix))
         {
             this.process(event, guildPrefix);
@@ -69,7 +69,7 @@ public class InteractionsModule extends Module
     {
         String[] args = event.getMessage().getContentRaw().split("\\s+");
 
-        Command command = Launcher.getModules().get(CommandsModule.class).getCommand(args[0].replace(prefix, ""));
+        Command command = BotController.getModules().get(CommandsModule.class).getCommand(args[0].replace(prefix, ""));
 
         if (command == null)
         {

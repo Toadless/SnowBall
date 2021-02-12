@@ -30,7 +30,7 @@ import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.module.Module;
 import net.toaddev.snowball.entities.music.SearchProvider;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.MusicUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,10 +144,10 @@ public class SpotifyModule extends Module
         ctx.getChannel().sendMessage("Loading...\nThis may take a while").queue();
 
         String[] args = ctx.getMessage().getContentRaw().split("\\s+");
-        String guildPrefix = Launcher.getModules().get(SettingsModule.class).getGuildPrefix(ctx.getGuild().getIdLong());
+        String guildPrefix = BotController.getModules().get(SettingsModule.class).getGuildPrefix(ctx.getGuild().getIdLong());
 
         toLoad.forEach(s -> {
-            Launcher.getMusicModule().play(ctx, s, SearchProvider.YOUTUBE, false, false);
+            BotController.getMusicModule().play(ctx, s, SearchProvider.YOUTUBE, false, false);
         });
 
         MusicUtils.sendAddedEmbed(ctx, toLoad.size());

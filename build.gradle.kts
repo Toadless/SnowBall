@@ -21,7 +21,11 @@
  */
 
 plugins {
+    java
+    idea
     application
+
+    kotlin("jvm") version "1.4.21"
     id ("org.springframework.boot") version "2.4.2"
     id ("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
@@ -71,6 +75,11 @@ dependencies {
     // database
     implementation ("org.mongodb:mongo-java-driver:$mongoVersion")
     implementation ("org.json:json:$jsonVersion")
+
+    // kotlin
+    // kotlin
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.2")
 
     // other
     implementation ("io.github.classgraph:classgraph:4.8.102")

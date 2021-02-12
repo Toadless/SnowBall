@@ -27,11 +27,9 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.exception.MusicException;
-import net.toaddev.snowball.main.Launcher;
-import net.toaddev.snowball.modules.MessageModule;
+import net.toaddev.snowball.main.BotController;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -66,11 +64,11 @@ public class TrackScheduler extends AudioEventAdapter
 
             if (nextTrack == null)
             {
-                Launcher.getMusicModule().getMusicManager(guild).planDestroy();
+                BotController.getMusicModule().getMusicManager(guild).planDestroy();
                 return;
             }
 
-            Launcher.getMusicModule().getMusicManager(guild).cancelDestroy();
+            BotController.getMusicModule().getMusicManager(guild).cancelDestroy();
 
             this.player.startTrack(nextTrack, false);
         } catch (Exception e)
@@ -101,17 +99,17 @@ public class TrackScheduler extends AudioEventAdapter
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track)
     {
-        Launcher.getMusicModule().getMusicManager(guild).sendMusicController();
+        BotController.getMusicModule().getMusicManager(guild).sendMusicController();
     }
 
     public void loadItem(String query,  MusicManager manager, CommandContext ctx, boolean messages)
     {
-        Launcher.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader(ctx, Launcher.getMusicModule(), messages));
+        BotController.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader(ctx, BotController.getMusicModule(), messages));
     }
 
     public void loadItemList(String query, MusicManager manager, CommandContext ctx)
     {
-        Launcher.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader.AudioLoaderList(ctx, Launcher.getMusicModule()));
+        BotController.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader.AudioLoaderList(ctx, BotController.getMusicModule()));
     }
 
     public LinkedList<AudioTrack> getQueue()

@@ -28,7 +28,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.toaddev.snowball.entities.exception.ModuleNotFoundException;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.ThreadFactoryHelper;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
@@ -119,7 +119,7 @@ public class Modules
 
     public JDA getJDA()
     {
-        return Launcher.getJda();
+        return BotController.getJda();
     }
 
     public ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long initDelay, long delay, TimeUnit timeUnit){

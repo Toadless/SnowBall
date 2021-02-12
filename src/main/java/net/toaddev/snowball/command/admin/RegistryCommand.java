@@ -22,7 +22,7 @@
 
 package net.toaddev.snowball.command.admin;
 
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.snowball.entities.command.CommandContext;
@@ -52,7 +52,7 @@ public class RegistryCommand extends Command
             ctx.getChannel().sendMessage("Please provide an option. `clear` | `rebuild`").queue();
             return;
         }
-        CommandsModule commandsModule = Launcher.getModules().get(CommandsModule.class);
+        CommandsModule commandsModule = BotController.getModules().get(CommandsModule.class);
         if (ctx.getArgs()[1].equals("clear"))
         {
             commandsModule.deleteAllCommands();

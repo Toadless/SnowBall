@@ -22,7 +22,7 @@
 
 package net.toaddev.snowball.command.util;
 
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.snowball.entities.command.CommandContext;
@@ -52,7 +52,7 @@ public class HelpCommand extends Command
             ctx.getChannel().sendMessage(stringBuilder.toString()).queue();
             return;
         }
-        Command command = Launcher.getModules().get(CommandsModule.class).getCommand(ctx.getArgs()[1]);
+        Command command = BotController.getModules().get(CommandsModule.class).getCommand(ctx.getArgs()[1]);
         if (command == null)
         {
             ctx.getChannel().sendMessage("Unknown command: `" + ctx.getArgs()[1] + "`.");

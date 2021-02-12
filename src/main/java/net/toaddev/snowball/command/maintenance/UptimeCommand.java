@@ -25,7 +25,7 @@ package net.toaddev.snowball.command.maintenance;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.toaddev.snowball.entities.command.Command;
 import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 
 import javax.annotation.Nonnull;
@@ -43,7 +43,7 @@ public class UptimeCommand extends Command
     @Override
     public void run(@Nonnull CommandContext ctx)
     {
-        Duration uptime = Duration.between(Launcher.getStartTimestamp(), LocalDateTime.now());
+        Duration uptime = Duration.between(BotController.getStartTimestamp(), LocalDateTime.now());
         ctx.getChannel().sendMessage(new EmbedBuilder()
                 .setDescription(
                         "Uptime: " + uptime.toDaysPart() +

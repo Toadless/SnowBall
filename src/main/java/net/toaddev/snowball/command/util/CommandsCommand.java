@@ -24,7 +24,7 @@ package net.toaddev.snowball.command.util;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
 import net.toaddev.snowball.util.MessageUtils;
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +43,7 @@ public class CommandsCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx)
     {
-        Map<String, Command> commandMap = Launcher.getModules().get(CommandsModule.class).getCommands();
+        Map<String, Command> commandMap = BotController.getModules().get(CommandsModule.class).getCommands();
         Collection<Command> cmds = new LinkedList<>();
 
         commandMap.forEach((s, command) -> {

@@ -25,7 +25,7 @@ package net.toaddev.snowball.command.maintenance;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
 import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.snowball.entities.command.CommandContext;
@@ -50,7 +50,7 @@ public class StatsCommand extends Command
                 .addField("Memory Usage", (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000 + "MB", true)
                 .addBlankField(true)
                 .addField("Shard info", ctx.getJDA().getShardInfo().getShardString(), true)
-                .addField("Server count", String.valueOf(Launcher.getAllGuilds().size()), true)
+                .addField("Server count", String.valueOf(BotController.getAllGuilds().size()), true)
                 .addBlankField(true)
                 .setColor(DiscordUtil.getEmbedColor())
                 .build()).queue();

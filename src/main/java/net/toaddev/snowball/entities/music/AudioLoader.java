@@ -32,7 +32,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.exception.MusicException;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.DatabaseModule;
 import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.util.MusicUtils;
@@ -66,10 +66,10 @@ public class AudioLoader implements AudioLoadResultHandler
     @Override
     public void trackLoaded(AudioTrack track)
     {
-        Launcher.getMusicModule().getMusicManager(ctx.getGuild()).cancelDestroy();
+        BotController.getMusicModule().getMusicManager(ctx.getGuild()).cancelDestroy();
         musicManager.getScheduler().queue(track);
 
-        if (messages)
+        if (messages && !musicManager.getScheduler().getQueue().isEmpty() || !musicManager.getScheduler().getQueue().contains(track))
         {
             sendAddedEmbed(track, channel, event);
         }
@@ -78,13 +78,13 @@ public class AudioLoader implements AudioLoadResultHandler
     @Override
     public void playlistLoaded(AudioPlaylist playlist)
     {
-        Launcher.getMusicModule().getMusicManager(ctx.getGuild()).cancelDestroy();
+        BotController.getMusicModule().getMusicManager(ctx.getGuild()).cancelDestroy();
         final List<AudioTrack> tracks = playlist.getTracks();
         if (playlist.isSearchResult())
         {
             musicManager.getScheduler().queue(tracks.get(0));
 
-            if (messages)
+            if (messages && !musicManager.getScheduler().getQueue().contains(tracks.get(0)))
             {
                 sendAddedEmbed(tracks.get(0), channel, event);
             }
@@ -109,7 +109,7 @@ public class AudioLoader implements AudioLoadResultHandler
     public void noMatches()
     {
         if (!ctx.getArgs()[1].contains("spotify."))
-            channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
+            channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(BotController.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
     }
 
     @Override
@@ -139,7 +139,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void trackLoaded(AudioTrack track)
         {
-            Launcher.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
+            BotController.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
             musicManager.getScheduler().queue(track);
             sendAddedEmbed(track, channel, event);
         }
@@ -147,7 +147,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void playlistLoaded(AudioPlaylist playlist)
         {
-            Launcher.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
+            BotController.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
             final List<AudioTrack> tracks = playlist.getTracks();
 
             {
@@ -155,9 +155,9 @@ public class AudioLoader implements AudioLoadResultHandler
                 embedBuilder.setAuthor("Found " + tracks.size() + " tracks: ");
 
                 {
-                    MusicUtils.sendTracks(tracks, Launcher.getModules(), channel, user.getIdLong(), "Found " + tracks.size() + " tracks:");
+                    MusicUtils.sendTracks(tracks, BotController.getModules(), channel, user.getIdLong(), "Found " + tracks.size() + " tracks:");
 
-                    Launcher.getEventWaiter().waitForEvent(
+                    BotController.getEventWaiter().waitForEvent(
                             GuildMessageReceivedEvent.class,
                             (e) -> e.getMember().getIdLong() == user.getIdLong() && e.getGuild().getIdLong() == channel.getGuild().getIdLong() && e.getChannel().getIdLong() == channel.getIdLong(),
                             (e) ->
@@ -200,7 +200,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void noMatches()
         {
-            channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(Launcher.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
+            channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(BotController.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
         }
 
         @Override

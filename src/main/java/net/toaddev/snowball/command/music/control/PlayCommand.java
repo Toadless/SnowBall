@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import net.toaddev.snowball.entities.music.MusicManager;
 import net.toaddev.snowball.entities.command.Command;
 import net.toaddev.snowball.entities.music.SearchProvider;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.snowball.entities.command.CommandContext;
@@ -90,7 +90,7 @@ public class PlayCommand extends Command
         SearchProvider searchProvider = SearchProvider.URL;
 
         String song = ctx.getArgs()[1];
-        if (!Launcher.getMusicModule().isUrl(song))
+        if (!BotController.getMusicModule().isUrl(song))
         {
             searchProvider = SearchProvider.YOUTUBE;
             song = songName;

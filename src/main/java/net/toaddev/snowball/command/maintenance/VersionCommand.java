@@ -23,7 +23,7 @@
 package net.toaddev.snowball.command.maintenance;
 
 import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import org.jetbrains.annotations.NotNull;
 import net.toaddev.snowball.entities.command.CommandContext;
 
@@ -38,6 +38,6 @@ public class VersionCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx)
     {
-        ctx.getChannel().sendMessage("v" + Launcher.version).queue();
+        ctx.getChannel().sendMessage("v" + BotController.version).queue();
     }
 }

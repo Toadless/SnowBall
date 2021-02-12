@@ -27,7 +27,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.snowball.main.Launcher;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.services.Modules;
 import net.toaddev.snowball.util.DiscordUtil;
 
@@ -187,7 +187,7 @@ public class CommandContext
 
     public Modules getModules()
     {
-        return Launcher.getModules();
+        return BotController.getModules();
     }
 
     public void sendMessage(MessageEmbed content)
