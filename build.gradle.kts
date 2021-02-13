@@ -79,7 +79,7 @@ dependencies {
     // kotlin
     // kotlin
     implementation(kotlin("stdlib-jdk8"))
-    implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.2")
+    implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.2-native-mt")
 
     // other
     implementation ("io.github.classgraph:classgraph:4.8.102")
