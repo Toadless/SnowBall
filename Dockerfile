@@ -1,12 +1,9 @@
-FROM gradle:6.1.0-jdk8-alpine AS build
-COPY --chown=gradle:gradle . /home/gradle/src
-WORKDIR /home/gradle/src
-RUN gradle build --no-daemon
-
-FROM openjdk:15-jre-slim
+FROM openjdk:15-jre
 
 RUN mkdir /prod
 
-COPY --from=build /home/gradle/src/build/libs/*.jar /prod/snowball.jar
+COPY --from=build /home/gradle/src/build/libs/Snowball.jar /prod/Snowball.jar
 
-ENTRYPOINT ["java", "-jar","/prod/snowball.jar"]
+WORKDIR /prod/
+
+ENTRYPOINT ["java", "-jar","/Snowball.jar"]
