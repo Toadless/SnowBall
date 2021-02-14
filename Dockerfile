@@ -4,7 +4,6 @@ WORKDIR /home/gradle/src
 RUN gradle build --no-daemon
 
 FROM openjdk:15-jre-slim
-
 RUN mkdir /prod
 
 COPY --from=build /home/gradle/src/build/libs/*.jar /prod/snowball.jar
