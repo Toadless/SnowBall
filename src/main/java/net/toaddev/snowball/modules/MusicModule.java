@@ -109,8 +109,8 @@ public class MusicModule extends Module
                 case "\u27A1\uFE0F" -> scheduler.nextTrack();
                 case "\u23ef\ufe0f" -> scheduler.player.setPaused(!scheduler.player.isPaused());
                 case "\uD83D\uDD00" -> scheduler.shuffle();
-                case "\uD83D\uDD09" -> scheduler.player.setVolume(scheduler.player.getVolume() - 50);
-                case "\uD83D\uDD0A" -> scheduler.player.setVolume(scheduler.player.getVolume() + 50);
+                case "\uD83D\uDD09" -> scheduler.player.setVolume(scheduler.player.getVolume() - 15);
+                case "\uD83D\uDD0A" -> scheduler.player.setVolume(scheduler.player.getVolume() + 15);
                 case "\u274C" -> destroy(event.getGuild().getIdLong(), event.getMember().getIdLong(), true);
             }
             if(event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE))

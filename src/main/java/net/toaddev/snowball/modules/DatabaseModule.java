@@ -152,9 +152,7 @@ public class DatabaseModule extends Module
             createGuild(id);
             return;
         }
-        return;
     }
-
 
     /**
      *

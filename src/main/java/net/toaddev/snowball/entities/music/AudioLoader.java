@@ -98,10 +98,7 @@ public class AudioLoader implements AudioLoadResultHandler
                     .append("`")
                     .queue();
 
-            for (final AudioTrack track : tracks)
-            {
-                musicManager.getScheduler().queue(track);
-            }
+            tracks.forEach(musicManager.getScheduler()::queue);
         }
     }
 
