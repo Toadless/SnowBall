@@ -9,7 +9,7 @@ USER docker
 
 FROM openjdk:15-jdk
 
-WORKDIR --chown=docker /home/snowball/
+WORKDIR /home/snowball/
 
 COPY --chown=docker . /home/build/
 
