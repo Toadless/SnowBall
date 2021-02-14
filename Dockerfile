@@ -17,7 +17,7 @@ FROM openjdk:15-jdk
 
 WORKDIR /home/snowball/
 
-COPY --chown=docker:docker . /home/build/
+COPY --chown=docker . /home/build/
 
 RUN /home/build/gradlew build --no-daemon
 
