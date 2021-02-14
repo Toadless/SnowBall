@@ -57,4 +57,4 @@ credentials:
     # If your bot isnt listed then leave this blank and
     # the bot will still function properly.
     # Place your token inbetween the quotes
-    topggtoken: ""
+  topggtoken: ""
