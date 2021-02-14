@@ -4,7 +4,7 @@ WORKDIR /home/snowball/
 
 COPY . /home/build/
 
-RUN ls -a
+RUN ls -a /home/build
 
 RUN ./gradlew build --no-daemon
 
