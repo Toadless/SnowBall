@@ -1,4 +1,4 @@
-FROM openjdk:15-jre
+FROM openjdk:15-jdk
 
 RUN mkdir /prod
 
