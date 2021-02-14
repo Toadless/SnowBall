@@ -17,11 +17,11 @@ FROM openjdk:15-jdk
 
 WORKDIR /home/snowball/
 
-COPY --chown=docker . /home/build/
+COPY . /home/build/
 
 RUN /home/build/gradlew build --no-daemon
 
-COPY --chown=docker /home/build/build/libs/*.jar /snowball/snowball.jar
+COPY /home/build/build/libs/*.jar /snowball/snowball.jar
 
 RUN rm -r /home/build/
 
