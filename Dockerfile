@@ -9,13 +9,13 @@ USER docker
 
 FROM openjdk:15-jdk
 
-WORKDIR /home/snowball/
+WORKDIR --chown=docker /home/snowball/
 
-COPY . /home/build/
+COPY --chown=docker . /home/build/
 
 RUN /home/build/gradlew build --no-daemon
 
-COPY /home/build/build/libs/*.jar /snowball/snowball.jar
+COPY --chown=docker /home/build/build/libs/*.jar /snowball/snowball.jar
 
 RUN rm -r /home/build/
 
