@@ -2,7 +2,7 @@ FROM openjdk:15-jdk
 
 WORKDIR /home/snowball/
 
-COPY --chown=gradle . /home/build/
+COPY --chown=gradle:gradle . /home/build/
 
 RUN /home/build/gradlew build --no-daemon
 
