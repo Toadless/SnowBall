@@ -1,9 +1,9 @@
-FROM openjdk:15-jdk-alpine
+FROM gradle:4.7.0-jdk8-alpine
 
 MAINTAINER Toadless
 
-RUN gradlew build
+RUN gradle build --no-daemon
 
-COPY build/libs/Snowball.jar Snowball.jar
+FROM openjdk:15-jdk-alpine
 
-CMD ["java","-jar","Snowball.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/Snowball.jar"]
