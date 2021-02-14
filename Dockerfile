@@ -3,7 +3,7 @@ COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle build --no-daemon
 
-FROM openjdk:15-jre-slim
+FROM openjdk:15-jdk
 
 RUN mkdir /prod
 
