@@ -46,6 +46,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The class responsible for controlling SnowBall at a large.
+ */
 public class BotController
 {
     public static final Logger logger = LoggerFactory.getLogger(BotController.class);

@@ -31,7 +31,6 @@ plugins {
 }
 
 group = "net.toaddev"
-version = "4.1.0"
 
 repositories {
     jcenter()

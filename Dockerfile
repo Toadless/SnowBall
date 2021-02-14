@@ -1,6 +1,9 @@
 FROM openjdk:15-jdk
+
 MAINTAINER Toadless
-COPY application.yml /production/application.yml
-COPY Snowball.jar /production/Snowball.jar
-WORKDIR /production/
+
+RUN gradlew build
+
+COPY build/libs/Snowball.jar Snowball.jar
+
 CMD ["java","-jar","Snowball.jar"]

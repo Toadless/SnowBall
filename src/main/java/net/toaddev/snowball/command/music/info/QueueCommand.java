@@ -46,6 +46,7 @@ public class QueueCommand extends Command
     public QueueCommand()
     {
         super("queue", "Displays the guilds queue");
+        addAlias("q");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
     }

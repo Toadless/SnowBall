@@ -39,7 +39,7 @@ public class InteractionsModule extends Module
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event)
     {
-        String mention = "<@!" + event.getJDA().getSelfUser().getId() + ">";
+        String mention = "<@!" + event.getJDA().getSelfUser().getIdLong() + ">";
         long guildId = Long.parseLong(event.getGuild().getId());
 
         if (event.getMessage().isWebhookMessage())
@@ -59,7 +59,7 @@ public class InteractionsModule extends Module
         {
             this.process(event, guildPrefix);
         }
-        else if (event.getMessage().getContentRaw().startsWith(mention))
+        else if (isBotMention(event))
         {
             this.process(event, guildPrefix);
         }
@@ -78,5 +78,12 @@ public class InteractionsModule extends Module
 
         CommandContext commandEvent = new CommandContext(event, args, prefix);
         command.process(commandEvent);
+    }
+
+    private boolean isBotMention(GuildMessageReceivedEvent event)
+    {
+        String content = event.getMessage().getContentRaw();
+        long id = event.getJDA().getSelfUser().getIdLong();
+        return content.startsWith("<@" + id + ">") || content.startsWith("<@!" + id + ">");
     }
 }
