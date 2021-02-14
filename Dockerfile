@@ -2,7 +2,7 @@ FROM openjdk:15-jdk
 
 RUN mkdir /prod
 
-COPY --from=build /home/gradle/src/build/libs/Snowball.jar /prod/Snowball.jar
+COPY build/libs/Snowball.jar /prod/Snowball.jar
 
 WORKDIR /prod/
 
