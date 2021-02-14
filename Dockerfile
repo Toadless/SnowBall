@@ -1,12 +1,14 @@
 FROM openjdk:15-jdk
 
-USER root
+RUN mkdir ./home
 
-RUN mkdir /home/snowball/
+WORKDIR ./home
 
-WORKDIR /home/snowball/
+RUN mkdir ./snowball
 
-COPY --chown=root . /home/build/
+WORKDIR ./snowball
+
+COPY . /home/build/
 
 RUN /home/build/gradlew build --no-daemon
 
