@@ -4,7 +4,7 @@ WORKDIR ./home/snowball
 
 COPY . /home/build/
 
-RUN .gradlew build --no-daemon
+RUN ./gradlew build --no-daemon
 
 COPY ./home/build/build/libs/*.jar /snowball/snowball.jar
 
