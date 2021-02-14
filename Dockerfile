@@ -1,4 +1,4 @@
-FROM openjdk:15-jdk
+FROM openjdk:15-jdk-alpine
 
 MAINTAINER Toadless
 
