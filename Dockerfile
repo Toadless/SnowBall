@@ -1,4 +1,4 @@
-FROM gradle:4.7.0-jdk8-alpine
+FROM gradle:4.7.0-jdk8-alpine AS build
 
 MAINTAINER Toadless
 
