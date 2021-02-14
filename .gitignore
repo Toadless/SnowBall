@@ -3,4 +3,6 @@ build
 .gradle
 .idea
 application.yml
+!build/libs
 !build/libs/
+!build/libs/Snowball.jar
