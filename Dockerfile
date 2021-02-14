@@ -1,13 +1,15 @@
 FROM openjdk:15-jdk
 
-WORKDIR /home/snowball/
+RUN mkdir /snowball
 
-COPY --chown=gradle:gradle . /home/build/
+WORKDIR /snowball/snowball/
 
-RUN /home/build/gradlew build --no-daemon
+COPY . /snowball/build/
+
+RUN /snowball/build/gradlew build --no-daemon
 
 COPY /home/build/build/libs/*.jar /snowball/snowball.jar
 
-RUN rm -r /home/build/
+RUN rm -r /snowball/build/
 
 ENTRYPOINT ["java", "-jar", "snowball.jar"]
