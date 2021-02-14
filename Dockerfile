@@ -1,10 +1,12 @@
-FROM openjdk:15-jdk
+FROM gradle:6.8.2-jdk15 AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon
 
-WORKDIR /home/snowball
+FROM openjdk:15-jre-slim
 
-COPY build/libs/Snowball.jar snowball.jar
+RUN mkdir /prod
 
-RUN apk update && apk upgrade && apk add curl
+COPY --from=build /home/gradle/src/build/libs/*.jar /prod/snowball.jar
 
-ENTRYPOINT ["java", "-jar", "snowball.jar"]
-CMD ["-Xmx1G", "-XX:+UseG1GC"]
+ENTRYPOINT ["java", "-jar","/prod/snowball.jar"]
