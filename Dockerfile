@@ -1,12 +1,6 @@
 FROM openjdk:15-jdk
 
-RUN mkdir ./home
-
-WORKDIR ./home
-
-RUN mkdir ./snowball
-
-WORKDIR ./snowball
+WORKDIR ./home/snowball
 
 COPY . /home/build/
 
