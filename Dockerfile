@@ -1,9 +1,10 @@
-FROM openjdk:15-jdk
+FROM openjdk-15-jdk-alpine
 
-RUN mkdir /prod
+WORKDIR /home/snowball
 
-COPY build/libs/Snowball.jar /prod/Snowball.jar
+COPY build/libs/Snowball.jar snowball.jar
 
-WORKDIR /prod/
+RUN apk update && apk upgrade && apk add curl
 
-ENTRYPOINT ["java", "-jar","/Snowball.jar"]
+ENTRYPOINT ["java", "-jar", "snowball.jar"]
+CMD ["-Xmx1G", "-XX:+UseG1GC"]
