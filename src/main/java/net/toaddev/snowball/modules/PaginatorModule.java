@@ -43,6 +43,11 @@ public class PaginatorModule extends Module
 {
     private Cache<Long, Paginator> paginators;
 
+    public PaginatorModule()
+    {
+        super("paginator");
+    }
+
     @Override
     public void onEnable()
     {

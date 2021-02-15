@@ -60,7 +60,7 @@ public class EvalCommand extends Command
                 "import net.dv8tion.jda.core.managers.*\n" +
                 "import net.dv8tion.jda.core.managers.impl.*\n" +
                 "import net.dv8tion.jda.api.*;" +
-                "import net.dv8tion.jda.api.entities.Activity;" +
+                "import net.dv8tion.jda.api.entities.Activity;;" +
                 "import net.dv8tion.jda.core.utils.*\n";
     }
 

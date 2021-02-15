@@ -43,6 +43,11 @@ public class SettingsModule extends Module
     private static final Logger LOG = LoggerFactory.getLogger(SettingsModule.class);
     private Cache<Long, String> guildSettings;
 
+    public SettingsModule()
+    {
+        super("settings");
+    }
+
     @Override
     public void onEnable()
     {

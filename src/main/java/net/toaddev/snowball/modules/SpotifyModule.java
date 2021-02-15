@@ -49,6 +49,11 @@ public class SpotifyModule extends Module
     private ClientCredentialsRequest clientCredentialsRequest;
     private int hits;
 
+    public SpotifyModule()
+    {
+        super("spotify");
+    }
+
     @Override
     public void onEnable()
     {

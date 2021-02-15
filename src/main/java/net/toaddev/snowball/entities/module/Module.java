@@ -29,7 +29,14 @@ import java.util.Set;
 
 public abstract class Module extends ListenerAdapter
 {
+    private String name;
+
     protected Modules modules;
+
+    protected Module(String name)
+    {
+        this.name = name;
+    }
 
     public Module init(Modules modules)
     {
@@ -45,4 +52,15 @@ public abstract class Module extends ListenerAdapter
     public void onEnable() {}
 
     public void onDisable() {}
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void reload()
+    {
+        this.onDisable();
+        this.onEnable();
+    }
 }

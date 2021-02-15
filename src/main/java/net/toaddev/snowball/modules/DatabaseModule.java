@@ -47,6 +47,11 @@ public class DatabaseModule extends Module
     private MongoClient SYNC_CLIENT;
     private String databaseName;
 
+    public DatabaseModule()
+    {
+        super("database");
+    }
+
     @Override
     public void onEnable()
     {

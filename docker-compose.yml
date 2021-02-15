@@ -1,0 +1,9 @@
+version: '3.7'
+
+services:
+  snowball:
+    image: toadless/snowball:latest
+    container_name: snowball
+    restart: unless-stopped
+    volumes:
+      - ./application.yml:/home/snowball/application.yml

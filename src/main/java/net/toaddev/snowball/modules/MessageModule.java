@@ -34,6 +34,11 @@ public class MessageModule extends Module
 {
     private Map<Long, Message> latestMessage;
 
+    public MessageModule()
+    {
+        super("message");
+    }
+
     @Override
     public void onEnable()
     {

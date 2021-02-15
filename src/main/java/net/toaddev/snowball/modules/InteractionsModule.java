@@ -30,6 +30,11 @@ import net.toaddev.snowball.main.BotController;
 
 public class InteractionsModule extends Module
 {
+    public InteractionsModule()
+    {
+        super("interactions");
+    }
+
     @Override
     public void onEnable()
     {

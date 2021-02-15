@@ -37,6 +37,11 @@ public class StatusModule extends Module
 {
     private List<String> statusMessages;
 
+    public StatusModule()
+    {
+        super("status");
+    }
+
     @Override
     public void onEnable()
     {

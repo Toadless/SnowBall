@@ -41,6 +41,11 @@ public class CommandsModule extends Module
     private ClassGraph classGraph;
     private Map<String, Command> commands;
 
+    public CommandsModule()
+    {
+        super("commands");
+    }
+
     @Override
     public void onEnable()
     {

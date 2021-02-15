@@ -8,8 +8,13 @@ import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.entities.module.Module;
 import org.jetbrains.annotations.NotNull;
 
-public class BotListModules extends Module
+public class BotListModule extends Module
 {
+    public BotListModule()
+    {
+        super("botlist");
+    }
+
     @Override
     public void onReady(@NotNull ReadyEvent event)
     {

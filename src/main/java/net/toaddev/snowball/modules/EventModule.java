@@ -40,6 +40,11 @@ public class EventModule extends Module
     public static JDA jda;
     public static final Logger log = LoggerFactory.getLogger(EventModule.class);
 
+    public EventModule()
+    {
+        super("event");
+    }
+
     @Override
     public void onReady(ReadyEvent event)
     {

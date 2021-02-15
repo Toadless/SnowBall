@@ -20,7 +20,7 @@
   ~  SOFTWARE.
   -->
 <SnowBall>
-    <Version>4.2.2</Version>
+    <Version>4.3.0</Version>
 
     <ConfigFile>application</ConfigFile>
     <ExampleConfigFile>snowball/example.application.yml</ExampleConfigFile>

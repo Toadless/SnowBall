@@ -18,6 +18,11 @@ public class RequestModule extends Module
 
     private final Request.Builder requestBuilder = new Request.Builder().header("user-agent", "de.kittybot");
 
+    public RequestModule()
+    {
+        super("request");
+    }
+
     public void executeAsync(Request request, BiConsumer<Call, Response> success, BiConsumer<Call, Response> error)
     {
         executeAsync(request, null, success, error);
