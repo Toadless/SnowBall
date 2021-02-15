@@ -1,13 +1,4 @@
-FROM openjdk:15-jdk
-
+FROM openjdk:15-alpine
 WORKDIR /home/snowball/
-
-COPY . /home/build/
-
-RUN /home/build/gradlew build --no-daemon
-
-COPY /home/build/build/libs/*.jar /snowball/snowball.jar
-
-RUN rm -r /home/build/
-
-ENTRYPOINT ["java", "-jar", "snowball.jar"]
+COPY build/libs/Snowball.jar Snowball.jar
+ENTRYPOINT java -jar Snowball.jar
