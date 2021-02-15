@@ -28,13 +28,13 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.music.MusicManager;
 import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.util.DiscordUtil;
-import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.Command;
 import net.toaddev.snowball.util.TimeUtils;
+import org.jetbrains.annotations.NotNull;
 
 @net.toaddev.snowball.annotation.Command
 public class InfoCommand extends Command
@@ -49,7 +49,7 @@ public class InfoCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx)
     {
-        final TextChannel channel = (TextChannel) ctx.getChannel();
+        final TextChannel channel = ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 

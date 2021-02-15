@@ -66,16 +66,21 @@ public class EmbedUtil
 
     public static void sendDeletingEmbed(MessageChannel channel, EmbedBuilder embed, long delay)
     {
-        try {
+        try
+        {
             channel.sendMessage(embed.build()).queue(message -> message.delete().queueAfter(delay, TimeUnit.MILLISECONDS, null, error ->
             {
             }));
-        } catch (PermissionException e) {
-            try {
+        } catch (PermissionException e)
+        {
+            try
+            {
                 channel.sendMessage("I do not have any permissions. My lowest required permissions is `MESSAGE_EMBED_LINKS`.").queue();
-            } catch (PermissionException exception) {
+            } catch (PermissionException exception)
+            {
                 Guild guild = BotController.getJda().getGuildChannelById(channel.getId()).getGuild();
-                if (guild == null) {
+                if (guild == null)
+                {
                     return;
                 }
                 guild.leave().queue();

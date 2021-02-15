@@ -37,7 +37,8 @@ public class WebUtil
 
     public static String getReq(String URL)
     {
-        try {
+        try
+        {
             URL url = new URL(URL);
             URLConnection connection = url.openConnection();
             BufferedReader in = new BufferedReader(
@@ -51,7 +52,8 @@ public class WebUtil
                 response.append(inputLine);
             in.close();
             return response.toString();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             return null;
         }
     }

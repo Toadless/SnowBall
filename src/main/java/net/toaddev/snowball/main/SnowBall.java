@@ -34,10 +34,6 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.toaddev.snowball.data.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 
 public class SnowBall extends BotController
 {
@@ -49,7 +45,8 @@ public class SnowBall extends BotController
         this.shardId = shardId;
 
         log.info("Building shard " + shardId);
-        try {
+        try
+        {
             boolean success = false;
             while (!success)
             {
@@ -87,6 +84,7 @@ public class SnowBall extends BotController
             throw new RuntimeException("Failed to start JDA shard " + shardId, e);
         }
     }
+
     int getShardId()
     {
         return shardId;

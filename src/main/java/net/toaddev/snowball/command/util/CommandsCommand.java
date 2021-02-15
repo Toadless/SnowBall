@@ -24,13 +24,15 @@ package net.toaddev.snowball.command.util;
 
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
 import net.toaddev.snowball.util.MessageUtils;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
 
 @net.toaddev.snowball.annotation.Command
 public class CommandsCommand extends Command
@@ -46,7 +48,8 @@ public class CommandsCommand extends Command
         Map<String, Command> commandMap = BotController.getModules().get(CommandsModule.class).getCommands();
         Collection<Command> cmds = new LinkedList<>();
 
-        commandMap.forEach((s, command) -> {
+        commandMap.forEach((s, command) ->
+        {
             if (command.getDescription() == null)
             {
                 return;

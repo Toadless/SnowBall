@@ -22,11 +22,11 @@
 
 package net.toaddev.snowball.command.admin;
 
-import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.main.BotController;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;

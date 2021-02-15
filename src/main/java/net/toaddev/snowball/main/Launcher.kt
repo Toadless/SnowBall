@@ -14,10 +14,9 @@ import java.util.*
 @SpringBootApplication
 open class SnowballApplication
 
-object Launcher
-{
+object Launcher {
     private val log = LoggerFactory.getLogger(Launcher::class.java)
-    private var version = "Unknown";
+    private var version = "Unknown"
 
     val startTime = System.currentTimeMillis()
 
@@ -28,21 +27,21 @@ object Launcher
 
         return buildString {
             if (vanity) {
-                appendln()
-                appendln()
-                appendln(getVanity())
+                appendLine()
+                appendLine()
+                appendLine(getVanity())
             }
-            appendln()
-            append("${indentation}Version:        "); appendln(version)
-            append("${indentation}Author:         "); appendln("Toadless")
-            append("${indentation}Cores:          "); appendln(cores)
-            append("${indentation}StartTime:      "); appendln(startTime);
-            append("${indentation}JVM:            "); appendln(System.getProperty("java.version"))
-            append("${indentation}Lavaplayer:     "); appendln(PlayerLibrary.VERSION)
-            append("${indentation}JDA:            "); appendln(JDAInfo.VERSION)
+            appendLine()
+            append("${indentation}Version:        "); appendLine(version)
+            append("${indentation}Author:         "); appendLine("Toadless")
+            append("${indentation}Cores:          "); appendLine(cores)
+            append("${indentation}StartTime:      "); appendLine(startTime)
+            append("${indentation}JVM:            "); appendLine(System.getProperty("java.version"))
+            append("${indentation}Lavaplayer:     "); appendLine(PlayerLibrary.VERSION)
+            append("${indentation}JDA:            "); appendLine(JDAInfo.VERSION)
 
-            appendln()
-            appendln()
+            appendLine()
+            appendLine()
         }
     }
 
@@ -63,8 +62,7 @@ object Launcher
     }
 
     @JvmStatic
-    fun main(args: Array<String>)
-    {
+    fun main(args: Array<String>) {
         val javaVersionMajor = Runtime.version().feature()
         if (javaVersionMajor != 15) {
             BotController.logger.warn("""

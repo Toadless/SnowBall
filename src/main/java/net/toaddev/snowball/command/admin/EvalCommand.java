@@ -24,11 +24,11 @@ package net.toaddev.snowball.command.admin;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -75,7 +75,8 @@ public class EvalCommand extends Command
         String messageArgs = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "eval" + " ", "");
         try
         {
-            EVAL_EXECUTOR.submit(() -> {
+            EVAL_EXECUTOR.submit(() ->
+            {
                 Object out;
                 String status = "Success";
 
@@ -94,8 +95,7 @@ public class EvalCommand extends Command
                 try
                 {
                     out = SCRIPT_ENGINE.eval(script);
-                }
-                catch(Exception exception)
+                } catch (Exception exception)
                 {
                     out = exception.getMessage();
                     status = "Failed";
@@ -111,8 +111,7 @@ public class EvalCommand extends Command
                         .build())
                         .queue();
             });
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             ctx.getChannel().sendMessage(e.getMessage()).queue();
         }

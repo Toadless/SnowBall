@@ -24,9 +24,9 @@ package net.toaddev.snowball.command.fun;
 
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.util.WebUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
 
 @net.toaddev.snowball.annotation.Command
 public class JokeCommand extends Command

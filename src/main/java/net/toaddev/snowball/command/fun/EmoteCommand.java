@@ -52,8 +52,7 @@ public class EmoteCommand extends Command
             try
             {
                 stringBuilder.append(emote.getGuild().getName());
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 stringBuilder.append("Unknown");
             }
@@ -93,10 +92,11 @@ public class EmoteCommand extends Command
             {
                 final char ch = in.charAt(i);
                 if (ch <= 127) out.append(ch);
-                else out.append("\\u").append(String.format("%04x", (int)ch));
+                else out.append("\\u").append(String.format("%04x", (int) ch));
             }
 
-            in.codePoints().forEachOrdered(code -> {
+            in.codePoints().forEachOrdered(code ->
+            {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("**Emote Info** \n");
                 stringBuilder.append("[`");
@@ -108,8 +108,7 @@ public class EmoteCommand extends Command
                 stringBuilder.append("*");
                 ctx.getChannel().sendMessage(stringBuilder.toString()).queue();
             });
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             ctx.getChannel().sendMessage("Unable to convert emote to unicode!").queue();
         }

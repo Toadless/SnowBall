@@ -22,11 +22,11 @@
 
 package net.toaddev.snowball.command.util;
 
+import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.Command;
 
 @net.toaddev.snowball.annotation.Command
 public class HelpCommand extends Command

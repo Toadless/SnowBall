@@ -43,26 +43,32 @@ public class MessageUtils
         // override, default, constructor
     }
 
-    public static String getUserMention(long userId){
-        if(userId == -1L){
+    public static String getUserMention(long userId)
+    {
+        if (userId == -1L)
+        {
             return UNSET;
         }
         return "<@!" + userId + ">";
     }
 
-    public static <T> String pluralize(String text, Collection<T> collection){
+    public static <T> String pluralize(String text, Collection<T> collection)
+    {
         return pluralize(text, collection.size());
     }
 
-    public static String pluralize(String text, int count){
+    public static String pluralize(String text, int count)
+    {
         return count == 1 ? text : text + "s";
     }
 
-    public static String trimIfTooLong(String message){
+    public static String trimIfTooLong(String message)
+    {
         return message.length() > 2048 ? message.substring(0, 2045) + "..." : message;
     }
 
-    public static String maskLink(String title, String url){
+    public static String maskLink(String title, String url)
+    {
         return "[" + title + "](" + url + ")";
     }
 
@@ -76,14 +82,16 @@ public class MessageUtils
                 .queue();
     }
 
-    public static void sendCommands(Collection<Command> commands, Modules modules, TextChannel channel, long authorId, String baseMessage){
-        if(channel == null){
+    public static void sendCommands(Collection<Command> commands, Modules modules, TextChannel channel, long authorId, String baseMessage)
+    {
+        if (channel == null)
+        {
             return;
         }
         var cmdMessage = new StringBuilder("**").append(baseMessage).append(":**\n");
         var pages = new ArrayList<String>();
 
-        for(var command : commands)
+        for (var command : commands)
         {
             if (cmdMessage.toString().contains(command.getName()))
             {
@@ -92,7 +100,8 @@ public class MessageUtils
 
             AtomicBoolean shouldContinue = new AtomicBoolean(true);
 
-            pages.forEach(s -> {
+            pages.forEach(s ->
+            {
                 if (s.contains(command.getName()))
                 {
                     shouldContinue.set(false);
@@ -113,7 +122,8 @@ public class MessageUtils
                 formattedCmd = formattedCmd + "`" + a + "` - `" + command.getDescription() + "`\n";
             }
 
-            if(cmdMessage.length() + formattedCmd.length() >= 516){
+            if (cmdMessage.length() + formattedCmd.length() >= 516)
+            {
                 pages.add(cmdMessage.toString());
                 cmdMessage = new StringBuilder();
             }

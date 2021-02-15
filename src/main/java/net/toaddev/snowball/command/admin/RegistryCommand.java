@@ -22,13 +22,13 @@
 
 package net.toaddev.snowball.command.admin;
 
+import net.toaddev.snowball.data.Config;
+import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.CommandFlag;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.data.Config;
 
 @net.toaddev.snowball.annotation.Command
 public class RegistryCommand extends Command
@@ -65,11 +65,11 @@ public class RegistryCommand extends Command
             commandsModule.scanCommands();
             ctx.getChannel().sendMessage("**Completely rebuilding the whole command registry**! I Hope you know what you are doing.").queue();
             return;
-        }
-        else
+        } else
         {
             ctx.getChannel().sendMessage("Please provide a valid method. `clear` | `rebuild`").queue();
-            System.out.println(ctx.getArgs()[1]); System.out.println(ctx.getArgs()[1]);
+            System.out.println(ctx.getArgs()[1]);
+            System.out.println(ctx.getArgs()[1]);
         }
     }
 }

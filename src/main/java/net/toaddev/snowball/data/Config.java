@@ -39,13 +39,13 @@ import java.io.IOException;
  */
 public class Config
 {
+    public static Config INS;
+    private final Logger logger = LoggerFactory.getLogger(Config.class);
     // ################################################################################
     // ##                     Login / credentials
     // ################################################################################
-    private File config;
+    private final File config;
     private String fileName;
-    private final Logger logger = LoggerFactory.getLogger(Config.class);
-    public static Config INS;
     private String Prefix;
     private String Token;
     private Boolean Development;
@@ -63,22 +63,20 @@ public class Config
     private String topGGToken;
 
     /**
-     *
-     * @param file The config files name
-     */
-    public static void init(String file) throws IOException
-    {
-        INS = new Config(file);
-    }
-
-    /**
-     *
      * @param file The config files name
      */
     private Config(String file) throws IOException
     {
         config = new File(file);
         initConfig();
+    }
+
+    /**
+     * @param file The config files name
+     */
+    public static void init(String file) throws IOException
+    {
+        INS = new Config(file);
     }
 
     private void initConfig() throws IOException
@@ -121,7 +119,6 @@ public class Config
     }
 
     /**
-     *
      * @return The token to the discord api login with
      */
     public String getToken()
@@ -130,7 +127,6 @@ public class Config
     }
 
     /**
-     *
      * @return The bots default prefix
      */
     public String getPrefix()
@@ -139,7 +135,6 @@ public class Config
     }
 
     /**
-     *
      * @return If the bot is in development mode
      */
     public Boolean getDevelopment()
@@ -148,7 +143,6 @@ public class Config
     }
 
     /**
-     *
      * @return The discord bots owner id
      */
     public String getOwnerID()
@@ -157,7 +151,6 @@ public class Config
     }
 
     /**
-     *
      * @return The guild invite message
      */
     public Boolean getInvite()
@@ -166,7 +159,6 @@ public class Config
     }
 
     /**
-     *
      * @return The guild join message
      */
     public String getJoin()
@@ -175,7 +167,6 @@ public class Config
     }
 
     /**
-     *
      * @return The number of shards that will be built
      */
     public int getNumShards()
@@ -184,7 +175,6 @@ public class Config
     }
 
     /**
-     *
      * @return The database name
      */
     public Boolean getDatabase()
@@ -193,7 +183,6 @@ public class Config
     }
 
     /**
-     *
      * @return The mongodb connection uri
      */
     public String getMongoUri()
@@ -202,7 +191,6 @@ public class Config
     }
 
     /**
-     *
      * @return The mongodb database name
      */
     public String getMongoName()
@@ -211,7 +199,6 @@ public class Config
     }
 
     /**
-     *
      * @return The shard builder staring point
      */
     public int getShardStart()
@@ -220,7 +207,6 @@ public class Config
     }
 
     /**
-     *
      * @return The max amount of shards
      */
     public int getMaxShards()

@@ -22,10 +22,10 @@
 
 package net.toaddev.snowball.command.util;
 
-import net.toaddev.snowball.entities.command.Command;
-import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.data.Constants;
+import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
+import org.jetbrains.annotations.NotNull;
 
 @net.toaddev.snowball.annotation.Command
 public class InviteCommand extends Command

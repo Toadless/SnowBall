@@ -50,8 +50,7 @@ public class IOUtil
         try
         {
             file = IOUtil.class.getClassLoader().getResourceAsStream(fileName);
-        }
-        catch(Exception exception)
+        } catch (Exception exception)
         {
             return null;
         }
@@ -67,12 +66,11 @@ public class IOUtil
         String str;
         try
         {
-            while((str = reader.readLine()) != null)
+            while ((str = reader.readLine()) != null)
             {
                 stringBuilder.append(str + "\n");
             }
-        }
-        catch(Exception exception)
+        } catch (Exception exception)
         {
             return "";
         }
@@ -94,8 +92,7 @@ public class IOUtil
         {
             builder = factory.newDocumentBuilder();
             return builder.parse(new InputSource(new StringReader(xmlString)));
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
         }
@@ -115,14 +112,16 @@ public class IOUtil
             InputStream inputStream = new FileInputStream(file);
             var reader = new BufferedReader(new InputStreamReader((inputStream), StandardCharsets.UTF_8));
             List<String> set = new ArrayList<>();
-            try{
+            try
+            {
                 String line;
-                while((line = reader.readLine()) != null){
+                while ((line = reader.readLine()) != null)
+                {
                     set.add(line);
                 }
                 reader.close();
-            }
-            catch(IOException e){
+            } catch (IOException e)
+            {
                 LOG.error("Error reading message file", e);
             }
             return set;

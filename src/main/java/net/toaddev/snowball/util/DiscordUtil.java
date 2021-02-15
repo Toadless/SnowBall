@@ -25,16 +25,17 @@ package net.toaddev.snowball.util;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+import net.toaddev.snowball.data.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.toaddev.snowball.data.Config;
 
 public class DiscordUtil
 {
     private static final Logger log = LoggerFactory.getLogger(DiscordUtil.class);
     private static final int embedColor = 0x4c50c1;
 
-    private DiscordUtil() {
+    private DiscordUtil()
+    {
 
     }
 

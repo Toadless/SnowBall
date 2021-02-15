@@ -40,12 +40,14 @@ public class MusicUtils
         // override, default, constructor
     }
 
-    public static String formatTrackWithInfo(AudioTrack track){
+    public static String formatTrackWithInfo(AudioTrack track)
+    {
         var info = track.getInfo();
         return formatTrack(track) + " - " + TimeUtils.formatDuration(info.length);
     }
 
-    public static String formatTrack(AudioTrack track){
+    public static String formatTrack(AudioTrack track)
+    {
         var info = track.getInfo();
         return MessageUtils.maskLink("`" + info.title + "`", info.uri);
     }
@@ -53,24 +55,28 @@ public class MusicUtils
     public static void sendAddedEmbed(CommandContext ctx, int trackCount)
     {
         ctx.sendMessage(new EmbedBuilder()
-                    .setDescription("Use `" + ctx.getPrefix() + "queue` to view the queue")
-                    .setAuthor("Queued " + trackCount + " tracks")
-                    .setTimestamp(Instant.now())
-                    .setColor(DiscordUtil.getEmbedColor())
-                    .build());
+                .setDescription("Use `" + ctx.getPrefix() + "queue` to view the queue")
+                .setAuthor("Queued " + trackCount + " tracks")
+                .setTimestamp(Instant.now())
+                .setColor(DiscordUtil.getEmbedColor())
+                .build());
     }
 
-    public static void sendTracks(Collection<AudioTrack> tracks, Modules modules, TextChannel channel, long authorId, String baseMessage){
-        if(channel == null){
+    public static void sendTracks(Collection<AudioTrack> tracks, Modules modules, TextChannel channel, long authorId, String baseMessage)
+    {
+        if (channel == null)
+        {
             return;
         }
         var trackMessage = new StringBuilder("**").append(baseMessage).append(":**\n");
         var pages = new ArrayList<String>();
 
         var i = 1;
-        for(var track : tracks){
+        for (var track : tracks)
+        {
             var formattedTrack = i + ". " + MusicUtils.formatTrackWithInfo(track) + "\n";
-            if(trackMessage.length() + formattedTrack.length() >= 2048){
+            if (trackMessage.length() + formattedTrack.length() >= 2048)
+            {
                 pages.add(trackMessage.toString());
                 trackMessage = new StringBuilder();
             }

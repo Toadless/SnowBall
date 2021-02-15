@@ -22,10 +22,10 @@
 
 package net.toaddev.snowball.command.util;
 
-import org.jetbrains.annotations.NotNull;
+import net.toaddev.snowball.entities.command.Command;
 import net.toaddev.snowball.entities.command.CommandContext;
 import net.toaddev.snowball.entities.command.CommandFlag;
-import net.toaddev.snowball.entities.command.Command;
+import org.jetbrains.annotations.NotNull;
 
 @net.toaddev.snowball.annotation.Command
 public class PingCommand extends Command

@@ -9,27 +9,32 @@ public enum API
     private final String url;
     private final String statsParameter;
 
-    API(final String name, final String url, final String statsParameter){
+    API(final String name, final String url, final String statsParameter)
+    {
         this.name = name;
         this.url = url;
         this.statsParameter = statsParameter;
     }
 
-    API(final String name, final String url){
+    API(final String name, final String url)
+    {
         this.name = name;
         this.url = url;
         this.statsParameter = null;
     }
 
-    public String getName(){
+    public String getName()
+    {
         return this.name;
     }
 
-    public String getUrl(){
+    public String getUrl()
+    {
         return this.url;
     }
 
-    public String getStatsParameter(){
+    public String getStatsParameter()
+    {
         return this.statsParameter;
     }
 }

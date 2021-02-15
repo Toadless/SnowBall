@@ -23,12 +23,12 @@
 package net.toaddev.snowball.command.admin;
 
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.entities.command.CommandFlag;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +46,8 @@ public class ExitCommand extends Command
     public void run(@NotNull CommandContext ctx)
     {
         ctx.getChannel().sendMessage("This will **shut down the whole bot**.")
-                .queue(message -> {
+                .queue(message ->
+                {
                     message.addReaction("\u2705").queue();
                     message.addReaction("\u274c").queue();
 
@@ -58,8 +59,7 @@ public class ExitCommand extends Command
                                 if (e.getReaction().toString().contains("U+274c"))
                                 {
                                     message.delete().queue();
-                                }
-                                else if (e.getReaction().toString().contains("U+2705"))
+                                } else if (e.getReaction().toString().contains("U+2705"))
                                 {
                                     message.clearReactions().queue();
                                     message.editMessage("Shutting down").queue();

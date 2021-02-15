@@ -33,7 +33,8 @@ public class ThreadFactoryHelper implements ThreadFactory
     private static final Logger LOG = LoggerFactory.getLogger(ThreadFactoryHelper.class);
 
     @Override
-    public Thread newThread(@NotNull Runnable r){
+    public Thread newThread(@NotNull Runnable r)
+    {
         var thread = new Thread(r, "Lavalite Scheduler");
         thread.setDaemon(true);
         thread.setUncaughtExceptionHandler((t, e) -> LOG.error("Caught an unexpected Exception in scheduler", e));

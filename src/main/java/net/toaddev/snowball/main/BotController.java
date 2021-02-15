@@ -23,27 +23,28 @@
 package net.toaddev.snowball.main;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDAInfo;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
+import net.toaddev.snowball.data.Config;
+import net.toaddev.snowball.data.Constants;
 import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.services.Modules;
 import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.services.Modules;
 import net.toaddev.snowball.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import net.toaddev.snowball.data.Config;
-import net.toaddev.snowball.data.Constants;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,15 +53,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BotController
 {
     public static final Logger logger = LoggerFactory.getLogger(BotController.class);
-    public static String version;
-    public static boolean DATABASE_ENABLED = false;
     public static final long START_TIME = System.currentTimeMillis();
     public static final int UNKNOWN_SHUTDOWN_CODE = -991023;
-    public static int shutdownCode = UNKNOWN_SHUTDOWN_CODE;
     public static final int SHARD_CREATION_SLEEP_INTERVAL = 5100;
-    public static JDA jda;
     private static final ArrayList<BotController> shards = new ArrayList<>();
-    private static AtomicInteger numShardsReady = new AtomicInteger(0);
+    public static String version;
+    public static boolean DATABASE_ENABLED = false;
+    public static int shutdownCode = UNKNOWN_SHUTDOWN_CODE;
+    public static JDA jda;
+    private static final AtomicInteger numShardsReady = new AtomicInteger(0);
     private static boolean hasReadiedOnce = false;
     private static Modules modules;
     private static MusicModule musicModule;
@@ -97,7 +98,7 @@ public class BotController
 
     private static void initBotShards()
     {
-        for(int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++)
+        for (int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++)
         {
             try
             {
@@ -141,8 +142,9 @@ public class BotController
         logger.info("Shutting down with exit code " + code);
         modules.modules.forEach(Module::onDisable);
         shutdownCode = code;
-        for(BotController lch : shards) {
-            lch.getJda().shutdown();
+        for (BotController lch : shards)
+        {
+            getJda().shutdown();
         }
         getJda().shutdown();
         System.exit(code);
@@ -157,9 +159,10 @@ public class BotController
     {
         int sId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
 
-        for(BotController lch : shards)
+        for (BotController lch : shards)
         {
-            if(((SnowBall) lch).getShardId() == sId) {
+            if (((SnowBall) lch).getShardId() == sId)
+            {
                 return lch;
             }
         }
@@ -172,19 +175,6 @@ public class BotController
         return shards.get(id);
     }
 
-    public JDA.ShardInfo getShardInfo()
-    {
-        int sId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
-        return new JDA.ShardInfo(sId, Config.INS.getNumShards());
-    }
-
-    public void revive() throws IOException, SAXException, ParserConfigurationException
-    {
-        jda.shutdown();
-        logger.info("Reviving a shard");
-        shards.set(getShardInfo().getShardId(), new SnowBall(getShardInfo().getShardId()));
-    }
-
     public static List<BotController> getShards()
     {
         return shards;
@@ -194,8 +184,9 @@ public class BotController
     {
         ArrayList<Guild> list = new ArrayList<>();
 
-        for (BotController lch : shards) {
-            list.addAll(lch.getJda().getGuilds());
+        for (BotController lch : shards)
+        {
+            list.addAll(getJda().getGuilds());
         }
 
         return list;
@@ -205,8 +196,9 @@ public class BotController
     {
         HashMap<String, User> map = new HashMap<>();
 
-        for (BotController lch : shards) {
-            for (User usr : lch.getJda().getUsers())
+        for (BotController lch : shards)
+        {
+            for (User usr : getJda().getUsers())
             {
                 map.put(usr.getId(), usr);
             }
@@ -244,5 +236,18 @@ public class BotController
     public static LocalDateTime getStartTimestamp()
     {
         return startTimestamp;
+    }
+
+    public JDA.ShardInfo getShardInfo()
+    {
+        int sId = jda.getShardInfo() == null ? 0 : jda.getShardInfo().getShardId();
+        return new JDA.ShardInfo(sId, Config.INS.getNumShards());
+    }
+
+    public void revive() throws IOException, SAXException, ParserConfigurationException
+    {
+        jda.shutdown();
+        logger.info("Reviving a shard");
+        shards.set(getShardInfo().getShardId(), new SnowBall(getShardInfo().getShardId()));
     }
 }
