@@ -14,7 +14,8 @@ import java.util.*
 @SpringBootApplication
 open class SnowballApplication
 
-object Launcher {
+object Launcher
+{
     private val log = LoggerFactory.getLogger(Launcher::class.java)
     private var version = "Unknown"
 
