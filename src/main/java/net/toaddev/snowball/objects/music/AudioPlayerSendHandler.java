@@ -20,47 +20,46 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.module;
+package net.toaddev.snowball.objects.music;
 
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.toaddev.snowball.services.Modules;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
+import net.dv8tion.jda.api.audio.AudioSendHandler;
 
-import java.util.Set;
+import java.nio.ByteBuffer;
 
-public abstract class Module extends ListenerAdapter
+public class AudioPlayerSendHandler implements AudioSendHandler
 {
-    private String name;
+    // ################################################################################
+    // ##                     Audio Player Send Handler
+    // ################################################################################
+    private final AudioPlayer audioPlayer;
+    private final ByteBuffer buffer;
+    private final MutableAudioFrame frame;
 
-    protected Modules modules;
-
-    protected Module(String name)
+    public AudioPlayerSendHandler(AudioPlayer audioPlayer)
     {
-        this.name = name;
+        this.audioPlayer = audioPlayer;
+        this.buffer = ByteBuffer.allocate(1024);
+        this.frame = new MutableAudioFrame();
+        this.frame.setBuffer(buffer);
     }
 
-    public Module init(Modules modules)
+    @Override
+    public boolean canProvide()
     {
-        this.modules = modules;
-        return this;
+        return this.audioPlayer.provide(this.frame);
     }
 
-    public Set<Class<? extends Module>> getDependencies()
+    @Override
+    public ByteBuffer provide20MsAudio()
     {
-        return null;
+        return this.buffer.flip();
     }
 
-    public void onEnable() {}
-
-    public void onDisable() {}
-
-    public String getName()
+    @Override
+    public boolean isOpus()
     {
-        return name;
-    }
-
-    public void reload()
-    {
-        this.onDisable();
-        this.onEnable();
+        return true;
     }
 }

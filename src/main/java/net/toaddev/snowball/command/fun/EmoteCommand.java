@@ -23,10 +23,13 @@
 package net.toaddev.snowball.command.fun;
 
 import net.dv8tion.jda.api.entities.Emote;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.CommandException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class EmoteCommand extends Command
@@ -37,7 +40,7 @@ public class EmoteCommand extends Command
     }
 
     @Override
-    public void run(@Nonnull CommandContext ctx)
+    public void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         if (!ctx.getMessage().getEmotes().isEmpty())
         {

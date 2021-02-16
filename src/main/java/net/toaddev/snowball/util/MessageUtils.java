@@ -24,7 +24,7 @@ package net.toaddev.snowball.util;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.modules.PaginatorModule;
 import net.toaddev.snowball.services.Modules;
 

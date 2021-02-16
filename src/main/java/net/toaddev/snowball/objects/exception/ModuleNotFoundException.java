@@ -20,42 +20,12 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.modules;
+package net.toaddev.snowball.objects.exception;
 
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.snowball.objects.module.Module;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
-
-public class MessageModule extends Module
+public class ModuleNotFoundException extends RuntimeException
 {
-    private Map<Long, Message> latestMessage;
-
-    public MessageModule()
+    public ModuleNotFoundException(Class clazz)
     {
-        super("message");
-    }
-
-    @Override
-    public void onEnable()
-    {
-        this.latestMessage = new HashMap<>();
-    }
-
-    @Override
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event){
-        if(event.getMessage().getContentRaw().isBlank()){
-            return;
-        }
-        latestMessage.remove(event.getGuild().getIdLong());
-        latestMessage.put(event.getGuild().getIdLong(), event.getMessage());
-    }
-
-    public Map<Long, Message> getLatestMessage()
-    {
-        return latestMessage;
+        super("Failed to load the '" + clazz.getName() + "' module.");
     }
 }

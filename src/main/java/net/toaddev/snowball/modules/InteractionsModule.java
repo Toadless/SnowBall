@@ -23,10 +23,14 @@
 package net.toaddev.snowball.modules;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.module.Module;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.main.BotController;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 public class InteractionsModule extends Module
 {
@@ -62,15 +66,39 @@ public class InteractionsModule extends Module
         String guildPrefix = BotController.getModules().get(SettingsModule.class).getGuildPrefix(guildId);
         if (event.getMessage().getContentRaw().startsWith(guildPrefix))
         {
-            this.process(event, guildPrefix);
+            try
+            {
+                this.process(event, guildPrefix);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            } catch (SAXException e)
+            {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e)
+            {
+                e.printStackTrace();
+            }
         }
         else if (isBotMention(event))
         {
-            this.process(event, guildPrefix);
+            try
+            {
+                this.process(event, guildPrefix);
+            } catch (IOException e)
+            {
+                e.printStackTrace();
+            } catch (SAXException e)
+            {
+                e.printStackTrace();
+            } catch (ParserConfigurationException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void process(GuildMessageReceivedEvent event, String prefix)
+    public void process(GuildMessageReceivedEvent event, String prefix) throws IOException, SAXException, ParserConfigurationException
     {
         String[] args = event.getMessage().getContentRaw().split("\\s+");
 

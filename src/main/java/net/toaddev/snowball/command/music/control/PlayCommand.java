@@ -28,13 +28,16 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.snowball.entities.music.MusicManager;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.music.SearchProvider;
+import net.toaddev.snowball.objects.exception.CommandException;
+import net.toaddev.snowball.objects.music.MusicManager;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.music.SearchProvider;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandContext;
+
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class PlayCommand extends Command
@@ -48,7 +51,7 @@ public class PlayCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx)
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "play" + " ", "");
         songName = songName.replaceFirst("^" + ctx.getPrefix() + "p" + " ", "");

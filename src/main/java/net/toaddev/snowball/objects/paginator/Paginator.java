@@ -20,7 +20,7 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.paginator;
+package net.toaddev.snowball.objects.paginator;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;

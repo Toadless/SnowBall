@@ -25,7 +25,7 @@ package net.toaddev.snowball.util;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.modules.PaginatorModule;
 import net.toaddev.snowball.services.Modules;
 

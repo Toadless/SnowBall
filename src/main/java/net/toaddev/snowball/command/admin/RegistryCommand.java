@@ -23,35 +23,35 @@
 package net.toaddev.snowball.command.admin;
 
 import net.toaddev.snowball.data.Config;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.CommandFlag;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class RegistryCommand extends Command
 {
     public RegistryCommand()
     {
-        super("registry", null);
+        super("registry", null, List.of("option"));
         addFlags(CommandFlag.DEVELOPER_ONLY);
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx)
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         if (!Config.INS.getDevelopment())
         {
             ctx.getChannel().sendMessage("This command can only be ran in development.").queue();
             return;
         }
-        if (ctx.getArgs().length < 2)
-        {
-            ctx.getChannel().sendMessage("Please provide an option. `clear` | `rebuild`").queue();
-            return;
-        }
+
         CommandsModule commandsModule = BotController.getModules().get(CommandsModule.class);
         if (ctx.getArgs()[1].equals("clear"))
         {

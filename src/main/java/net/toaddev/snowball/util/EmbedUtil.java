@@ -26,7 +26,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.exceptions.PermissionException;
-import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.main.BotController;
 
 import java.awt.*;

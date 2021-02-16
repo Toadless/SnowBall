@@ -20,7 +20,7 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.music;
+package net.toaddev.snowball.objects.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -31,7 +31,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
-import net.toaddev.snowball.entities.Emoji;
+import net.toaddev.snowball.objects.Emoji;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.MessageModule;
 import net.toaddev.snowball.modules.MusicModule;

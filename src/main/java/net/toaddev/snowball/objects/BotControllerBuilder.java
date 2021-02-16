@@ -1,4 +1,4 @@
-package net.toaddev.snowball.entities;
+package net.toaddev.snowball.objects;
 
 import net.toaddev.snowball.main.BotController;
 import org.w3c.dom.Document;

@@ -26,19 +26,23 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageHistory;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.CommandFlag;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.exception.CommandException;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class ClearCommand extends Command
 {
     public ClearCommand()
     {
-        super("clear", null);
+        super("clear", null, List.of("messages"));
         addFlags(CommandFlag.SERVER_ADMIN_ONLY);
         addMemberPermissions(Permission.MESSAGE_MANAGE);
         addSelfPermissions(Permission.MESSAGE_MANAGE);
@@ -46,14 +50,8 @@ public class ClearCommand extends Command
     }
 
     @Override
-    public void run(@Nonnull CommandContext ctx)
+    public void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        if (ctx.getArgs().length < 2)
-        {
-            ctx.getChannel().sendMessage("Please provide an amount of messages to delete.").queue();
-            return;
-        }
-
         if (Integer.parseInt(ctx.getArgs()[1]) > 100) {
             ctx.getChannel().sendMessage("Make sure that your range is `1-100`.").queue();
             return;

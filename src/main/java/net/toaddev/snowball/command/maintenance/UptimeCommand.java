@@ -23,14 +23,17 @@
 package net.toaddev.snowball.command.maintenance;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class UptimeCommand extends Command
@@ -41,7 +44,7 @@ public class UptimeCommand extends Command
     }
 
     @Override
-    public void run(@Nonnull CommandContext ctx)
+    public void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         Duration uptime = Duration.between(BotController.getStartTimestamp(), LocalDateTime.now());
         ctx.getChannel().sendMessage(new EmbedBuilder()

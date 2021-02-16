@@ -23,14 +23,16 @@
 package net.toaddev.snowball.command.admin;
 
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.CommandFlag;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class ExitCommand extends Command
@@ -43,7 +45,7 @@ public class ExitCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx)
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         ctx.getChannel().sendMessage("This will **shut down the whole bot**.")
                 .queue(message ->

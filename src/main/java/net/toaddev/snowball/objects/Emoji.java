@@ -20,7 +20,7 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities;
+package net.toaddev.snowball.objects;
 
 public enum Emoji
 {

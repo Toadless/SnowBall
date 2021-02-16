@@ -20,12 +20,24 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.exception;
+package net.toaddev.snowball.objects.music;
 
-public class ModuleNotFoundException extends RuntimeException
+public enum SearchProvider
 {
-    public ModuleNotFoundException(Class clazz)
+    YOUTUBE("ytsearch:"), // Simple yt support
+    SOUNDCLOUD("scsearch:"), // Yes soundcloud support
+
+    URL(""); // This is for urls not searches
+
+    private final String searchPrefix;
+
+    SearchProvider(String searchPrefix)
     {
-        super("Failed to load the '" + clazz.getName() + "' module.");
+        this.searchPrefix = searchPrefix;
+    }
+
+    public String getSearchPrefix()
+    {
+        return searchPrefix;
     }
 }

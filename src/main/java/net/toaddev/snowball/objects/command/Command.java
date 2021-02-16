@@ -20,11 +20,13 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.command;
+package net.toaddev.snowball.objects.command;
 
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.Permission;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.util.EmbedUtil;
+import org.jetbrains.annotations.NotNull;
 import org.xml.sax.SAXException;
 
 import javax.annotation.Nonnull;
@@ -32,6 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * A class representing a command for use in the {@link net.toaddev.snowball.modules.CommandsModule CommandManager}.
@@ -51,6 +54,7 @@ public abstract class Command
     private final List<Permission> selfRequiredPermissions;
     private final List<CommandFlag> flags;
     private final List<String> alias;
+    private final List<String> syntax;
 
     /**
      *
@@ -65,6 +69,23 @@ public abstract class Command
         this.selfRequiredPermissions = new ArrayList<>();
         this.flags = new ArrayList<>();
         this.alias = new ArrayList<>();
+        this.syntax = null;
+    }
+
+    /**
+     *
+     * @param name The commands name
+     * @param help The commands help page
+     */
+    public Command(@NonNull String name, @NonNull String help, List<String> syntax)
+    {
+        this.name = name;
+        this.help = help;
+        this.memberRequiredPermissions = new ArrayList<>();
+        this.selfRequiredPermissions = new ArrayList<>();
+        this.flags = new ArrayList<>();
+        this.alias = new ArrayList<>();
+        this.syntax = syntax;
     }
 
     /**
@@ -72,10 +93,10 @@ public abstract class Command
      * <p>
      * This will consider the {@link CommandFlag flags} of this {@link net.toaddev.snowball.modules.CommandsModule command}
      * <p>
-     * This will only {@link #run(CommandContext) run} the command if all checks pass.
+     * This will only {@link #execute(CommandContext)} execute} the command if all checks pass.
      * @param event The command event to process with.
      */
-    public void process(CommandContext event)
+    public void process(CommandContext event) throws ParserConfigurationException, SAXException, IOException
     {
         if (hasFlag(CommandFlag.DISABLED))
         {
@@ -99,19 +120,32 @@ public abstract class Command
         }
         else
         {
-            if (hasFlag(CommandFlag.AUTO_DELETE_MESSAGE))
-            {
-                event.getMessage().delete().queue();
-            }
+            execute(event);
+        }
+    }
 
-            try {
-                run(event);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(e);
-                EmbedUtil.sendError(event.getChannel(), "An error occurred whilst executing this command. This is most likely a self permission exception.");
+    private void execute(@NonNull CommandContext ctx) throws IOException, SAXException, ParserConfigurationException
+    {
+        if (hasFlag(CommandFlag.AUTO_DELETE_MESSAGE))
+        {
+            ctx.getMessage().delete().queue();
+        }
+
+        if (this.syntax != null && this.syntax.size() > ctx.getArgs().length - 2)
+        {
+            for (int i = 2; i < this.syntax.size() + 2; i++)
+            {
+                if (ctx.getArgs().length < i)
+                {
+                    ctx.getChannel().sendMessage("Please provide the following argument: `" + this.syntax.get(i - 2) + "`.").queue();
+                    return;
+                }
             }
         }
+
+        run(ctx, exception ->
+        {
+        });
     }
 
     /**
@@ -152,7 +186,7 @@ public abstract class Command
      *
      * @param ctx The {@link CommandContext event} to use.
      */
-    public abstract void run(@Nonnull CommandContext ctx) throws ParserConfigurationException, SAXException, IOException;
+    public abstract void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure) throws ParserConfigurationException, SAXException, IOException;
 
     /**
      * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.toaddev.snowball.modules.CommandsModule command} {@link net.dv8tion.jda.api.entities.Member author} to execute.

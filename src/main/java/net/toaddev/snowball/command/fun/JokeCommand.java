@@ -23,10 +23,13 @@
 package net.toaddev.snowball.command.fun;
 
 import net.dv8tion.jda.api.utils.data.DataObject;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.util.WebUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class JokeCommand extends Command
@@ -37,7 +40,7 @@ public class JokeCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx)
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         String joke = WebUtil.getReq("http://api.icndb.com/jokes/random");
         if (joke == null)

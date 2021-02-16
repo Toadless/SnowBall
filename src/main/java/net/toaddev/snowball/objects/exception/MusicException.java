@@ -20,15 +20,20 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.database;
+package net.toaddev.snowball.objects.exception;
 
-import com.mongodb.client.MongoDatabase;
-
-public interface IMongoTask
+public class MusicException extends RuntimeException
 {
-    /**
-     *
-     * @param database The {@link net.toaddev.snowball.modules.DatabaseModule database} to use.
-     */
-    public void run(MongoDatabase database);
+    private final String text;
+
+    public MusicException(String text)
+    {
+        super(text, null, true, false);
+        this.text = text;
+    }
+
+    public String getText()
+    {
+        return text;
+    }
 }

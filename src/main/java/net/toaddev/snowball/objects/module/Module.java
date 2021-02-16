@@ -20,12 +20,47 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.exception;
+package net.toaddev.snowball.objects.module;
 
-public class CommandErrorException extends CommandException
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.toaddev.snowball.services.Modules;
+
+import java.util.Set;
+
+public abstract class Module extends ListenerAdapter
 {
-    public CommandErrorException(String text)
+    private String name;
+
+    protected Modules modules;
+
+    protected Module(String name)
     {
-        super(text);
+        this.name = name;
+    }
+
+    public Module init(Modules modules)
+    {
+        this.modules = modules;
+        return this;
+    }
+
+    public Set<Class<? extends Module>> getDependencies()
+    {
+        return null;
+    }
+
+    public void onEnable() {}
+
+    public void onDisable() {}
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void reload()
+    {
+        this.onDisable();
+        this.onEnable();
     }
 }

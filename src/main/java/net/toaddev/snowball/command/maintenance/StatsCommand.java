@@ -24,11 +24,14 @@ package net.toaddev.snowball.command.maintenance;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
-import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandContext;
+
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class StatsCommand extends Command
@@ -39,7 +42,7 @@ public class StatsCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx)
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         ctx.getChannel().sendMessage(new EmbedBuilder()
                 .setTitle(ctx.getJDA().getSelfUser().getAsTag() + " information")

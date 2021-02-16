@@ -20,15 +20,15 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.music;
+package net.toaddev.snowball.objects.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.exception.MusicException;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.MusicException;
 import net.toaddev.snowball.main.BotController;
 
 import java.util.Collections;

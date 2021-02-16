@@ -2,7 +2,7 @@ package net.toaddev.snowball.modules;
 
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.toaddev.snowball.api.API;
-import net.toaddev.snowball.entities.module.Module;
+import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.main.BotController;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;

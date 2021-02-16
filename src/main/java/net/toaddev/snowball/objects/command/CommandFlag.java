@@ -20,12 +20,36 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.exception;
+package net.toaddev.snowball.objects.command;
 
-public class CommandFlagException extends CommandException
+/**
+ * An enum for flags related to {@link net.toaddev.snowball.modules.CommandsModule command} execution.
+ */
+public enum CommandFlag
 {
-    public CommandFlagException(String text)
-    {
-        super(text);
-    }
+    /**
+     * If the {@link net.toaddev.snowball.modules.CommandsModule command} can only be used by developers.
+     *
+     * @see CommandContext#isDeveloper().
+     */
+    DEVELOPER_ONLY,
+    /**
+     * If the {@link net.toaddev.snowball.modules.CommandsModule command} can only be used by server admins.
+     *
+     * @see CommandContext#isServerAdmin().
+     */
+    SERVER_ADMIN_ONLY,
+    /**
+     * If the {@link net.toaddev.snowball.modules.CommandsModule command} is disabled.
+     *
+     */
+    /**
+     * If the {@link net.toaddev.snowball.modules.CommandsModule commands} message needs to be deleted.
+     */
+    AUTO_DELETE_MESSAGE,
+
+    /**
+     * If the {@link net.toaddev.snowball.modules.CommandsModule command} is disabled.
+     */
+    DISABLED;
 }

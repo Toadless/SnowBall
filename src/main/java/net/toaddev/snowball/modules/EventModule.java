@@ -30,7 +30,7 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
-import net.toaddev.snowball.entities.module.Module;
+import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.main.BotController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -20,7 +20,7 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.command;
+package net.toaddev.snowball.objects.command;
 
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.JDA;

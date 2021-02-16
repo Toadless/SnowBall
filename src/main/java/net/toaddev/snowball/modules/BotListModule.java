@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.toaddev.snowball.api.API;
 import net.toaddev.snowball.data.Config;
-import net.toaddev.snowball.entities.module.Module;
+import net.toaddev.snowball.objects.module.Module;
 import org.jetbrains.annotations.NotNull;
 
 public class BotListModule extends Module

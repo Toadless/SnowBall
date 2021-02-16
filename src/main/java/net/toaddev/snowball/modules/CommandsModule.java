@@ -26,8 +26,8 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 import net.toaddev.snowball.annotation.Ignore;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.module.Module;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.module.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

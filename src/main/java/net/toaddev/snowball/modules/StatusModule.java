@@ -25,7 +25,7 @@ package net.toaddev.snowball.modules;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.toaddev.snowball.entities.module.Module;
+import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.IOUtil;
 import org.jetbrains.annotations.NotNull;

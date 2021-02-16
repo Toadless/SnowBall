@@ -24,16 +24,19 @@ package net.toaddev.snowball.command.admin;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.CommandFlag;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class EvalCommand extends Command
@@ -45,7 +48,7 @@ public class EvalCommand extends Command
 
     public EvalCommand()
     {
-        super("eval", null);
+        super("eval", null, List.of("code"));
         addFlags(CommandFlag.DEVELOPER_ONLY);
         addSelfPermissions(Permission.MESSAGE_EMBED_LINKS);
         this.EVAL_EXECUTOR = Executors.newFixedThreadPool(4);
@@ -65,13 +68,8 @@ public class EvalCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx)
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        if (ctx.getArgs().length < 2)
-        {
-            ctx.getChannel().sendMessage("You need to provide code to evaluate.").queue();
-            return;
-        }
         String messageArgs = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "eval" + " ", "");
         try
         {

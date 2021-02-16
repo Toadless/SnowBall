@@ -31,9 +31,9 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
-import net.toaddev.snowball.entities.Emoji;
-import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.entities.paginator.Paginator;
+import net.toaddev.snowball.objects.Emoji;
+import net.toaddev.snowball.objects.module.Module;
+import net.toaddev.snowball.objects.paginator.Paginator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;

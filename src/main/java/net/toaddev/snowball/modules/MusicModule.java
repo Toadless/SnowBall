@@ -36,11 +36,11 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.snowball.entities.music.MusicManager;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.exception.MusicException;
-import net.toaddev.snowball.entities.module.Module;
-import net.toaddev.snowball.entities.music.SearchProvider;
+import net.toaddev.snowball.objects.music.MusicManager;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.MusicException;
+import net.toaddev.snowball.objects.module.Module;
+import net.toaddev.snowball.objects.music.SearchProvider;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import net.toaddev.snowball.util.MessageUtils;
@@ -255,9 +255,9 @@ public class MusicModule extends Module
 
     /**
      *
-     * @param ctx The {@link net.toaddev.snowball.entities.command.CommandContext context} to use.
+     * @param ctx The {@link net.toaddev.snowball.objects.command.CommandContext context} to use.
      * @param query The query to play.
-     * @param searchProvider The {@link net.toaddev.snowball.entities.music.SearchProvider searchProvider} to use.
+     * @param searchProvider The {@link net.toaddev.snowball.objects.music.SearchProvider searchProvider} to use.
      * @param messages Are we going to send the added to the queue messages or not?
      * @param search This is for the dynamic search page.
      */

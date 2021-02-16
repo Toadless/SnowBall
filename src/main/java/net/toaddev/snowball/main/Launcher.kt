@@ -2,7 +2,7 @@ package net.toaddev.snowball.main
 
 import com.sedmelluq.discord.lavaplayer.tools.PlayerLibrary
 import net.dv8tion.jda.api.JDAInfo
-import net.toaddev.snowball.entities.BotControllerBuilder
+import net.toaddev.snowball.objects.BotControllerBuilder
 import net.toaddev.snowball.util.IOUtil
 import org.slf4j.LoggerFactory
 import org.springframework.boot.Banner

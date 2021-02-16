@@ -29,7 +29,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
-import net.toaddev.snowball.entities.module.Module;
+import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.services.Modules;
 import net.toaddev.snowball.util.IOUtil;

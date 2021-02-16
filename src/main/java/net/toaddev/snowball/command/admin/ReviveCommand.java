@@ -22,33 +22,31 @@
 
 package net.toaddev.snowball.command.admin;
 
-import net.toaddev.snowball.entities.command.Command;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.CommandFlag;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
 import org.jetbrains.annotations.NotNull;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.List;
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class ReviveCommand extends Command
 {
     public ReviveCommand()
     {
-        super("revive", null);
+        super("revive", null, List.of("shardId"));
         addFlags(CommandFlag.DEVELOPER_ONLY);
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx) throws ParserConfigurationException, SAXException, IOException
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure) throws ParserConfigurationException, SAXException, IOException
     {
-        if (ctx.getArgs().length < 2)
-        {
-            ctx.getChannel().sendMessage("Please provide a shard id to revive.").queue();
-            return;
-        }
         int shardId = Integer.parseInt(ctx.getArgs()[1]);
         ctx.getChannel().sendMessage("Reviving shard" + " " + shardId).queue();
         BotController.getInstance(shardId).revive();

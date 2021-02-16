@@ -27,11 +27,14 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.snowball.entities.music.MusicManager;
+import net.toaddev.snowball.objects.exception.CommandException;
+import net.toaddev.snowball.objects.music.MusicManager;
 import net.toaddev.snowball.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.Command;
+
+import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class PauseCommand extends Command
@@ -44,7 +47,7 @@ public class PauseCommand extends Command
     }
 
     @Override
-    public void run(@NotNull CommandContext ctx)
+    public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();

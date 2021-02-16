@@ -20,7 +20,7 @@
  *  SOFTWARE.
  */
 
-package net.toaddev.snowball.entities.music;
+package net.toaddev.snowball.objects.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -30,8 +30,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
-import net.toaddev.snowball.entities.command.CommandContext;
-import net.toaddev.snowball.entities.exception.MusicException;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.MusicException;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.DatabaseModule;
 import net.toaddev.snowball.modules.MusicModule;
@@ -84,7 +84,9 @@ public class AudioLoader implements AudioLoadResultHandler
         {
             musicManager.getScheduler().queue(tracks.get(0));
 
-            if (messages && !musicManager.getScheduler().getQueue().contains(tracks.get(0)))
+            if (musicManager.getScheduler().player.getPlayingTrack() != tracks.get(0) &&
+                    musicManager.getScheduler().getQueue().contains(tracks.get(0)) &&
+                    messages)
             {
                 sendAddedEmbed(tracks.get(0), channel, event);
             }
