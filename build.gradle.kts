@@ -76,7 +76,6 @@ dependencies {
     implementation ("org.json:json:$jsonVersion")
 
     // kotlin
-    // kotlin
     implementation(kotlin("stdlib-jdk8"))
     implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.4.2-native-mt")
 
