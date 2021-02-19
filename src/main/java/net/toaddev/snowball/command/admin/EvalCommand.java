@@ -99,19 +99,18 @@ public class EvalCommand extends Command
                     status = "Failed";
                 }
 
-                ctx.getChannel().sendMessage(new EmbedBuilder()
+                ctx.reply(new EmbedBuilder()
                         .setTitle("Evaluated Result")
                         .addField("Status:", status, true)
                         .addField("Duration:", (System.currentTimeMillis() - start) + "ms", true)
                         .addField("Code:", "```java\n" + ctx.getMessage().getContentRaw().split("\\s+", 2)[1] + "\n```", false)
                         .addField("Result:", out == null ? "No result." : out.toString(), false)
                         .setColor(DiscordUtil.getEmbedColor())
-                        .build())
-                        .queue();
+                        .build());
             });
         } catch (Exception e)
         {
-            ctx.getChannel().sendMessage(e.getMessage()).queue();
+            ctx.reply(e.getMessage());
         }
     }
 }

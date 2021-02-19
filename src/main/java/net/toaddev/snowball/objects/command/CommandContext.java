@@ -194,4 +194,19 @@ public class CommandContext
     {
         this.channel.sendMessage(content).queue();
     }
+
+    public void reply(MessageEmbed embed)
+    {
+        this.message.reply(embed).mentionRepliedUser(false).queue();
+    }
+
+    public void reply(Message message)
+    {
+        this.message.reply(message).mentionRepliedUser(false).queue();
+    }
+
+    public void reply(String message)
+    {
+        this.message.reply(message).mentionRepliedUser(false).queue();
+    }
 }
