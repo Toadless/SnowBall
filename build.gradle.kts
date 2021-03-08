@@ -39,7 +39,7 @@ repositories {
     maven { setUrl ("http://repo.spring.io/plugins-release") }
 }
 
-val jdaVersion = "4.2.0_231"
+val jdaVersion = "4.2.0_236"
 val logbackVersion = "1.3.0-alpha5"
 val lavaplayerVersion = "1.3.72"
 val yamlVersion = "1.7.2"
