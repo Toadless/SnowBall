@@ -81,6 +81,6 @@ public class SearchCommand extends Command
         ctx.getEvent().acknowledge().queue();
 
         MusicModule.getInstance()
-                .play(ctx, ctx.getOption("song"), searchProvider, true, true);
+                .play(ctx, ctx.getOption("query"), searchProvider, true, true);
     }
 }

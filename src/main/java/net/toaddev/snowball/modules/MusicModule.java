@@ -146,7 +146,14 @@ public class MusicModule extends Module
             }
             if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE))
             {
-                event.getReaction().removeReaction(event.getUser()).queue();
+                try
+                {
+                    event.getReaction().removeReaction(event.getUser()).queue();
+                }
+                catch (Exception ignored)
+                {
+
+                }
             }
         } catch (Exception e)
         {

@@ -22,7 +22,6 @@
 
 package net.toaddev.snowball.objects.command;
 
-import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.utils.data.DataObject;
 import net.toaddev.snowball.objects.exception.CommandException;
@@ -59,7 +58,7 @@ public abstract class Command
      * @param name The commands name
      * @param help The commands help page
      */
-    public Command(@NonNull String name, @NonNull String help)
+    public Command(@NotNull String name, @NotNull String help)
     {
         this.name = name;
         this.help = help;
@@ -187,7 +186,7 @@ public abstract class Command
     /**
      * @return The command name
      */
-    @NonNull
+    @NotNull
     public String getName()
     {
         return name;

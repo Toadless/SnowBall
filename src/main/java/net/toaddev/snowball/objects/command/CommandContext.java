@@ -145,4 +145,9 @@ public class CommandContext
     {
         return event.getOption(option).getAsString();
     }
+
+    public boolean isDefined(String option)
+    {
+        return !(event.getOption(option) == null);
+    }
 }

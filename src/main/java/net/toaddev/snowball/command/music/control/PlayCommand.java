@@ -70,7 +70,7 @@ public class PlayCommand extends Command
             return;
         }
 
-        if (ctx.getOption("song") == null)
+        if (!ctx.isDefined("song"))
         {
             final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
             if (musicManager.getAudioPlayer().getPlayingTrack() != null)

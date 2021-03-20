@@ -68,7 +68,6 @@ dependencies {
 
     // yaml config
     implementation ("me.carleslc.Simple-YAML:Simple-Yaml:$yamlVersion")
-
     // database
     implementation ("org.mongodb:mongo-java-driver:$mongoVersion")
     implementation ("org.json:json:$jsonVersion")

@@ -47,7 +47,7 @@ public class SpotifyCommand extends Command
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
 
         addOptions(
-                new CommandOptionString("song", "The song you want to play throught spotify.")
+                new CommandOptionString("song", "The song you want to play throught spotify.").required()
         );
     }
 

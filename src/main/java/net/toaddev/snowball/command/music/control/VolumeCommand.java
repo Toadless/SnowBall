@@ -76,7 +76,7 @@ public class VolumeCommand extends Command
         {
             ctx.getEvent().reply("You need to be in the same voice channel as me for this to work!").queue();
             return;
-        } else if (Integer.parseInt(ctx.getOption("song")) < 2)
+        } else if (Integer.parseInt(ctx.getOption("volume")) < 2)
         {
             ctx.getEvent().reply("You need to provide a volume to set between `0 - 200`.").queue();
             return;
@@ -84,7 +84,7 @@ public class VolumeCommand extends Command
         {
             try
             {
-                int volume = Integer.parseInt(ctx.getOption("song"));
+                int volume = Integer.parseInt(ctx.getOption("volume"));
                 if (volume <= -1)
                 {
                     ctx.getEvent().reply("Please provide a valid volume to set between `0 - 200`.").queue();
