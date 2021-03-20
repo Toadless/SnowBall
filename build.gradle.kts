@@ -69,9 +69,6 @@ dependencies {
     // yaml config
     implementation ("me.carleslc.Simple-YAML:Simple-Yaml:$yamlVersion")
 
-    //eval
-    implementation ("org.codehaus.groovy:groovy-jsr223:$groovyVersion")
-
     // database
     implementation ("org.mongodb:mongo-java-driver:$mongoVersion")
     implementation ("org.json:json:$jsonVersion")

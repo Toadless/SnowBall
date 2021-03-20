@@ -1,7 +1,3 @@
 watching ${total_guilds} guilds 👀
 watching ${total_users} users 👀
-watching the world burn
-watching dreams die
-playing games
-listening music
-playing music
+with new slash commands

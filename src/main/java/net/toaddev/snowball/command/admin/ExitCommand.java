@@ -39,7 +39,7 @@ public class ExitCommand extends Command
 {
     public ExitCommand()
     {
-        super("exit", null);
+        super("exit", "Stops the bot");
         addFlags(CommandFlag.DEVELOPER_ONLY);
     }
 
