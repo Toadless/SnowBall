@@ -31,10 +31,10 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
-import net.toaddev.snowball.objects.Emoji;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.MessageModule;
 import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.objects.Emoji;
 import net.toaddev.snowball.util.DiscordUtil;
 import net.toaddev.snowball.util.MusicUtils;
 import net.toaddev.snowball.util.TimeUtils;
@@ -79,22 +79,21 @@ public class MusicManager
 
     public EmbedBuilder buildMusicController()
     {
-       try
-       {
-           var embed = new EmbedBuilder();
-           var track = this.scheduler.player.getPlayingTrack();
-           embed.setColor(DiscordUtil.getEmbedColor())
-                   .addField("Playing", Emoji.FORWARD.get() + " " + MusicUtils.formatTrack(track), false)
-                   .addField("Length", TimeUtils.formatDuration(track.getDuration()), true)
-                   .addField("Volume", (int) (this.scheduler.player.getVolume()) + "%", true)
-                   .addField("Repeat Mode", this.scheduler.repeating ? "Enabled" : "Disabled", true)
-                   .setTimestamp(Instant.now());
-           return embed;
-       }
-       catch (Exception e)
-       {
-           return null;
-       }
+        try
+        {
+            var embed = new EmbedBuilder();
+            var track = this.scheduler.player.getPlayingTrack();
+            embed.setColor(DiscordUtil.getEmbedColor())
+                    .addField("Playing", Emoji.FORWARD.get() + " " + MusicUtils.formatTrack(track), false)
+                    .addField("Length", TimeUtils.formatDuration(track.getDuration()), true)
+                    .addField("Volume", this.scheduler.player.getVolume() + "%", true)
+                    .addField("Repeat Mode", this.scheduler.repeating ? "Enabled" : "Disabled", true)
+                    .setTimestamp(Instant.now());
+            return embed;
+        } catch (Exception e)
+        {
+            return null;
+        }
     }
 
     public void sendMusicController()
@@ -111,7 +110,7 @@ public class MusicManager
 
             TextChannel channel = latestMessage.getTextChannel();
 
-            if(channel == null || !channel.canTalk())
+            if (channel == null || !channel.canTalk())
             {
                 return;
             }
@@ -123,14 +122,16 @@ public class MusicManager
                     }));
 
             var embed = buildMusicController();
-            if(!channel.canTalk() && embed != null)
+            if (!channel.canTalk() && embed != null)
             {
                 return;
             }
 
-            channel.sendMessage(embed.build()).queue(message -> {
+            channel.sendMessage(embed.build()).queue(message ->
+            {
                 this.setMusicControllerId(message.getIdLong());
-                if(!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_ADD_REACTION)){
+                if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MESSAGE_ADD_REACTION))
+                {
                     return;
                 }
                 message.addReaction(Emoji.VOLUME_DOWN.get()).queue();
@@ -140,8 +141,7 @@ public class MusicManager
                 message.addReaction(Emoji.SHUFFLE.get()).queue();
                 message.addReaction(Emoji.X.get()).queue();
             });
-        }
-        catch (Exception ignored)
+        } catch (Exception ignored)
         {
         }
     }
@@ -161,17 +161,21 @@ public class MusicManager
         this.musicControllerId = -1L;
     }
 
-    public void planDestroy(){
+    public void planDestroy()
+    {
         this.scheduler.player.setPaused(true);
-        if(this.future != null){
+        if (this.future != null)
+        {
             return;
         }
         this.future = BotController.getModules().schedule(() -> BotController.getModules().get(MusicModule.class).destroy(this, -1L, true), 2, TimeUnit.MINUTES);
     }
 
-    public void cancelDestroy(){
+    public void cancelDestroy()
+    {
         this.scheduler.player.setPaused(false);
-        if(this.future == null){
+        if (this.future == null)
+        {
             return;
         }
         this.future.cancel(true);

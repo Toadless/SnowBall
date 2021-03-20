@@ -24,12 +24,12 @@ package net.toaddev.snowball.command.maintenance;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.objects.command.CommandContext;
 
 import java.util.function.Consumer;
 
@@ -38,15 +38,15 @@ public class StatsCommand extends Command
 {
     public StatsCommand()
     {
-        super("stats", null);
+        super("stats", "Gives you the bots stats.");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getChannel().sendMessage(new EmbedBuilder()
+        ctx.getEvent().reply(new EmbedBuilder()
                 .setTitle(ctx.getJDA().getSelfUser().getAsTag() + " information")
-                .addField("JVM Version",System.getProperty("java.version"), true)
+                .addField("JVM Version", System.getProperty("java.version"), true)
                 .addField("JDA Version", JDAInfo.VERSION, true)
                 .addBlankField(true)
                 .addField("Thread Count", String.valueOf(java.lang.Thread.activeCount()), true)

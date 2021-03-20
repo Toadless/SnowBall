@@ -24,9 +24,9 @@ package net.toaddev.snowball.util;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.snowball.objects.command.CommandContext;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.toaddev.snowball.modules.PaginatorModule;
+import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.services.Modules;
 
 import java.time.Instant;
@@ -55,14 +55,14 @@ public class MusicUtils
     public static void sendAddedEmbed(CommandContext ctx, int trackCount)
     {
         ctx.sendMessage(new EmbedBuilder()
-                .setDescription("Use `" + ctx.getPrefix() + "queue` to view the queue")
+                .setDescription("Use `/queue` to view the queue")
                 .setAuthor("Queued " + trackCount + " tracks")
                 .setTimestamp(Instant.now())
                 .setColor(DiscordUtil.getEmbedColor())
                 .build());
     }
 
-    public static void sendTracks(Collection<AudioTrack> tracks, Modules modules, TextChannel channel, long authorId, String baseMessage)
+    public static void sendTracks(Collection<AudioTrack> tracks, Modules modules, MessageChannel channel, long authorId, String baseMessage)
     {
         if (channel == null)
         {

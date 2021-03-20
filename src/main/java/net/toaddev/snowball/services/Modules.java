@@ -26,9 +26,9 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.exception.ModuleNotFoundException;
 import net.toaddev.snowball.objects.module.Module;
-import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.ThreadFactoryHelper;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
@@ -44,18 +44,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
- *  This class loads all of the bots modules
+ * This class loads all of the bots modules
  */
 public class Modules
 {
     private static final String MODULE_PACKAGE = "net.toaddev.snowball.modules";
     private static final Logger LOG = LoggerFactory.getLogger(Modules.class);
-
+    public final List<Module> modules;
     private final ScheduledExecutorService scheduler;
     private final OkHttpClient httpClient;
-    public final List<Module> modules;
 
-    public Modules(){
+    public Modules()
+    {
         this.httpClient = new OkHttpClient();
         this.modules = new LinkedList<>();
         this.scheduler = new ScheduledThreadPoolExecutor(2, new ThreadFactoryHelper());
@@ -65,7 +65,7 @@ public class Modules
     private void loadModules()
     {
         LOG.info("Loading modules...");
-        try(var result = new ClassGraph().acceptPackages(MODULE_PACKAGE).scan())
+        try (var result = new ClassGraph().acceptPackages(MODULE_PACKAGE).scan())
         {
             var queue = result.getSubclasses(Module.class.getName()).stream()
                     .map(ClassInfo::loadClass)
@@ -75,8 +75,7 @@ public class Modules
                         try
                         {
                             return ((Module) clazz.getDeclaredConstructor().newInstance()).init(this);
-                        }
-                        catch(Exception e)
+                        } catch (Exception e)
                         {
                             LOG.info("Error whilst attempting to load modules.", e);
                         }
@@ -85,11 +84,11 @@ public class Modules
                     .filter(Objects::nonNull)
                     .collect(Collectors.toCollection(LinkedList::new));
 
-            while(!queue.isEmpty())
+            while (!queue.isEmpty())
             {
                 var instance = queue.remove();
                 var dependencies = instance.getDependencies();
-                if(dependencies != null && !dependencies.stream().allMatch(mod -> this.modules.stream().anyMatch(module -> mod == module.getClass())))
+                if (dependencies != null && !dependencies.stream().allMatch(mod -> this.modules.stream().anyMatch(module -> mod == module.getClass())))
                 {
                     queue.add(instance);
                     LOG.info("Added '{}' back to the queue. Dependencies: {}", instance.getClass().getSimpleName(), dependencies.toString());
@@ -111,7 +110,8 @@ public class Modules
     public <T extends Module> T get(Class<T> clazz)
     {
         var module = this.modules.stream().filter(mod -> mod.getClass().equals(clazz)).findFirst();
-        if(module.isEmpty()){
+        if (module.isEmpty())
+        {
             throw new ModuleNotFoundException(clazz);
         }
         return (T) module.get();
@@ -122,23 +122,29 @@ public class Modules
         return BotController.getJda();
     }
 
-    public ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long initDelay, long delay, TimeUnit timeUnit){
-        return this.scheduler.scheduleAtFixedRate(() -> {
-            try{
+    public ScheduledFuture<?> scheduleAtFixedRate(Runnable runnable, long initDelay, long delay, TimeUnit timeUnit)
+    {
+        return this.scheduler.scheduleAtFixedRate(() ->
+        {
+            try
+            {
                 runnable.run();
-            }
-            catch(Exception e){
+            } catch (Exception e)
+            {
                 LOG.error("Unexpected error in scheduler", e);
             }
         }, initDelay, delay, timeUnit);
     }
 
-    public ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit timeUnit){
-        return this.scheduler.schedule(() -> {
-            try{
+    public ScheduledFuture<?> schedule(Runnable runnable, long delay, TimeUnit timeUnit)
+    {
+        return this.scheduler.schedule(() ->
+        {
+            try
+            {
                 runnable.run();
-            }
-            catch(Exception e){
+            } catch (Exception e)
+            {
                 LOG.error("Unexpected error in scheduler", e);
             }
         }, delay, timeUnit);
@@ -149,7 +155,8 @@ public class Modules
         return getJDA().getGuildById(guildId);
     }
 
-    public OkHttpClient getHttpClient(){
+    public OkHttpClient getHttpClient()
+    {
         return this.httpClient;
     }
 }

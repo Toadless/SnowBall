@@ -36,7 +36,7 @@ public class JokeCommand extends Command
 {
     public JokeCommand()
     {
-        super("joke", null);
+        super("joke", "Tells a joke.");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class JokeCommand extends Command
         String joke = WebUtil.getReq("http://api.icndb.com/jokes/random");
         if (joke == null)
         {
-            ctx.getChannel().sendMessage("Unable to request a joke.").queue();
+            ctx.getEvent().reply("Unable to request a joke.").queue();
             return;
         }
         DataObject object = DataObject.fromJson(joke);
@@ -55,6 +55,6 @@ public class JokeCommand extends Command
         result = result.toString().replaceAll("Chuck Norris", ctx.getMember().getUser().getName());
         result = result.toString().replaceAll("&quot;", "\"");
 
-        ctx.getChannel().sendMessage(result.toString()).queue();
+        ctx.getEvent().reply(result.toString()).queue();
     }
 }

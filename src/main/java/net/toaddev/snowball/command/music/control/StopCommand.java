@@ -26,12 +26,12 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.MusicManager;
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.objects.command.CommandContext;
 
 import java.util.function.Consumer;
 
@@ -43,7 +43,6 @@ public class StopCommand extends Command
         super("stop", "Stops the guilds player");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("end");
     }
 
     @Override
@@ -58,18 +57,18 @@ public class StopCommand extends Command
 
         if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel for this to work.").queue();
+            ctx.getEvent().reply("I need to be in a voice channel for this to work.").queue();
             return;
         }
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
         {
-            channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
+            ctx.getEvent().reply("You need to be in the same voice channel as me for this to work!").queue();
             return;
         }
 
@@ -77,6 +76,6 @@ public class StopCommand extends Command
         musicManager.getScheduler().player.stopTrack();
         musicManager.getScheduler().getQueue().clear();
         musicManager.getAudioPlayer().destroy();
-        channel.sendMessage("The player has stopped.").queue();
+        ctx.getEvent().reply("The player has stopped.").queue();
     }
 }

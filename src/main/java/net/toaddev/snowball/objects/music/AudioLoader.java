@@ -27,14 +27,14 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.toaddev.snowball.main.BotController;
+import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.MusicException;
-import net.toaddev.snowball.main.BotController;
-import net.toaddev.snowball.modules.DatabaseModule;
-import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.util.MusicUtils;
 
 import java.util.List;
@@ -46,8 +46,8 @@ public class AudioLoader implements AudioLoadResultHandler
 {
     private final MusicManager musicManager;
 
-    private final TextChannel channel;
-    private final GuildMessageReceivedEvent event;
+    private final MessageChannel channel;
+    private final SlashCommandEvent event;
 
     private final boolean messages;
     private final CommandContext ctx;
@@ -56,7 +56,7 @@ public class AudioLoader implements AudioLoadResultHandler
     {
         this.musicManager = musicModule.getMusicManager(ctx.getGuild());
 
-        this.channel = ctx.getChannel();
+        this.channel = ctx.getEvent().getChannel();
         this.event = ctx.getEvent();
 
         this.messages = messages;
@@ -90,8 +90,7 @@ public class AudioLoader implements AudioLoadResultHandler
             {
                 sendAddedEmbed(tracks.get(0), channel, event);
             }
-        }
-        else
+        } else
         {
             channel.sendMessage("Adding to queue: `")
                     .append(String.valueOf(tracks.size()))
@@ -107,8 +106,8 @@ public class AudioLoader implements AudioLoadResultHandler
     @Override
     public void noMatches()
     {
-        if (!ctx.getArgs()[1].contains("spotify."))
-            channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(BotController.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
+        if (!ctx.getOption("song").contains("spotify."))
+            channel.sendMessage(":x: No songs found matching `" + event.getOption("song") + "`").queue();
     }
 
     @Override
@@ -122,8 +121,8 @@ public class AudioLoader implements AudioLoadResultHandler
     {
         private final MusicManager musicManager;
 
-        private final TextChannel channel;
-        private final GuildMessageReceivedEvent event;
+        private final MessageChannel channel;
+        private final SlashCommandEvent event;
         private final User user;
 
         public AudioLoaderList(CommandContext ctx, MusicModule musicModule)
@@ -138,7 +137,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void trackLoaded(AudioTrack track)
         {
-            BotController.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
+            BotController.getMusicModule().getMusicManager(event.getGuild()).cancelDestroy();
             musicManager.getScheduler().queue(track);
             sendAddedEmbed(track, channel, event);
         }
@@ -146,7 +145,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void playlistLoaded(AudioPlaylist playlist)
         {
-            BotController.getMusicModule().getMusicManager(channel.getGuild()).cancelDestroy();
+            BotController.getMusicModule().getMusicManager(event.getGuild()).cancelDestroy();
             final List<AudioTrack> tracks = playlist.getTracks();
 
             {
@@ -158,7 +157,7 @@ public class AudioLoader implements AudioLoadResultHandler
 
                     BotController.getEventWaiter().waitForEvent(
                             GuildMessageReceivedEvent.class,
-                            (e) -> e.getMember().getIdLong() == user.getIdLong() && e.getGuild().getIdLong() == channel.getGuild().getIdLong() && e.getChannel().getIdLong() == channel.getIdLong(),
+                            (e) -> e.getMember().getIdLong() == user.getIdLong() && e.getGuild().getIdLong() == event.getGuild().getIdLong() && e.getChannel().getIdLong() == channel.getIdLong(),
                             (e) ->
                             {
                                 String[] args = e.getMessage().getContentRaw().split("\\s+");
@@ -178,13 +177,11 @@ public class AudioLoader implements AudioLoadResultHandler
                                     {
                                         sendAddedEmbed(tracks.get(num), channel, event);
                                         musicManager.getScheduler().queue(tracks.get(num));
-                                    }
-                                    catch (IndexOutOfBoundsException exe)
+                                    } catch (IndexOutOfBoundsException exe)
                                     {
                                         channel.sendMessage("Invalid number!").queue();
                                     }
-                                }
-                                catch (NumberFormatException ex)
+                                } catch (NumberFormatException ex)
                                 {
                                     channel.sendMessage("Invalid number.").queue();
                                 }
@@ -199,7 +196,7 @@ public class AudioLoader implements AudioLoadResultHandler
         @Override
         public void noMatches()
         {
-            channel.sendMessage(":x: No songs found matching `" + event.getMessage().getContentRaw().replace(BotController.getModules().get(DatabaseModule.class).getPrefix(channel.getGuild().getIdLong()) + "play", "") + "`").queue();
+            channel.sendMessage(":x: No songs found matching `" + event.getOption("song") + "`").queue();
         }
 
         @Override

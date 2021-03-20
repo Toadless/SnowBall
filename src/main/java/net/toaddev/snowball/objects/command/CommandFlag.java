@@ -51,5 +51,5 @@ public enum CommandFlag
     /**
      * If the {@link net.toaddev.snowball.modules.CommandsModule command} is disabled.
      */
-    DISABLED;
+    DISABLED
 }

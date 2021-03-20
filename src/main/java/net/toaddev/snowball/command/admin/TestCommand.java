@@ -26,6 +26,7 @@ import net.toaddev.snowball.annotation.Ignore;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
 import net.toaddev.snowball.objects.exception.CommandException;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +40,10 @@ public class TestCommand extends Command
     {
         super("test", null);
         addFlags(CommandFlag.DISABLED);
+
+        addOptions(
+                new CommandOptionString("a", "b")
+        );
     }
 
     @Override

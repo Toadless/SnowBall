@@ -22,9 +22,9 @@
 
 package net.toaddev.snowball.command.fun;
 
-import net.dv8tion.jda.api.entities.Emote;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
 import net.toaddev.snowball.objects.exception.CommandException;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,60 +36,19 @@ public class EmoteCommand extends Command
 {
     public EmoteCommand()
     {
-        super("emote", null);
+        super("emote", "Gives you an emotes unicode.");
+
+        addOptions(
+                new CommandOptionString("emote", "The emote that you want infomation about").required()
+        );
     }
 
     @Override
     public void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        if (!ctx.getMessage().getEmotes().isEmpty())
-        {
-            Emote emote = ctx.getMessage().getEmotes().get(0);
-
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("**Emote Info** \n");
-
-            stringBuilder.append(":white_small_square: ");
-            stringBuilder.append("Guild: ");
-
-            try
-            {
-                stringBuilder.append(emote.getGuild().getName());
-            } catch (Exception e)
-            {
-                stringBuilder.append("Unknown");
-            }
-
-            stringBuilder.append("\n");
-
-            stringBuilder.append(":white_small_square: ");
-            stringBuilder.append("ID: ");
-            stringBuilder.append(emote.getId());
-
-            stringBuilder.append("\n");
-
-            stringBuilder.append(":white_small_square: ");
-            stringBuilder.append("URL: ");
-            stringBuilder.append(emote.getImageUrl());
-
-            stringBuilder.append("\n");
-
-            stringBuilder.append("[`");
-            stringBuilder.append(":" + emote.getName() + ":");
-            stringBuilder.append("`]  ");
-
-            stringBuilder.append("     -     *");
-            stringBuilder.append(emote.getName());
-            stringBuilder.append("*");
-
-            ctx.getChannel().sendMessage(stringBuilder.toString()).queue();
-
-            return;
-        }
-
         try
         {
-            final String in = ctx.getArgs()[1];
+            final String in = ctx.getOption("emote");
             final StringBuilder out = new StringBuilder();
             for (int i = 0; i < in.length(); i++)
             {

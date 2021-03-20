@@ -26,12 +26,12 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.snowball.objects.exception.CommandException;
-import net.toaddev.snowball.objects.music.MusicManager;
+import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.objects.Emoji;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
-import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.objects.exception.CommandException;
+import net.toaddev.snowball.objects.music.MusicManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -58,23 +58,23 @@ public class WipeCommand extends Command
 
         if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel for this to work.").queue();
+            ctx.getEvent().reply("I need to be in a voice channel for this to work.").queue();
             return;
         }
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
         {
-            channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
+            ctx.getEvent().reply("You need to be in the same voice channel as me for this to work!").queue();
             return;
         }
         final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
 
         musicManager.getScheduler().getQueue().clear();
-        channel.sendMessage(Emoji.CHECK.get() + " Wiped the queue!").queue();
+        ctx.getEvent().reply(Emoji.CHECK.get() + " Wiped the queue!").queue();
     }
 }

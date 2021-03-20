@@ -27,13 +27,13 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.MusicManager;
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.modules.MusicModule;
-import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.util.TimeUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -45,7 +45,6 @@ public class DurationCommand extends Command
         super("duration", "Displays the current songs duration");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("dur", "position");
     }
 
     @Override
@@ -60,7 +59,7 @@ public class DurationCommand extends Command
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel to display the guilds song position.").queue();
+            ctx.getEvent().reply("I need to be in a voice channel to display the guilds song position.").queue();
             return;
         }
 
@@ -68,7 +67,7 @@ public class DurationCommand extends Command
         final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
-            channel.sendMessage("I have no current song playing. No info to show.").queue();
+            ctx.getEvent().reply("I have no current song playing. No info to show.").queue();
             return;
         }
         StringBuilder stringBuilder = new StringBuilder();
@@ -85,6 +84,6 @@ public class DurationCommand extends Command
         stringBuilder.append(TimeUtils.formatDuration(musicManager.getAudioPlayer().getPlayingTrack().getDuration() - musicManager.getAudioPlayer().getPlayingTrack().getPosition()));
         stringBuilder.append("\n");
         stringBuilder.append("```");
-        channel.sendMessage(stringBuilder.toString()).queue();
+        ctx.getEvent().reply(stringBuilder.toString()).queue();
     }
 }

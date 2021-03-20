@@ -55,12 +55,11 @@ public class Config
     private int numShards;
     private int shardStart;
     private int maxShards;
-    private Boolean database;
-    private String mongoUri;
-    private String mongoName;
     private String spotifyId;
     private String spotifyApiKey;
     private String topGGToken;
+    private Long id;
+    private Long slashCommandId;
 
     /**
      * @param file The config files name
@@ -108,14 +107,13 @@ public class Config
         this.Invite = config.getBoolean("config.invite");
         this.Join = config.getString("config.join");
         this.numShards = config.getInt("config.shardCount");
-        this.database = config.getBoolean("config.database");
-        this.mongoUri = config.getString("credentials.mongoDBUri");
-        this.mongoName = config.getString("credentials.mongoDBName");
         this.shardStart = config.getInt("config.shardStart");
         this.maxShards = config.getInt("config.maxShards");
         this.spotifyId = config.getString("credentials.spotifyId");
         this.spotifyApiKey = config.getString("credentials.spotifySecret");
         this.topGGToken = config.getString("credentials.topggtoken");
+        this.id = config.getLong("config.botId");
+        this.slashCommandId = config.getLong("config.slashCommandId");
     }
 
     /**
@@ -175,30 +173,6 @@ public class Config
     }
 
     /**
-     * @return The database name
-     */
-    public Boolean getDatabase()
-    {
-        return database;
-    }
-
-    /**
-     * @return The mongodb connection uri
-     */
-    public String getMongoUri()
-    {
-        return mongoUri;
-    }
-
-    /**
-     * @return The mongodb database name
-     */
-    public String getMongoName()
-    {
-        return mongoName;
-    }
-
-    /**
      * @return The shard builder staring point
      */
     public int getShardStart()
@@ -227,5 +201,15 @@ public class Config
     public String getTopGGToken()
     {
         return topGGToken;
+    }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public long getSlashCommandId()
+    {
+        return slashCommandId;
     }
 }

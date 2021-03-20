@@ -25,14 +25,13 @@ package net.toaddev.snowball.command.music.control;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.MusicManager;
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.objects.command.CommandContext;
 
 import java.util.function.Consumer;
 
@@ -44,13 +43,11 @@ public class LeaveCommand extends Command
         super("leave", "Disconnects from the voice channel");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("disconnect");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
@@ -59,18 +56,18 @@ public class LeaveCommand extends Command
 
         if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel for this to work.").queue();
+            ctx.getEvent().reply("I need to be in a voice channel for this to work.").queue();
             return;
         }
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
         {
-            channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
+            ctx.getEvent().reply("You need to be in the same voice channel as me for this to work!").queue();
             return;
         }
 
@@ -79,6 +76,6 @@ public class LeaveCommand extends Command
         audioManager.closeAudioConnection();
         musicManager.getScheduler().getQueue().clear();
         musicManager.getAudioPlayer().stopTrack();
-        channel.sendMessage("Ive left the voice channel!").queue();
+        ctx.getEvent().reply("Ive left the voice channel!").queue();
     }
 }

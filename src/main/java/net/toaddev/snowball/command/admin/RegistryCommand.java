@@ -23,15 +23,15 @@
 package net.toaddev.snowball.command.admin;
 
 import net.toaddev.snowball.data.Config;
+import net.toaddev.snowball.main.BotController;
+import net.toaddev.snowball.modules.CommandsModule;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
 import net.toaddev.snowball.objects.exception.CommandException;
-import net.toaddev.snowball.main.BotController;
-import net.toaddev.snowball.modules.CommandsModule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
@@ -39,13 +39,18 @@ public class RegistryCommand extends Command
 {
     public RegistryCommand()
     {
-        super("registry", null, List.of("option"));
+        super("registry", "Allows you to modify the bots registry");
         addFlags(CommandFlag.DEVELOPER_ONLY);
+
+        addOptions(
+                new CommandOptionString("action", "What do you want to do with the registry?").required()
+        );
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
+        ctx.getEvent().acknowledge().queue();
         if (!Config.INS.getDevelopment())
         {
             ctx.getChannel().sendMessage("This command can only be ran in development.").queue();
@@ -53,13 +58,13 @@ public class RegistryCommand extends Command
         }
 
         CommandsModule commandsModule = BotController.getModules().get(CommandsModule.class);
-        if (ctx.getArgs()[1].equals("clear"))
+        if (ctx.getOption("action").equals("clear"))
         {
             commandsModule.deleteAllCommands();
             ctx.getChannel().sendMessage("**Completely emptying the whole command registry**! I Hope you know what you are doing.").queue();
             return;
         }
-        if (ctx.getArgs()[1].equals("rebuild"))
+        if (ctx.getOption("action").equals("rebuild"))
         {
             commandsModule.deleteAllCommands();
             commandsModule.scanCommands();
@@ -68,8 +73,6 @@ public class RegistryCommand extends Command
         } else
         {
             ctx.getChannel().sendMessage("Please provide a valid method. `clear` | `rebuild`").queue();
-            System.out.println(ctx.getArgs()[1]);
-            System.out.println(ctx.getArgs()[1]);
         }
     }
 }

@@ -46,8 +46,10 @@ public class MessageModule extends Module
     }
 
     @Override
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event){
-        if(event.getMessage().getContentRaw().isBlank()){
+    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event)
+    {
+        if (event.getMessage().getContentRaw().isBlank())
+        {
             return;
         }
         latestMessage.remove(event.getGuild().getIdLong());

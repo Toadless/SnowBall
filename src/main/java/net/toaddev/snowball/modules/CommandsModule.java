@@ -25,17 +25,31 @@ package net.toaddev.snowball.modules;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
+import net.dv8tion.jda.api.utils.data.DataArray;
+import net.dv8tion.jda.internal.requests.Method;
+import net.dv8tion.jda.internal.requests.Requester;
+import net.dv8tion.jda.internal.requests.Route;
 import net.toaddev.snowball.annotation.Ignore;
+import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.module.Module;
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CommandsModule extends Module
 {
+    public static final Route COMMANDS_CREATE = Route.custom(Method.PUT, "applications/{application.id}/commands");
+    public static final Route GUILD_COMMANDS_CREATE = Route.custom(Method.PUT, "applications/{application.id}/guilds/{guild.id}/commands");
     private static final Logger LOG = LoggerFactory.getLogger(CommandsModule.class);
     private static final String COMMANDS_PACKAGE = "net.toaddev.snowball.command";
     private ClassGraph classGraph;
@@ -55,15 +69,16 @@ public class CommandsModule extends Module
         this.classGraph.enableAnnotationInfo();
 
         scanCommands();
+        deployAllCommands(Config.INS.getSlashCommandId());
     }
 
     public void scanCommands()
     {
         LOG.info("Loading commands...");
 
-        try(ScanResult result = classGraph.scan())
+        try (ScanResult result = classGraph.scan())
         {
-            for(ClassInfo clazz : result.getAllClasses())
+            for (ClassInfo clazz : result.getAllClasses())
             {
                 if (!clazz.hasAnnotation(net.toaddev.snowball.annotation.Command.class.getName()))
                 {
@@ -76,32 +91,68 @@ public class CommandsModule extends Module
                     continue;
                 }
                 Constructor<?>[] constructors = clazz.loadClass().getDeclaredConstructors();
-                if(constructors.length == 0)
+                if (constructors.length == 0)
                 {
                     LOG.warn("No constructor found for Command class (" + clazz.getSimpleName() + ")!");
                     continue;
                 }
-                if(constructors[0].getParameterCount() > 0)
+                if (constructors[0].getParameterCount() > 0)
                 {
                     continue;
                 }
                 Object instance = constructors[0].newInstance();
-                if(!(instance instanceof Command))
+                if (!(instance instanceof Command))
                 {
                     LOG.warn("Non Command class (" + clazz.getSimpleName() + ") found in commands package!");
                     continue;
                 }
                 Command cmd = (Command) instance;
                 commands.put(cmd.getName(), cmd);
-                for(String alias : cmd.getAliases()) commands.put(alias, cmd);
             }
 
             LOG.info("Loaded {} commands", this.commands.size());
-        }
-        catch(Exception exception)
+        } catch (Exception exception)
         {
             LOG.error("A exception occurred whilst loading commands. Exception: ", exception);
         }
+    }
+
+    public void deployAllCommands(long guildId)
+    {
+        LOG.info("Registering commands {}...", guildId == -1 ? "global" : "for guild " + guildId);
+
+        var commands = DataArray.fromCollection(this.commands.values().stream().filter(command ->
+        {
+            return command.getDescription() != null;
+        }).map(Command::toJSON).collect(Collectors.toList()));
+        var rqBody = RequestBody.create(commands.toJson(), MediaType.parse("application/json"));
+
+        var route = guildId == -1L ? COMMANDS_CREATE.compile(String.valueOf(Config.INS.getId())) : GUILD_COMMANDS_CREATE.compile(String.valueOf(Config.INS.getId()), String.valueOf(guildId));
+        try (var resp = newCall(route, rqBody).execute())
+        {
+            if (!resp.isSuccessful())
+            {
+                var body = resp.body();
+                LOG.error("Registering commands failed. Request Body: {}, Response Body: {}", commands.toString(), body == null ? "null" : body.string());
+                return;
+            }
+        } catch (IOException e)
+        {
+            LOG.error("Error while processing registerCommands", e);
+        }
+        LOG.info("Registered " + this.commands.size() + " commands...");
+    }
+
+    private Call newCall(Route.CompiledRoute route, RequestBody body)
+    {
+        return this.modules.getHttpClient().newCall(newBuilder(route).method(route.getMethod().name(), body).build());
+    }
+
+    private Request.Builder newBuilder(Route.CompiledRoute route)
+    {
+        return new Request.Builder()
+                .url(Requester.DISCORD_API_PREFIX + route.getCompiledRoute())
+                .addHeader("Authorization", "Bot " + Config.INS.getToken());
     }
 
     public Map<String, Command> getCommands()

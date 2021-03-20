@@ -28,14 +28,14 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.SearchProvider;
-import net.toaddev.snowball.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
@@ -43,8 +43,12 @@ public class SearchCommand extends Command
 {
     public SearchCommand()
     {
-        super("search", "Searches for a list of songs.", List.of("song"));
-        addAlias("find");
+        super("search", "Searches for a list of songs.");
+
+        addOptions(
+                new CommandOptionString("query", "The search query").required()
+        );
+
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
     }
@@ -52,8 +56,6 @@ public class SearchCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "search" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "find" + " ", "");
         final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -61,8 +63,9 @@ public class SearchCommand extends Command
         final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if (!memberVoiceState.inVoiceChannel()) {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+        if (!memberVoiceState.inVoiceChannel())
+        {
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
@@ -75,7 +78,9 @@ public class SearchCommand extends Command
 
         SearchProvider searchProvider = SearchProvider.YOUTUBE;
 
+        ctx.getEvent().acknowledge().queue();
+
         MusicModule.getInstance()
-                .play(ctx, songName, searchProvider, true, true);
+                .play(ctx, ctx.getOption("song"), searchProvider, true, true);
     }
 }

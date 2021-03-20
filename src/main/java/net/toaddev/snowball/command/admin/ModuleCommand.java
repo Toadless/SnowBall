@@ -1,15 +1,15 @@
 package net.toaddev.snowball.command.admin;
 
 import net.toaddev.snowball.data.Config;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.module.Module;
-import net.toaddev.snowball.main.BotController;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
@@ -17,20 +17,27 @@ public class ModuleCommand extends Command
 {
     public ModuleCommand()
     {
-        super("module", null, List.of("method", "module"));
+        super("module", "Allows you to modiy the mots modules.");
         addFlags(CommandFlag.DEVELOPER_ONLY);
+
+        addOptions(
+                new CommandOptionString("module", "The module you want to modify.").required(),
+                new CommandOptionString("action", "What do you want to do with the module?").required()
+        );
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
+        ctx.getEvent().acknowledge().queue();
+
         if (!Config.INS.getDevelopment())
         {
             ctx.getChannel().sendMessage("This command can only be ran in development.").queue();
             return;
         }
 
-        Module m = BotController.getModules().modules.stream().filter(module -> module.getName().equalsIgnoreCase(ctx.getArgs()[2])).findFirst().orElse(null);
+        Module m = BotController.getModules().modules.stream().filter(module -> module.getName().equalsIgnoreCase(ctx.getOption("module"))).findFirst().orElse(null);
 
         if (m == null)
         {
@@ -40,7 +47,7 @@ public class ModuleCommand extends Command
 
         boolean completed = true;
 
-        switch (ctx.getArgs()[1].toLowerCase())
+        switch (ctx.getOption("action").toLowerCase())
         {
             case "restart", "reload" -> m.reload();
             case "stop", "disable" -> m.onDisable();
@@ -52,8 +59,7 @@ public class ModuleCommand extends Command
         if (completed)
         {
             ctx.getChannel().sendMessage("Successfully completed the operation.").queue();
-        }
-        else
+        } else
         {
             ctx.getChannel().sendMessage("Failed to complete the operation.").queue();
         }

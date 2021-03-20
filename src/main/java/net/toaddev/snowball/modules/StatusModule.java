@@ -25,13 +25,14 @@ package net.toaddev.snowball.modules;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.main.BotController;
+import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.util.IOUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 public class StatusModule extends Module
 {
@@ -62,7 +63,7 @@ public class StatusModule extends Module
 
     private Activity generateRandomMessage()
     {
-        if(statusMessages.isEmpty())
+        if (statusMessages.isEmpty())
         {
             return Activity.watching("you \uD83D\uDC40");
         }

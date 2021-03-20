@@ -25,17 +25,16 @@ package net.toaddev.snowball.command.music.control;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.SearchProvider;
-import net.toaddev.snowball.main.BotController;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
@@ -43,32 +42,27 @@ public class SpotifyCommand extends Command
 {
     public SpotifyCommand()
     {
-        super("spotify", "Plays a song from spotify", List.of("song"));
+        super("spotify", "Plays a song from spotify");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("sp");
+
+        addOptions(
+                new CommandOptionString("song", "The song you want to play throught spotify.")
+        );
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "spotify" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "sp" + " ", "");
-        final TextChannel channel = ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
         final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if (!memberVoiceState.inVoiceChannel()) {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
-            return;
-        }
-
-        if (ctx.getArgs().length < 2)
+        if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("Please provide a url or search query.").queue();
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
@@ -79,6 +73,8 @@ public class SpotifyCommand extends Command
             audioManager.openAudioConnection(memberChannel);
         }
 
-        BotController.getMusicModule().play(ctx, songName, SearchProvider.URL, false, false);
+        ctx.getEvent().acknowledge().queue();
+
+        BotController.getMusicModule().play(ctx, ctx.getOption("song"), SearchProvider.URL, false, false);
     }
 }

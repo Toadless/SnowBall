@@ -27,9 +27,9 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.MusicException;
-import net.toaddev.snowball.main.BotController;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -37,8 +37,8 @@ import java.util.LinkedList;
 public class TrackScheduler extends AudioEventAdapter
 {
     public final AudioPlayer player;
-    private final LinkedList<AudioTrack> queue;
     public final Guild guild;
+    private final LinkedList<AudioTrack> queue;
     public boolean repeating = false;
 
     public TrackScheduler(AudioPlayer player, Guild guild)
@@ -50,7 +50,7 @@ public class TrackScheduler extends AudioEventAdapter
 
     public void queue(AudioTrack track)
     {
-        if(!this.player.startTrack(track, true))
+        if (!this.player.startTrack(track, true))
         {
             this.queue.offer(track);
         }
@@ -102,7 +102,7 @@ public class TrackScheduler extends AudioEventAdapter
         BotController.getMusicModule().getMusicManager(guild).sendMusicController();
     }
 
-    public void loadItem(String query,  MusicManager manager, CommandContext ctx, boolean messages)
+    public void loadItem(String query, MusicManager manager, CommandContext ctx, boolean messages)
     {
         BotController.getMusicModule().getAudioPlayerManager().loadItemOrdered(manager, query, new AudioLoader(ctx, BotController.getMusicModule(), messages));
     }

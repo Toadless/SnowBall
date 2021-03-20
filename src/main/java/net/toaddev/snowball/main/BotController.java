@@ -29,8 +29,8 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
-import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.services.Modules;
 import net.toaddev.snowball.util.IOUtil;
 import org.slf4j.Logger;
@@ -57,11 +57,10 @@ public class BotController
     public static final int UNKNOWN_SHUTDOWN_CODE = -991023;
     public static final int SHARD_CREATION_SLEEP_INTERVAL = 5100;
     private static final ArrayList<BotController> shards = new ArrayList<>();
+    private static final AtomicInteger numShardsReady = new AtomicInteger(0);
     public static String version;
-    public static boolean DATABASE_ENABLED = false;
     public static int shutdownCode = UNKNOWN_SHUTDOWN_CODE;
     public static JDA jda;
-    private static final AtomicInteger numShardsReady = new AtomicInteger(0);
     private static boolean hasReadiedOnce = false;
     private static Modules modules;
     private static MusicModule musicModule;
@@ -81,8 +80,6 @@ public class BotController
 
         Constants.Init();
 
-        DATABASE_ENABLED = Config.INS.getDatabase();
-
         eventWaiter = new EventWaiter();
 
         modules = new Modules();
@@ -94,30 +91,6 @@ public class BotController
 
     public BotController()
     {
-    }
-
-    private static void initBotShards()
-    {
-        for (int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++)
-        {
-            try
-            {
-                shards.add(i, new SnowBall(i));
-            } catch (Exception e)
-            {
-                logger.error("Caught an exception while starting shard " + i + "!", e);
-                numShardsReady.getAndIncrement();
-            }
-            try
-            {
-                Thread.sleep(SHARD_CREATION_SLEEP_INTERVAL);
-            } catch (InterruptedException e)
-            {
-                throw new RuntimeException("Got interrupted while setting up bot shards!", e);
-            }
-        }
-        logger.info(shards.size() + " shards have been constructed");
-        logger.info("Snowball ready in {}ms", System.currentTimeMillis() - START_TIME);
     }
 
     public static void onInit(ReadyEvent readyEvent)
@@ -236,6 +209,30 @@ public class BotController
     public static LocalDateTime getStartTimestamp()
     {
         return startTimestamp;
+    }
+
+    private void initBotShards()
+    {
+        for (int i = Config.INS.getShardStart(); i < Config.INS.getNumShards(); i++)
+        {
+            try
+            {
+                shards.add(i, new SnowBall(i));
+            } catch (Exception e)
+            {
+                logger.error("Caught an exception while starting shard " + i + "!", e);
+                numShardsReady.getAndIncrement();
+            }
+            try
+            {
+                Thread.sleep(SHARD_CREATION_SLEEP_INTERVAL);
+            } catch (InterruptedException e)
+            {
+                throw new RuntimeException("Got interrupted while setting up bot shards!", e);
+            }
+        }
+        logger.info(shards.size() + " shards have been constructed");
+        logger.info("Snowball ready in {}ms", System.currentTimeMillis() - START_TIME);
     }
 
     public JDA.ShardInfo getShardInfo()

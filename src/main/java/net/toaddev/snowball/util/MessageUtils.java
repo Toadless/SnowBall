@@ -23,15 +23,15 @@
 package net.toaddev.snowball.util;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.modules.PaginatorModule;
+import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.services.Modules;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MessageUtils
@@ -82,7 +82,7 @@ public class MessageUtils
                 .queue();
     }
 
-    public static void sendCommands(Collection<Command> commands, Modules modules, TextChannel channel, long authorId, String baseMessage)
+    public static void sendCommands(Collection<Command> commands, Modules modules, MessageChannel channel, long authorId, String baseMessage)
     {
         if (channel == null)
         {
@@ -114,13 +114,6 @@ public class MessageUtils
             }
 
             var formattedCmd = "`" + command.getName() + "` - `" + command.getDescription() + "`\n";
-
-            List<String> alias = command.getAliases();
-
-            for (String a : alias)
-            {
-                formattedCmd = formattedCmd + "`" + a + "` - `" + command.getDescription() + "`\n";
-            }
 
             if (cmdMessage.length() + formattedCmd.length() >= 516)
             {

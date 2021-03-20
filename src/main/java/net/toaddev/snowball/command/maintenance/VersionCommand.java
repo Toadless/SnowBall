@@ -22,11 +22,11 @@
 
 package net.toaddev.snowball.command.maintenance;
 
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
-import org.jetbrains.annotations.NotNull;
+import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.exception.CommandException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -35,12 +35,12 @@ public class VersionCommand extends Command
 {
     public VersionCommand()
     {
-        super("version", null);
+        super("version", "Tells you the bots version");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getChannel().sendMessage("v" + BotController.version).queue();
+        ctx.getEvent().reply("v" + BotController.version).queue();
     }
 }

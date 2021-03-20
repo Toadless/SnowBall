@@ -24,6 +24,7 @@ package net.toaddev.snowball.objects.command;
 
 import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.utils.data.DataObject;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.util.EmbedUtil;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,6 @@ import java.util.function.Consumer;
 
 /**
  * A class representing a command for use in the {@link net.toaddev.snowball.modules.CommandsModule CommandManager}.
- *
  */
 public abstract class Command
 {
@@ -53,11 +53,9 @@ public abstract class Command
      */
     private final List<Permission> selfRequiredPermissions;
     private final List<CommandFlag> flags;
-    private final List<String> alias;
-    private final List<String> syntax;
+    private final List<CommandOption<?>> options;
 
     /**
-     *
      * @param name The commands name
      * @param help The commands help page
      */
@@ -68,84 +66,37 @@ public abstract class Command
         this.memberRequiredPermissions = new ArrayList<>();
         this.selfRequiredPermissions = new ArrayList<>();
         this.flags = new ArrayList<>();
-        this.alias = new ArrayList<>();
-        this.syntax = null;
+        this.options = new ArrayList<>();
     }
 
-    /**
-     *
-     * @param name The commands name
-     * @param help The commands help page
-     */
-    public Command(@NonNull String name, @NonNull String help, List<String> syntax)
-    {
-        this.name = name;
-        this.help = help;
-        this.memberRequiredPermissions = new ArrayList<>();
-        this.selfRequiredPermissions = new ArrayList<>();
-        this.flags = new ArrayList<>();
-        this.alias = new ArrayList<>();
-        this.syntax = syntax;
-    }
-
-    /**
-     * Processes this {@link net.toaddev.snowball.modules.CommandsModule command} for execution.
-     * <p>
-     * This will consider the {@link CommandFlag flags} of this {@link net.toaddev.snowball.modules.CommandsModule command}
-     * <p>
-     * This will only {@link #execute(CommandContext)} execute} the command if all checks pass.
-     * @param event The command event to process with.
-     */
     public void process(CommandContext event) throws ParserConfigurationException, SAXException, IOException
     {
         if (hasFlag(CommandFlag.DISABLED))
         {
+            event.getEvent().acknowledge().queue();
             EmbedUtil.sendDisabledError(event);
-        }
-        else if (hasFlag(CommandFlag.DEVELOPER_ONLY) && !event.isDeveloper())
+        } else if (hasFlag(CommandFlag.DEVELOPER_ONLY) && !event.isDeveloper())
         {
+            event.getEvent().acknowledge().queue();
             EmbedUtil.sendError(event.getChannel(), "This command is in developer only mode.");
-        }
-        else if(!getMemberRequiredPermissions().isEmpty() && !event.memberPermissionCheck(getMemberRequiredPermissions()))
+        } else if (!getMemberRequiredPermissions().isEmpty() && !event.memberPermissionCheck(getMemberRequiredPermissions()))
         {
+            event.getEvent().acknowledge().queue();
             EmbedUtil.sendError(event.getChannel(), "You do not have the required permission to perform this action.");
-        }
-        else if(!getSelfRequiredPermissions().isEmpty() && !event.selfPermissionCheck(getSelfRequiredPermissions()))
+        } else if (!getSelfRequiredPermissions().isEmpty() && !event.selfPermissionCheck(getSelfRequiredPermissions()))
         {
+            event.getEvent().acknowledge().queue();
             EmbedUtil.sendError(event.getChannel(), "I do not have the required permission to perform this action.");
-        }
-        else if (hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isDeveloper() || hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isServerAdmin())
+        } else if (hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isDeveloper() || hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isServerAdmin())
         {
+            event.getEvent().acknowledge().queue();
             EmbedUtil.sendError(event.getChannel(), "You do not have sufficient permissions to perform this action!");
-        }
-        else
+        } else
         {
-            execute(event);
-        }
-    }
-
-    private void execute(@NonNull CommandContext ctx) throws IOException, SAXException, ParserConfigurationException
-    {
-        if (hasFlag(CommandFlag.AUTO_DELETE_MESSAGE))
-        {
-            ctx.getMessage().delete().queue();
-        }
-
-        if (this.syntax != null && this.syntax.size() > ctx.getArgs().length - 2)
-        {
-            for (int i = 2; i < this.syntax.size() + 2; i++)
+            run(event, exception ->
             {
-                if (ctx.getArgs().length < i)
-                {
-                    ctx.getChannel().sendMessage("Please provide the following argument: `" + this.syntax.get(i - 2) + "`.").queue();
-                    return;
-                }
-            }
+            });
         }
-
-        run(ctx, exception ->
-        {
-        });
     }
 
     /**
@@ -183,7 +134,6 @@ public abstract class Command
     }
 
     /**
-     *
      * @param ctx The {@link CommandContext event} to use.
      */
     public abstract void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure) throws ParserConfigurationException, SAXException, IOException;
@@ -226,26 +176,15 @@ public abstract class Command
     /**
      * Gets the {@link net.dv8tion.jda.api.Permission permissions} required by the {@link net.dv8tion.jda.api.entities.Member self user} to execute the {@link net.toaddev.snowball.modules.CommandsModule command}.
      *
-     * @see #getSelfRequiredPermissions()
      * @return
+     * @see #getSelfRequiredPermissions()
      */
     public List<Permission> getSelfRequiredPermissions()
     {
         return selfRequiredPermissions;
     }
 
-    public void addAlias(@Nonnull String... alias)
-    {
-        this.alias.addAll(List.of(alias));
-    }
-
-    public List<String> getAliases()
-    {
-        return this.alias;
-    }
-
     /**
-     *
      * @return The command name
      */
     @NonNull
@@ -254,12 +193,33 @@ public abstract class Command
         return name;
     }
 
+    protected void addOptions(CommandOption<?>... options)
+    {
+        this.options.addAll(List.of(options));
+    }
+
+    public List<CommandOption<?>> getOptions()
+    {
+        return this.options;
+    }
+
     /**
-     *
      * @return Returns the string for the help page
      */
     public String getDescription()
     {
         return help;
+    }
+
+    public DataObject toJSON()
+    {
+        var json = DataObject.empty()
+                .put("name", this.name)
+                .put("description", this.help);
+        if (!this.options.isEmpty())
+        {
+            json.put("options", CommandOption.toJSON(this.options));
+        }
+        return json;
     }
 }

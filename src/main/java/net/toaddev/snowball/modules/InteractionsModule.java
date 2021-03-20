@@ -22,11 +22,11 @@
 
 package net.toaddev.snowball.modules;
 
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.module.Module;
-import net.toaddev.snowball.main.BotController;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,77 +46,27 @@ public class InteractionsModule extends Module
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event)
+    public void onSlashCommand(SlashCommandEvent event)
     {
-        String mention = "<@!" + event.getJDA().getSelfUser().getIdLong() + ">";
-        long guildId = Long.parseLong(event.getGuild().getId());
-
-        if (event.getMessage().isWebhookMessage())
-        {
-            return;
-        }
-        else if (event.getAuthor().equals(event.getJDA().getSelfUser()))
-        {
-            return;
-        }
-        else if (event.getMember().getUser().isBot())
-        {
-            return;
-        }
-        String guildPrefix = BotController.getModules().get(SettingsModule.class).getGuildPrefix(guildId);
-        if (event.getMessage().getContentRaw().startsWith(guildPrefix))
-        {
-            try
-            {
-                this.process(event, guildPrefix);
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            } catch (SAXException e)
-            {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else if (isBotMention(event))
-        {
-            try
-            {
-                this.process(event, guildPrefix);
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-            } catch (SAXException e)
-            {
-                e.printStackTrace();
-            } catch (ParserConfigurationException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void process(GuildMessageReceivedEvent event, String prefix) throws IOException, SAXException, ParserConfigurationException
-    {
-        String[] args = event.getMessage().getContentRaw().split("\\s+");
-
-        Command command = BotController.getModules().get(CommandsModule.class).getCommand(args[0].replace(prefix, ""));
+        Command command = BotController.getModules().get(CommandsModule.class).getCommand(event.getName());
 
         if (command == null)
         {
             return;
         }
-
-        CommandContext commandEvent = new CommandContext(event, args, prefix);
-        command.process(commandEvent);
-    }
-
-    private boolean isBotMention(GuildMessageReceivedEvent event)
-    {
-        String content = event.getMessage().getContentRaw();
-        long id = event.getJDA().getSelfUser().getIdLong();
-        return content.startsWith("<@" + id + ">") || content.startsWith("<@!" + id + ">");
+        CommandContext commandEvent = new CommandContext(event);
+        try
+        {
+            command.process(commandEvent);
+        } catch (ParserConfigurationException e)
+        {
+            e.printStackTrace();
+        } catch (SAXException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

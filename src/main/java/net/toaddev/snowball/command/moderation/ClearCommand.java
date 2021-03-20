@@ -29,11 +29,11 @@ import net.dv8tion.jda.api.entities.MessageHistory;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.command.CommandFlag;
+import net.toaddev.snowball.objects.command.options.CommandOptionInteger;
 import net.toaddev.snowball.objects.exception.CommandException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -42,30 +42,38 @@ public class ClearCommand extends Command
 {
     public ClearCommand()
     {
-        super("clear", null, List.of("messages"));
+        super("clear", "Clears the specified messages.");
         addFlags(CommandFlag.SERVER_ADMIN_ONLY);
         addMemberPermissions(Permission.MESSAGE_MANAGE);
         addSelfPermissions(Permission.MESSAGE_MANAGE);
-        addAlias("cleanup");
+
+        addOptions(
+                new CommandOptionInteger("amount", "The amount of messages").required()
+        );
     }
 
     @Override
     public void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        if (Integer.parseInt(ctx.getArgs()[1]) > 100) {
+        ctx.getEvent().acknowledge().queue();
+
+        if (Integer.parseInt(ctx.getOption("amount")) > 100)
+        {
             ctx.getChannel().sendMessage("Make sure that your range is `1-100`.").queue();
             return;
         }
 
-        try {
+        try
+        {
             final MessageChannel channel = ctx.getChannel();
             MessageHistory history = new MessageHistory(channel);
-            history.retrievePast(Integer.parseInt((ctx.getArgs()[1]+1))).queue(channel::purgeMessages);
-            channel.sendMessage("Successfully deleted" + " " + ctx.getArgs()[1] + " " + "messages.")
+            history.retrievePast(Integer.parseInt((ctx.getOption("amount") + 1))).queue(channel::purgeMessages);
+            channel.sendMessage("Successfully deleted" + " " + ctx.getOption("amount") + " " + "messages.")
                     .delay(5, TimeUnit.SECONDS)
                     .flatMap(Message::delete)
                     .queue();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e)
+        {
             ctx.getChannel().sendMessage("I cant bulk delete messages older than 2 weeks!").queue();
         }
     }

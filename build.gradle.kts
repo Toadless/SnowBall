@@ -58,7 +58,8 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
 
     // discord
-    implementation("net.dv8tion:JDA:$jdaVersion")
+    //implementation("net.dv8tion:JDA:$jdaVersion")
+    implementation ("com.github.dv8fromtheworld:jda:feature~slash-commands-SNAPSHOT")
     implementation ("com.jagrosh:jda-utilities:$utilsVersion")
 
     // audio

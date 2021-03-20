@@ -27,16 +27,16 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.toaddev.snowball.objects.exception.CommandException;
-import net.toaddev.snowball.objects.music.MusicManager;
+import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.objects.Emoji;
 import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.objects.exception.CommandErrorException;
-import net.toaddev.snowball.modules.MusicModule;
-import org.jetbrains.annotations.NotNull;
 import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionInteger;
+import net.toaddev.snowball.objects.exception.CommandErrorException;
+import net.toaddev.snowball.objects.exception.CommandException;
+import net.toaddev.snowball.objects.music.MusicManager;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
@@ -44,10 +44,14 @@ public class VolumeCommand extends Command
 {
     public VolumeCommand()
     {
-        super("setvolume", "Changes the players volume", List.of("volume"));
+        super("setvolume", "Changes the players volume");
+
+        addOptions(
+                new CommandOptionInteger("volume", "The volume that you want to set the player to.").required()
+        );
+
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("vol");
     }
 
     @Override
@@ -62,43 +66,41 @@ public class VolumeCommand extends Command
 
         if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
-        }
-        else if (!selfVoiceState.inVoiceChannel())
+        } else if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel for this to work.").queue();
+            ctx.getEvent().reply("I need to be in a voice channel for this to work.").queue();
             return;
-        }
-        else if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
+        } else if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
         {
-            channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
+            ctx.getEvent().reply("You need to be in the same voice channel as me for this to work!").queue();
             return;
-        }
-        else if (ctx.getArgs().length < 2)
+        } else if (Integer.parseInt(ctx.getOption("song")) < 2)
         {
-            channel.sendMessage("You need to provide a volume to set between `0 - 200`.").queue();
+            ctx.getEvent().reply("You need to provide a volume to set between `0 - 200`.").queue();
             return;
-        }
-        else
+        } else
         {
             try
             {
-                int volume = Integer.parseInt(ctx.getArgs()[1]);
+                int volume = Integer.parseInt(ctx.getOption("song"));
                 if (volume <= -1)
                 {
-                    channel.sendMessage("Please provide a valid volume to set between `0 - 200`.").queue();
+                    ctx.getEvent().reply("Please provide a valid volume to set between `0 - 200`.").queue();
                     return;
                 }
 
                 if (volume > 200)
                 {
-                    channel.sendMessage("Please provide a valid volume to set between `0 - 200`.").queue();
+                    ctx.getEvent().reply("Please provide a valid volume to set between `0 - 200`.").queue();
                     return;
                 }
                 final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
                 final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
                 audioPlayer.setVolume(volume);
+
+                ctx.getEvent().acknowledge().queue();
 
                 if (volume < 100)
                 {

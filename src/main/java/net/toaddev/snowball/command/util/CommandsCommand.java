@@ -22,12 +22,12 @@
 
 package net.toaddev.snowball.command.util;
 
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.toaddev.snowball.main.BotController;
+import net.toaddev.snowball.modules.CommandsModule;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.CommandException;
-import net.toaddev.snowball.main.BotController;
-import net.toaddev.snowball.modules.CommandsModule;
 import net.toaddev.snowball.util.MessageUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,12 +41,14 @@ public class CommandsCommand extends Command
 {
     public CommandsCommand()
     {
-        super("commands", null);
+        super("commands", "Displays all of the bots commands,");
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
+        ctx.getEvent().acknowledge().queue();
+
         Map<String, Command> commandMap = BotController.getModules().get(CommandsModule.class).getCommands();
         Collection<Command> cmds = new LinkedList<>();
 
@@ -63,7 +65,7 @@ public class CommandsCommand extends Command
         processMessage(cmds, ctx.getChannel(), ctx);
     }
 
-    public void processMessage(Collection<Command> cmds, TextChannel channel, CommandContext ctx)
+    public void processMessage(Collection<Command> cmds, MessageChannel channel, CommandContext ctx)
     {
         MessageUtils.sendCommands(cmds, ctx.getModules(), channel, ctx.getMember().getUser().getIdLong(), "Commands: ");
     }

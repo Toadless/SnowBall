@@ -27,16 +27,16 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.toaddev.snowball.modules.MusicModule;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionInteger;
+import net.toaddev.snowball.objects.exception.CommandErrorException;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.MusicManager;
-import net.toaddev.snowball.modules.MusicModule;
-import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.objects.command.CommandContext;
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.objects.exception.CommandErrorException;
 import net.toaddev.snowball.util.TimeUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
@@ -44,10 +44,13 @@ public class SeekCommand extends Command
 {
     public SeekCommand()
     {
-        super("seek", "Seeks to a provided position in the track", List.of("position"));
+        super("seek", "Seeks to a provided position in the track");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("pos");
+
+        addOptions(
+                new CommandOptionInteger("position", "The position that you want to seek to.").required()
+        );
     }
 
     @Override
@@ -62,18 +65,18 @@ public class SeekCommand extends Command
 
         if (!memberVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel for this to work.").queue();
+            ctx.getEvent().reply("I need to be in a voice channel for this to work.").queue();
             return;
         }
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel()))
         {
-            channel.sendMessage("You need to be in the same voice channel as me for this to work!").queue();
+            ctx.getEvent().reply("You need to be in the same voice channel as me for this to work!").queue();
             return;
         }
 
@@ -81,12 +84,13 @@ public class SeekCommand extends Command
         final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
-            channel.sendMessage("No current playing song.").queue();
+            ctx.getEvent().reply("No current playing song.").queue();
             return;
         }
         try
         {
-            int amount = Integer.parseInt(ctx.getArgs()[1]);
+            ctx.getEvent().acknowledge().queue();
+            int amount = Integer.parseInt(ctx.getOption("position"));
             amount = (amount * 1000);
             if (musicManager.getScheduler().player.getPlayingTrack().getDuration() < Long.parseLong(String.valueOf(amount)))
             {

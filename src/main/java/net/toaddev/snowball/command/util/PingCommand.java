@@ -35,7 +35,7 @@ public class PingCommand extends Command
 {
     public PingCommand()
     {
-        super("ping", null);
+        super("ping", "Gives the bots ping");
         addFlags(CommandFlag.AUTO_DELETE_MESSAGE);
     }
 
@@ -60,7 +60,7 @@ public class PingCommand extends Command
             stringBuilder.append("ms");
             stringBuilder.append("\n");
             stringBuilder.append("```");
-            ctx.getChannel().sendMessage(stringBuilder.toString()).queue();
+            ctx.getEvent().reply(stringBuilder.toString()).queue();
         });
     }
 }

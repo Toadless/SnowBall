@@ -25,12 +25,12 @@ package net.toaddev.snowball.modules;
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
-import net.toaddev.snowball.objects.music.MusicManager;
 import net.toaddev.snowball.data.Config;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.module.Module;
+import net.toaddev.snowball.objects.music.MusicManager;
 import net.toaddev.snowball.objects.music.SearchProvider;
-import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.MusicUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,11 +69,10 @@ public class SpotifyModule extends Module
         {
             this.spotify.setAccessToken(this.clientCredentialsRequest.execute().getAccessToken());
             this.hits = 0;
-        }
-        catch(Exception e)
+        } catch (Exception e)
         {
             this.hits++;
-            if(this.hits < 10)
+            if (this.hits < 10)
             {
                 LOG.warn("Updating the access token failed. Retrying in 10 seconds", e);
                 this.modules.schedule(this::refreshAccessToken, 10, TimeUnit.SECONDS);
@@ -86,7 +85,7 @@ public class SpotifyModule extends Module
 
     public void load(CommandContext ctx, MusicManager manager, Matcher matcher)
     {
-        switch(matcher.group(3))
+        switch (matcher.group(3))
         {
             case "album":
                 loadAlbum(matcher.group(4), ctx, manager);
@@ -106,7 +105,8 @@ public class SpotifyModule extends Module
         {
             var items = tracks.getItems();
             var toLoad = new ArrayList<String>();
-            for(var track : items){
+            for (var track : items)
+            {
                 toLoad.add(track.getArtists()[0].getName() + " " + track.getName());
             }
             loadTracks(id, ctx, manager, toLoad);
@@ -120,7 +120,8 @@ public class SpotifyModule extends Module
     private void loadTrack(String id, CommandContext ctx, MusicManager manager)
     {
         this.spotify.getTrack(id).build().executeAsync().thenAcceptAsync(track -> this.modules.get(MusicModule.class).play(ctx, track.getArtists()[0].getName() + " " + track.getName(), SearchProvider.YOUTUBE, true, false))
-                .exceptionally(throwable -> {
+                .exceptionally(throwable ->
+                {
                     ctx.getChannel().sendMessage(throwable.getMessage().contains("invalid id") ? "Track not found" : "There was an error while loading the track").queue();
                     return null;
                 });
@@ -132,7 +133,8 @@ public class SpotifyModule extends Module
         {
             var items = tracks.getItems();
             var toLoad = new ArrayList<String>();
-            for(var item : items){
+            for (var item : items)
+            {
                 var track = (Track) item.getTrack();
                 toLoad.add(track.getArtists()[0].getName() + " " + track.getName());
             }
@@ -148,10 +150,8 @@ public class SpotifyModule extends Module
     {
         ctx.getChannel().sendMessage("Loading...\nThis may take a while").queue();
 
-        String[] args = ctx.getMessage().getContentRaw().split("\\s+");
-        String guildPrefix = BotController.getModules().get(SettingsModule.class).getGuildPrefix(ctx.getGuild().getIdLong());
-
-        toLoad.forEach(s -> {
+        toLoad.forEach(s ->
+        {
             BotController.getMusicModule().play(ctx, s, SearchProvider.YOUTUBE, false, false);
         });
 

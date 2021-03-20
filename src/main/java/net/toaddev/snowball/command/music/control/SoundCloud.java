@@ -28,31 +28,33 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.SearchProvider;
-import net.toaddev.snowball.modules.MusicModule;
 import org.jetbrains.annotations.NotNull;
-import net.toaddev.snowball.objects.command.CommandContext;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
 public class SoundCloud extends Command
 {
-    public SoundCloud() {
-        super("soundcloud", "Plays music from soundcloud", List.of("song"));
+    public SoundCloud()
+    {
+        super("soundcloud", "Plays music from soundcloud");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("sc");
+
+        addOptions(
+                new CommandOptionString("song", "The song name that you want to play").required()
+        );
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "soundcloud" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "sc" + " ", "");
         final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -60,14 +62,15 @@ public class SoundCloud extends Command
         final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if (!memberVoiceState.inVoiceChannel()) {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+        if (!memberVoiceState.inVoiceChannel())
+        {
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
-        if (ctx.getArgs().length < 2)
+        if (ctx.getOption("song") == null)
         {
-            channel.sendMessage("Please provide a search query.").queue();
+            ctx.getEvent().reply("Please provide a search query.").queue();
             return;
         }
 
@@ -77,9 +80,9 @@ public class SoundCloud extends Command
             final VoiceChannel memberChannel = memberVoiceState.getChannel();
             audioManager.openAudioConnection(memberChannel);
         }
-        channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
+        ctx.getEvent().reply("Searching :mag_right: `" + ctx.getOption("song") + "`").queue();
         MusicModule.getInstance()
-                .play(ctx, songName, SearchProvider.SOUNDCLOUD, true, false);
+                .play(ctx, ctx.getOption("song"), SearchProvider.SOUNDCLOUD, true, false);
         return;
     }
 }

@@ -86,7 +86,8 @@ public class Paginator
         this.currentPage++;
     }
 
-    public MessageEmbed constructEmbed(){
+    public MessageEmbed constructEmbed()
+    {
         return this.embedFunction.apply(this.currentPage, new EmbedBuilder().setFooter("Page " + (this.currentPage + 1) + "/" + this.maxPages)).build();
     }
 }

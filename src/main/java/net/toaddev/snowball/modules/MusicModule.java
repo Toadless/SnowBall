@@ -29,19 +29,22 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
-import net.dv8tion.jda.api.events.guild.voice.*;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.snowball.objects.music.MusicManager;
+import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.MusicException;
 import net.toaddev.snowball.objects.module.Module;
+import net.toaddev.snowball.objects.music.MusicManager;
 import net.toaddev.snowball.objects.music.SearchProvider;
-import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.util.DiscordUtil;
 import net.toaddev.snowball.util.MessageUtils;
 import net.toaddev.snowball.util.TimeUtils;
@@ -55,17 +58,39 @@ import java.util.regex.Pattern;
 
 public class MusicModule extends Module
 {
-    private Map<Long, MusicManager> musicPlayers;
-    private AudioPlayerManager audioPlayerManager;
-
-
-    private final Pattern urlPattern = Pattern.compile("^((?:https?:)?\\/\\/)?((?:www|m)\\.)?((?:youtube\\.com|youtu.be))(\\/(?:[\\w\\-]+\\?v=|embed\\/|v\\/)?)([\\w\\-]+)(\\S+)?$");;
     public static final Pattern URL_PATTERN = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]?");
     public static final Pattern SPOTIFY_URL_PATTERN = Pattern.compile("^(https?://)?(www\\.)?open\\.spotify\\.com/(track|album|playlist)/([a-zA-Z0-9-_]+)(\\?si=[a-zA-Z0-9-_]+)?");
+    private final Pattern urlPattern = Pattern.compile("^((?:https?:)?\\/\\/)?((?:www|m)\\.)?((?:youtube\\.com|youtu.be))(\\/(?:[\\w\\-]+\\?v=|embed\\/|v\\/)?)([\\w\\-]+)(\\S+)?$");
+    private Map<Long, MusicManager> musicPlayers;
+    private AudioPlayerManager audioPlayerManager;
 
     public MusicModule()
     {
         super("music");
+    }
+
+    /**
+     * @param track   The audio track
+     * @param channel The text channel to send the embed to
+     * @param event   The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
+     */
+    public static void sendAddedEmbed(AudioTrack track, MessageChannel channel, SlashCommandEvent event)
+    {
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setAuthor("Added to queue", track.getInfo().uri, event.getUser().getAvatarUrl());
+        embed.setDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")");
+        embed.addField("**Channel**", track.getInfo().author, true);
+        embed.addField("**Song Duration**", TimeUtils.formatDuration(track.getDuration()), true);
+        embed.setColor(DiscordUtil.getEmbedColor());
+        channel.sendMessage(embed.build()).queue();
+    }
+
+    /**
+     * @return The instance of this class
+     */
+    public static MusicModule getInstance()
+    {
+        return BotController.getMusicModule();
     }
 
     @Override
@@ -82,13 +107,13 @@ public class MusicModule extends Module
     {
         try
         {
-            if(event.getUser().isBot())
+            if (event.getUser().isBot())
             {
                 return;
             }
             var manager = this.musicPlayers.get(event.getGuild().getIdLong());
 
-            if(manager == null)
+            if (manager == null)
             {
                 return;
             }
@@ -98,14 +123,15 @@ public class MusicModule extends Module
 
             var voiceState = member.getVoiceState();
 
-            if(voiceState == null || voiceState.getChannel() == null)
+            if (voiceState == null || voiceState.getChannel() == null)
             {
                 return;
             }
 
             var messageId = event.getMessageIdLong();
 
-            if(messageId != getMusicManager(event.getGuild()).getMusicController()){
+            if (messageId != getMusicManager(event.getGuild()).getMusicController())
+            {
                 return;
             }
 
@@ -118,28 +144,26 @@ public class MusicModule extends Module
                 case "\uD83D\uDD0A" -> scheduler.player.setVolume(scheduler.player.getVolume() + 15);
                 case "\u274C" -> destroy(event.getGuild().getIdLong(), event.getMember().getIdLong(), true);
             }
-            if(event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE))
+            if (event.getGuild().getSelfMember().hasPermission(event.getChannel(), Permission.MESSAGE_MANAGE))
             {
                 event.getReaction().removeReaction(event.getUser()).queue();
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             event.getChannel().sendMessage("Your request could not be completed!").queue();
         }
     }
 
     @Override
-    public void onGuildLeave(@NotNull GuildLeaveEvent event){
+    public void onGuildLeave(@NotNull GuildLeaveEvent event)
+    {
         this.musicPlayers.remove(event.getGuild().getIdLong());
     }
 
     /**
-     *
      * @param event The event.
-     *
-     * This is only here to save bandwidth and to stop the player from playing
-     *
+     *              <p>
+     *              This is only here to save bandwidth and to stop the player from playing
      */
     @Override
     public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event)
@@ -154,13 +178,14 @@ public class MusicModule extends Module
     @Override
     public void onGuildVoiceUpdate(@NotNull GuildVoiceUpdateEvent event)
     {
-        if(event instanceof GuildVoiceLeaveEvent || event instanceof GuildVoiceMoveEvent)
+        if (event instanceof GuildVoiceLeaveEvent || event instanceof GuildVoiceMoveEvent)
         {
             var manager = getMusicManager(event.getEntity().getGuild());
-            if(manager == null){
+            if (manager == null)
+            {
                 return;
             }
-            if(event.getEntity().getIdLong() == BotController.getJda().getSelfUser().getIdLong())
+            if (event.getEntity().getIdLong() == BotController.getJda().getSelfUser().getIdLong())
             {
                 this.modules.get(MusicModule.class).destroy(manager, -1L, false);
                 return;
@@ -173,17 +198,20 @@ public class MusicModule extends Module
                 return;
             }
             var currentChannelId = currentChannel.getIdLong();
-            if(channel == null || channel.getIdLong() != currentChannelId){
+            if (channel == null || channel.getIdLong() != currentChannelId)
+            {
                 return;
             }
-            if(channel.getMembers().stream().anyMatch(member -> !member.getUser().isBot())){
+            if (channel.getMembers().stream().anyMatch(member -> !member.getUser().isBot()))
+            {
                 return;
             }
             manager.planDestroy();
-        }
-        else if(event instanceof GuildVoiceJoinEvent){
+        } else if (event instanceof GuildVoiceJoinEvent)
+        {
             var player = getMusicManager(event.getEntity().getGuild());
-            if(player == null){
+            if (player == null)
+            {
                 return;
             }
             player.cancelDestroy();
@@ -206,8 +234,7 @@ public class MusicModule extends Module
         try
         {
             destroy(this.musicPlayers.get(guildId), userId, message);
-        }
-        catch (Exception ignored)
+        } catch (Exception ignored)
         {
 
         }
@@ -230,7 +257,7 @@ public class MusicModule extends Module
         }
 
         var channel = BotController.getModules().get(MessageModule.class).getLatestMessage().get(scheduler.guild.getIdLong()).getTextChannel();
-        if(channel == null || !channel.canTalk())
+        if (channel == null || !channel.canTalk())
         {
             return;
         }
@@ -239,7 +266,6 @@ public class MusicModule extends Module
     }
 
     /**
-     *
      * @param guild The {@link net.dv8tion.jda.api.entities.Guild guild} to fetch the music manager from.
      * @return The {@link MusicManager musicManager}.
      */
@@ -254,12 +280,11 @@ public class MusicModule extends Module
     }
 
     /**
-     *
-     * @param ctx The {@link net.toaddev.snowball.objects.command.CommandContext context} to use.
-     * @param query The query to play.
+     * @param ctx            The {@link net.toaddev.snowball.objects.command.CommandContext context} to use.
+     * @param query          The query to play.
      * @param searchProvider The {@link net.toaddev.snowball.objects.music.SearchProvider searchProvider} to use.
-     * @param messages Are we going to send the added to the queue messages or not?
-     * @param search This is for the dynamic search page.
+     * @param messages       Are we going to send the added to the queue messages or not?
+     * @param search         This is for the dynamic search page.
      */
     public void play(CommandContext ctx, String query, SearchProvider searchProvider, boolean messages, boolean search)
     {
@@ -290,43 +315,16 @@ public class MusicModule extends Module
             {
                 manager.getScheduler().loadItemList(query, manager, ctx);
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             ctx.getChannel().sendMessage("This is embarrassing. A wild exception has occurred. \n Exception: `" + e + "`. \n We are sorry for the inconvenience. If the exception persists please contact support.").queue();
             throw new MusicException(e.toString());
         }
     }
 
-    /**
-     *
-     * @param track The audio track
-     * @param channel The text channel to send the embed to
-     * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
-     */
-    public static void sendAddedEmbed(AudioTrack track, TextChannel channel, GuildMessageReceivedEvent event)
-    {
-        EmbedBuilder embed = new EmbedBuilder();
-        embed.setAuthor("Added to queue", track.getInfo().uri, event.getAuthor().getAvatarUrl());
-        embed.setDescription("[" + track.getInfo().title + "](" + track.getInfo().uri + ")");
-        embed.addField("**Channel**", track.getInfo().author, true);
-        embed.addField("**Song Duration**", TimeUtils.formatDuration(track.getDuration()), true);
-        embed.setColor(DiscordUtil.getEmbedColor());
-        channel.sendMessage(embed.build()).queue();
-    }
-
     public boolean isUrl(String url)
     {
         return urlPattern.matcher(url).matches();
-    }
-
-    /**
-     *
-     * @return The instance of this class
-     */
-    public static MusicModule getInstance()
-    {
-        return BotController.getMusicModule();
     }
 
     public AudioPlayerManager getAudioPlayerManager()

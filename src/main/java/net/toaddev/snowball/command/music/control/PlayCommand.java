@@ -28,14 +28,15 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-import net.toaddev.snowball.objects.exception.CommandException;
-import net.toaddev.snowball.objects.music.MusicManager;
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.objects.music.SearchProvider;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.MusicModule;
-import org.jetbrains.annotations.NotNull;
+import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
+import net.toaddev.snowball.objects.exception.CommandException;
+import net.toaddev.snowball.objects.music.MusicManager;
+import net.toaddev.snowball.objects.music.SearchProvider;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -47,14 +48,15 @@ public class PlayCommand extends Command
         super("play", "Plays the provided song");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
-        addAlias("p");
+
+        addOptions(
+                new CommandOptionString("song", "The song that you want to play")
+        );
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        String songName = ctx.getMessage().getContentRaw().replaceFirst("^" + ctx.getPrefix() + "play" + " ", "");
-        songName = songName.replaceFirst("^" + ctx.getPrefix() + "p" + " ", "");
         final TextChannel channel = (TextChannel) ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
@@ -62,12 +64,13 @@ public class PlayCommand extends Command
         final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if (!memberVoiceState.inVoiceChannel()) {
-            channel.sendMessage("You need to be in a voice channel for this command to work.").queue();
+        if (!memberVoiceState.inVoiceChannel())
+        {
+            ctx.getEvent().reply("You need to be in a voice channel for this command to work.").queue();
             return;
         }
 
-        if (ctx.getArgs().length < 2)
+        if (ctx.getOption("song") == null)
         {
             final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
             if (musicManager.getAudioPlayer().getPlayingTrack() != null)
@@ -76,10 +79,10 @@ public class PlayCommand extends Command
                 musicManager.getScheduler().player.setPaused(!paused);
                 String status = paused ? "paused" : "playing";
                 String newStatus = !paused ? "paused" : "playing";
-                channel.sendMessage("Changed the player from **" + status+ "** to **" + newStatus + "**. \nThis event occured because a song is and no arguments were provided!").queue();
+                ctx.getEvent().reply("Changed the player from **" + status + "** to **" + newStatus + "**. \nThis event occured because a song is and no arguments were provided!").queue();
                 return;
             }
-            channel.sendMessage("Please provide a url or search query.").queue();
+            ctx.getEvent().reply("Please provide a url or search query.").queue();
             return;
         }
 
@@ -92,13 +95,16 @@ public class PlayCommand extends Command
 
         SearchProvider searchProvider = SearchProvider.URL;
 
-        String song = ctx.getArgs()[1];
+        String song = ctx.getOption("song");
+
         if (!BotController.getMusicModule().isUrl(song))
         {
             searchProvider = SearchProvider.YOUTUBE;
-            song = songName;
-            channel.sendMessage("Searching :mag_right: `" + songName + "`").queue();
+            channel.sendMessage("Searching :mag_right: `" + song + "`").queue();
         }
+
+        ctx.getEvent().acknowledge().queue();
+
         MusicModule.getInstance()
                 .play(ctx, song, searchProvider, true, false);
     }

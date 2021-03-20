@@ -30,15 +30,15 @@ import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
-import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.main.BotController;
+import net.toaddev.snowball.objects.module.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EventModule extends Module
 {
-    public static JDA jda;
     public static final Logger log = LoggerFactory.getLogger(EventModule.class);
+    public static JDA jda;
 
     public EventModule()
     {
@@ -62,7 +62,8 @@ public class EventModule extends Module
             defaultMessage = defaultMessage.replace("{prefix}", Constants.GUILD_PREFIX);
             defaultMessage = defaultMessage.replace("{guildName}", event.getGuild().getName());
             TextChannel systemChannel = event.getGuild().getDefaultChannel();
-            if (systemChannel == null) {
+            if (systemChannel == null)
+            {
                 event.getGuild().getDefaultChannel().sendMessage(defaultMessage).queue();
                 return;
             }

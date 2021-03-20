@@ -22,11 +22,12 @@
 
 package net.toaddev.snowball.command.util;
 
-import net.toaddev.snowball.objects.command.Command;
-import net.toaddev.snowball.objects.command.CommandContext;
-import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.modules.CommandsModule;
+import net.toaddev.snowball.objects.command.Command;
+import net.toaddev.snowball.objects.command.CommandContext;
+import net.toaddev.snowball.objects.command.options.CommandOptionString;
+import net.toaddev.snowball.objects.exception.CommandException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -37,28 +38,30 @@ public class HelpCommand extends Command
     public HelpCommand()
     {
         super("help", null);
+
+        addOptions(
+                new CommandOptionString("command", "The command that you want help about.")
+        );
     }
 
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        if (ctx.getArgs().length < 2)
+        ctx.getEvent().acknowledge().queue();
+        if (ctx.getOption("command") == null)
         {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(ctx.getMember().getUser().getName());
-            stringBuilder.append(": Say `");
-            stringBuilder.append(ctx.getPrefix());
+            stringBuilder.append(": Say `/");
             stringBuilder.append("commands` to learn what this bot can do! \n");
-            stringBuilder.append("The prefix for this guild is `");
-            stringBuilder.append(ctx.getPrefix());
             stringBuilder.append("`");
             ctx.getChannel().sendMessage(stringBuilder.toString()).queue();
             return;
         }
-        Command command = BotController.getModules().get(CommandsModule.class).getCommand(ctx.getArgs()[1]);
+        Command command = BotController.getModules().get(CommandsModule.class).getCommand(ctx.getOption("command"));
         if (command == null)
         {
-            ctx.getChannel().sendMessage("Unknown command: `" + ctx.getArgs()[1] + "`.");
+            ctx.getChannel().sendMessage("Unknown command: `" + ctx.getOption("command") + "`.");
             return;
         }
         if (command.getDescription() == null)

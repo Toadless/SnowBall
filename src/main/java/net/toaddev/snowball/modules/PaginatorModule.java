@@ -25,9 +25,8 @@ package net.toaddev.snowball.modules;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
@@ -61,12 +60,12 @@ public class PaginatorModule extends Module
     @Override
     public void onGuildMessageReactionAdd(@NotNull GuildMessageReactionAddEvent event)
     {
-        if(event.getUser().isBot())
+        if (event.getUser().isBot())
         {
             return;
         }
         var paginator = this.paginators.getIfPresent(event.getMessageIdLong());
-        if(paginator == null)
+        if (paginator == null)
         {
             return;
         }
@@ -74,31 +73,28 @@ public class PaginatorModule extends Module
         var currentPage = paginator.getCurrentPage();
         var maxPages = paginator.getMaxPages();
 
-        if(Emoji.ARROW_LEFT.get().equals(code))
+        if (Emoji.ARROW_LEFT.get().equals(code))
         {
-            if(currentPage != 0)
+            if (currentPage != 0)
             {
                 paginator.previousPage();
                 event.getChannel().editMessageById(event.getMessageIdLong(), paginator.constructEmbed()).queue();
             }
-        }
-        else if(Emoji.ARROW_RIGHT.get().equals(code))
+        } else if (Emoji.ARROW_RIGHT.get().equals(code))
         {
-            if(currentPage != maxPages - 1)
+            if (currentPage != maxPages - 1)
             {
                 paginator.nextPage();
                 event.getChannel().editMessageById(event.getMessageIdLong(), paginator.constructEmbed()).queue();
             }
-        }
-        else if(Emoji.WASTEBASKET.get().equals(code))
+        } else if (Emoji.WASTEBASKET.get().equals(code))
         {
-            if(paginator.getAuthorId() == event.getUserIdLong())
+            if (paginator.getAuthorId() == event.getUserIdLong())
             {
                 try
                 {
                     this.paginators.invalidate(event.getMessageIdLong());
-                }
-                catch (Exception ignored)
+                } catch (Exception ignored)
                 {
 
                 }
@@ -112,12 +108,12 @@ public class PaginatorModule extends Module
     public void remove(Paginator paginator)
     {
         var guild = this.modules.getGuildById(paginator.getGuildId());
-        if(guild == null)
+        if (guild == null)
         {
             return;
         }
         var channel = guild.getTextChannelById(paginator.getChannelId());
-        if(channel == null)
+        if (channel == null)
         {
             return;
         }
@@ -127,26 +123,23 @@ public class PaginatorModule extends Module
         }));
     }
 
-    public void create(TextChannel channel, long authorId, int maxPages, BiFunction<Integer, EmbedBuilder, EmbedBuilder> embedFunction)
+    public void create(MessageChannel channel, long authorId, int maxPages, BiFunction<Integer, EmbedBuilder, EmbedBuilder> embedFunction)
     {
         var embedBuilder = embedFunction.apply(0, new EmbedBuilder().setFooter("Page: 1/" + maxPages)).build();
         create(maxPages, embedFunction, embedBuilder, channel, authorId);
     }
 
-    public void create(int maxPages, BiFunction<Integer, EmbedBuilder, EmbedBuilder> embedFunction, MessageEmbed embedBuilder, TextChannel channel, long userId)
+    public void create(int maxPages, BiFunction<Integer, EmbedBuilder, EmbedBuilder> embedFunction, MessageEmbed embedBuilder, MessageChannel channel, long userId)
     {
         channel.sendMessage(embedBuilder).queue(message ->
         {
             var paginator = new Paginator(message, userId, maxPages, embedFunction);
-            if(channel.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION))
+            if (maxPages > 1)
             {
-                if(maxPages > 1)
-                {
-                    message.addReaction(Emoji.ARROW_LEFT.get()).queue();
-                    message.addReaction(Emoji.ARROW_RIGHT.get()).queue();
-                }
-                message.addReaction(Emoji.WASTEBASKET.get()).queue();
+                message.addReaction(Emoji.ARROW_LEFT.get()).queue();
+                message.addReaction(Emoji.ARROW_RIGHT.get()).queue();
             }
+            message.addReaction(Emoji.WASTEBASKET.get()).queue();
             this.paginators.put(paginator.getMessageId(), paginator);
         });
     }

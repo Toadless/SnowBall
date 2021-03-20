@@ -37,7 +37,7 @@ public class BotListModule extends Module
     {
         var guildCount = getTotalGuilds();
         var requestModule = this.modules.get(RequestModule.class);
-        if(!Config.INS.getTopGGToken().isBlank())
+        if (!Config.INS.getTopGGToken().isBlank())
         {
             requestModule.updateStats(API.TOP_GG, guildCount, Config.INS.getTopGGToken());
         }

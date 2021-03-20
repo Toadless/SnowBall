@@ -36,7 +36,7 @@ public class InviteCommand extends Command
 
     public InviteCommand()
     {
-        super("invite", null);
+        super("invite", "Gives you the bots invite link.");
     }
 
     @Override
@@ -46,6 +46,7 @@ public class InviteCommand extends Command
         {
             return;
         }
+        ctx.getEvent().acknowledge().queue();
         String str = "https://discord.com/api/oauth2/authorize?client_id=" + ctx.getJDA().getSelfUser().getId() + "&permissions=267911025&scope=bot";
         ctx.getChannel().sendMessageFormat("My invite: %s", str).queue();
     }

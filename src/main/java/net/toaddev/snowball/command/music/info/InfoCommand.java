@@ -27,12 +27,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
 import net.toaddev.snowball.objects.exception.CommandException;
 import net.toaddev.snowball.objects.music.MusicManager;
-import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.util.DiscordUtil;
 import net.toaddev.snowball.util.TimeUtils;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +51,6 @@ public class InfoCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        final TextChannel channel = ctx.getChannel();
         final Member self = ctx.getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
@@ -61,7 +59,7 @@ public class InfoCommand extends Command
 
         if (!selfVoiceState.inVoiceChannel())
         {
-            channel.sendMessage("I need to be in a voice channel to display the guilds play information.").queue();
+            ctx.getEvent().reply("I need to be in a voice channel to display the guilds play information.").queue();
             return;
         }
 
@@ -69,7 +67,7 @@ public class InfoCommand extends Command
         final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
         if (audioPlayer.getPlayingTrack() == null)
         {
-            channel.sendMessage("I have no current song playing. No info to show.").queue();
+            ctx.getEvent().reply("I have no current song playing. No info to show.").queue();
             return;
         }
 

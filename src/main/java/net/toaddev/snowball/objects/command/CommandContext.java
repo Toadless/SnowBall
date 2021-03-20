@@ -22,11 +22,10 @@
 
 package net.toaddev.snowball.objects.command;
 
-import com.mongodb.lang.NonNull;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.services.Modules;
 import net.toaddev.snowball.util.DiscordUtil;
@@ -35,69 +34,31 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- *  A class representing an event for a {@link Command command}.
+ * A class representing an event for a {@link Command command}.
  */
 public class CommandContext
 {
-    private final GuildMessageReceivedEvent event;
+    private final SlashCommandEvent event;
     private final JDA jda;
-    private final String[] args;
-    private final TextChannel channel;
+    private final MessageChannel channel;
     private final Member member;
-    private final String prefix;
-    private final Message message;
     private final Guild guild;
 
-    /**
-     *  Constructs a new {@link CommandContext event}.
-     *
-     * @param event The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
-     * @param args The {@link net.toaddev.snowball.modules.InteractionsModule args} to use.
-     * @param prefix The {@link net.toaddev.snowball.modules.SettingsModule prefix} to use.
-     */
-    public CommandContext(GuildMessageReceivedEvent event, String[] args, String prefix)
+    public CommandContext(SlashCommandEvent event)
     {
         this.event = event;
         this.jda = event.getJDA();
-        this.args = args;
         this.channel = event.getChannel();
         this.member = event.getMember();
-        this.prefix = prefix;
-        this.message = event.getMessage();
         this.guild = event.getGuild();
     }
 
-    /**
-     *
-     * @return The args/
-     */
-    @NonNull
-    public String[] getArgs()
-    {
-        return args;
-    }
-
-    /**
-     *
-     * @return The prefix. This varies per {@link net.dv8tion.jda.api.entities.Guild guild}.
-     */
-    @NonNull
-    public String getPrefix()
-    {
-        return prefix;
-    }
-
-    /**
-     *
-     * @return The {@link net.dv8tion.jda.api.events.message.MessageReceivedEvent event} to use.
-     */
-    public GuildMessageReceivedEvent getEvent()
+    public SlashCommandEvent getEvent()
     {
         return event;
     }
 
     /**
-     *
      * @return The {@link net.dv8tion.jda.api.JDA jda instance}.
      */
     public JDA getJDA()
@@ -106,7 +67,6 @@ public class CommandContext
     }
 
     /**
-     *
      * @return The {@link net.dv8tion.jda.api.entities.Guild guild} the event took place in.
      */
     public Guild getGuild()
@@ -115,9 +75,7 @@ public class CommandContext
     }
 
     /**
-     *
      * @return The {@link net.dv8tion.jda.api.entities.Member member} for this {@link CommandContext event}.
-     *
      * @throws java.lang.NullPointerException if the member is null.
      */
     public Member getMember()
@@ -126,25 +84,14 @@ public class CommandContext
     }
 
     /**
-     *
-     * @return The message sent by the user.
-     */
-    public Message getMessage()
-    {
-        return message;
-    }
-
-    /**
-     *
      * @return The channel that the event took place in
      */
-    public TextChannel getChannel()
+    public MessageChannel getChannel()
     {
         return channel;
     }
 
     /**
-     *
      * @return If the {@link #getMember()} is a developer.
      */
     public Boolean isDeveloper()
@@ -153,7 +100,6 @@ public class CommandContext
     }
 
     /**
-     *
      * @return If the {@link #getMember()} is a server admin.
      */
     public Boolean isServerAdmin()
@@ -195,18 +141,8 @@ public class CommandContext
         this.channel.sendMessage(content).queue();
     }
 
-    public void reply(MessageEmbed embed)
+    public String getOption(String option)
     {
-        this.message.reply(embed).mentionRepliedUser(false).queue();
-    }
-
-    public void reply(Message message)
-    {
-        this.message.reply(message).mentionRepliedUser(false).queue();
-    }
-
-    public void reply(String message)
-    {
-        this.message.reply(message).mentionRepliedUser(false).queue();
+        return event.getOption(option).getAsString();
     }
 }

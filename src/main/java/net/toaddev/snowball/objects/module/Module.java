@@ -29,9 +29,8 @@ import java.util.Set;
 
 public abstract class Module extends ListenerAdapter
 {
-    private String name;
-
     protected Modules modules;
+    private final String name;
 
     protected Module(String name)
     {
@@ -49,9 +48,13 @@ public abstract class Module extends ListenerAdapter
         return null;
     }
 
-    public void onEnable() {}
+    public void onEnable()
+    {
+    }
 
-    public void onDisable() {}
+    public void onDisable()
+    {
+    }
 
     public String getName()
     {
