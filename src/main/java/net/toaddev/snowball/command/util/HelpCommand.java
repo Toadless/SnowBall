@@ -37,7 +37,7 @@ public class HelpCommand extends Command
 {
     public HelpCommand()
     {
-        super("help", null);
+        super("help", "Gives you help for each of the commands.");
 
         addOptions(
                 new CommandOptionString("command", "The command that you want help about.")

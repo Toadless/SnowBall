@@ -68,7 +68,7 @@ public class SoundCloud extends Command
             return;
         }
 
-        if (ctx.getOption("song") == null)
+        if (!ctx.isDefined("song"))
         {
             ctx.getEvent().reply("Please provide a search query.").queue();
             return;

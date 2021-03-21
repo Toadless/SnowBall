@@ -96,6 +96,8 @@ public class QueueCommand extends Command
             return;
         }
 
+        ctx.getEvent().acknowledge().queue();
+
         List<AudioTrack> tracks = musicManager.getScheduler().getQueue();
 
         MusicUtils.sendTracks(tracks, BotController.getModules(), ctx.getChannel(), ctx.getMember().getUser().getIdLong(), "Currently " + tracks.size() + " " + MessageUtils.pluralize("track", tracks) + " are queued");
