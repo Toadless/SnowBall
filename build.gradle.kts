@@ -35,13 +35,15 @@ group = "net.toaddev"
 repositories {
     jcenter()
     mavenCentral()
-    maven { setUrl("https://jitpack.io") }
+    maven("https://jitpack.io")
     maven { setUrl ("http://repo.spring.io/plugins-release") }
+
+    maven { setUrl ("https://m2.dv8tion.net/releases") }
 }
 
-val jdaVersion = "4.2.0_242"
+val jdaVersion = "4.2.0_249"
 val logbackVersion = "1.3.0-alpha5"
-val lavaplayerVersion = "1.3.73"
+val lavaplayerVersion = "1.3.74"
 val yamlVersion = "1.7.2"
 val groovyVersion = "3.0.7"
 val mongoVersion = "3.12.8"
