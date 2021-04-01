@@ -33,12 +33,11 @@ plugins {
 group = "net.toaddev"
 
 repositories {
-    jcenter()
     mavenCentral()
     maven("https://jitpack.io")
     maven { setUrl ("http://repo.spring.io/plugins-release") }
-
     maven { setUrl ("https://m2.dv8tion.net/releases") }
+    jcenter()
 }
 
 val jdaVersion = "4.2.0_249"
@@ -65,7 +64,7 @@ dependencies {
     implementation ("com.jagrosh:jda-utilities:$utilsVersion")
 
     // audio
-    implementation ("com.sedmelluq:lavaplayer:$lavaplayerVersion")
+    implementation ("com.github.sedmelluq:lavaplayer:$lavaplayerVersion")
     implementation ("se.michaelthelin.spotify:spotify-web-api-java:$spotifyVersion")
 
     // yaml config
