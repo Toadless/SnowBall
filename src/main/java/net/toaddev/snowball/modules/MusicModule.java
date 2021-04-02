@@ -180,6 +180,7 @@ public class MusicModule extends Module
             return;
         }
         getInstance().getMusicManager(event.getGuild()).getAudioPlayer().destroy();
+        getInstance().getMusicManager(event.getGuild()).cancelDestroy();
     }
 
     @Override
