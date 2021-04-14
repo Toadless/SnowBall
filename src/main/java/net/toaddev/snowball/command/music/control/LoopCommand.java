@@ -36,11 +36,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 @net.toaddev.snowball.annotation.Command
-public class RepeatCommand extends Command
+public class LoopCommand extends Command
 {
-    public RepeatCommand()
+    public LoopCommand()
     {
-        super("repeat", "Loops the player");
+        super("loop", "Loops the player");
         addMemberPermissions(Permission.VOICE_CONNECT);
         addSelfPermissions(Permission.VOICE_CONNECT, Permission.VOICE_SPEAK);
     }
