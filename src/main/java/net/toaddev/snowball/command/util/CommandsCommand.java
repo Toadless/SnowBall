@@ -47,7 +47,7 @@ public class CommandsCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         Map<String, Command> commandMap = BotController.getModules().get(CommandsModule.class).getCommands();
         Collection<Command> cmds = new LinkedList<>();

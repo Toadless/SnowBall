@@ -36,7 +36,7 @@ public class RedditCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure) throws ParserConfigurationException, SAXException, IOException
     {
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         final MessageChannel textChannel = ctx.getChannel();
 

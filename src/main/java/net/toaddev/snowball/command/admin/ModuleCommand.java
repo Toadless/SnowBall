@@ -29,7 +29,7 @@ public class ModuleCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         if (!Config.INS.getDevelopment())
         {

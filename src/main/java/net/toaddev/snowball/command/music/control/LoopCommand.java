@@ -74,7 +74,7 @@ public class LoopCommand extends Command
         final MusicManager musicManager = MusicModule.getInstance().getMusicManager(ctx.getGuild());
         final boolean newRepeating = !musicManager.getScheduler().repeating;
         musicManager.getScheduler().repeating = newRepeating;
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
         channel.sendMessageFormat(":repeat: **%s!**", newRepeating ? "Enabled" : "Disabled").queue();
     }
 }

@@ -81,7 +81,7 @@ public class SkipCommand extends Command
             return;
         }
 
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         musicManager.getScheduler().nextTrack();
     }

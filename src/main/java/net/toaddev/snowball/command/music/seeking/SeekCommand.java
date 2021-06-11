@@ -89,7 +89,7 @@ public class SeekCommand extends Command
         }
         try
         {
-            ctx.getEvent().acknowledge().queue();
+            ctx.getEvent().deferReply().queue();
             int amount = Integer.parseInt(ctx.getOption("position"));
             amount = (amount * 1000);
             if (musicManager.getScheduler().player.getPlayingTrack().getDuration() < Long.parseLong(String.valueOf(amount)))

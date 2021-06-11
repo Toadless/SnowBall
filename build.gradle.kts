@@ -36,11 +36,11 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven { setUrl ("http://repo.spring.io/plugins-release") }
-    maven { setUrl ("https://m2.dv8tion.net/releases") }
     jcenter()
+    maven { setUrl ("https://m2.dv8tion.net/releases") }
 }
 
-val jdaVersion = "4.2.0_249"
+val jdaVersion = "4.3.0_277"
 val logbackVersion = "1.3.0-alpha5"
 val lavaplayerVersion = "1.3.74"
 val yamlVersion = "1.7.2"
@@ -59,8 +59,8 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
 
     // discord
-    //implementation("net.dv8tion:JDA:$jdaVersion")
-    implementation ("com.github.dv8fromtheworld:jda:feature~slash-commands-SNAPSHOT")
+    implementation("net.dv8tion:JDA:$jdaVersion")
+    //implementation ("com.github.dv8fromtheworld:jda:feature~slash-commands-SNAPSHOT")
     implementation ("com.jagrosh:jda-utilities:$utilsVersion")
 
     // audio

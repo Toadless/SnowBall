@@ -78,7 +78,7 @@ public class SearchCommand extends Command
 
         SearchProvider searchProvider = SearchProvider.YOUTUBE;
 
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         MusicModule.getInstance()
                 .play(ctx, ctx.getOption("query"), searchProvider, true, true);

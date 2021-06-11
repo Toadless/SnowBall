@@ -24,6 +24,7 @@ package net.toaddev.snowball.command.maintenance;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDAInfo;
+import net.dv8tion.jda.api.entities.Message;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
@@ -44,12 +45,12 @@ public class StatsCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getEvent().reply(new EmbedBuilder()
+        ctx.getEvent().replyEmbeds(new EmbedBuilder()
                 .setTitle(ctx.getJDA().getSelfUser().getAsTag() + " information")
                 .addField("JVM Version", System.getProperty("java.version"), true)
                 .addField("JDA Version", JDAInfo.VERSION, true)
                 .addBlankField(true)
-                .addField("Thread Count", String.valueOf(java.lang.Thread.activeCount()), true)
+                .addField("Thread Count", String.valueOf(Thread.activeCount()), true)
                 .addField("Memory Usage", (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1000000 + "MB", true)
                 .addBlankField(true)
                 .addField("Shard info", ctx.getJDA().getShardInfo().getShardString(), true)

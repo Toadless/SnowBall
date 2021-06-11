@@ -47,7 +47,7 @@ public class HelpCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
         if (ctx.getOption("command") == null)
         {
             StringBuilder stringBuilder = new StringBuilder();

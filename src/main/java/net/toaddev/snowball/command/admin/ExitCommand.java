@@ -46,7 +46,7 @@ public class ExitCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
         ctx.getChannel().sendMessage("This will **shut down the whole bot**.")
                 .queue(message ->
                 {

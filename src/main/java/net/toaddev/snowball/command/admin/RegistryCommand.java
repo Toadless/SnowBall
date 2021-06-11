@@ -50,7 +50,7 @@ public class RegistryCommand extends Command
     @Override
     public void run(@NotNull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
         if (!Config.INS.getDevelopment())
         {
             ctx.getChannel().sendMessage("This command can only be ran in development.").queue();

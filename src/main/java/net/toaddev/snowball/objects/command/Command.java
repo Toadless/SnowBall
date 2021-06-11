@@ -72,23 +72,23 @@ public abstract class Command
     {
         if (hasFlag(CommandFlag.DISABLED))
         {
-            event.getEvent().acknowledge().queue();
+            event.getEvent().deferReply().queue();
             EmbedUtil.sendDisabledError(event);
         } else if (hasFlag(CommandFlag.DEVELOPER_ONLY) && !event.isDeveloper())
         {
-            event.getEvent().acknowledge().queue();
+            event.getEvent().deferReply().queue();
             EmbedUtil.sendError(event.getChannel(), "This command is in developer only mode.");
         } else if (!getMemberRequiredPermissions().isEmpty() && !event.memberPermissionCheck(getMemberRequiredPermissions()))
         {
-            event.getEvent().acknowledge().queue();
+            event.getEvent().deferReply().queue();
             EmbedUtil.sendError(event.getChannel(), "You do not have the required permission to perform this action.");
         } else if (!getSelfRequiredPermissions().isEmpty() && !event.selfPermissionCheck(getSelfRequiredPermissions()))
         {
-            event.getEvent().acknowledge().queue();
+            event.getEvent().deferReply().queue();
             EmbedUtil.sendError(event.getChannel(), "I do not have the required permission to perform this action.");
         } else if (hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isDeveloper() || hasFlag(CommandFlag.SERVER_ADMIN_ONLY) && !event.isServerAdmin())
         {
-            event.getEvent().acknowledge().queue();
+            event.getEvent().deferReply().queue();
             EmbedUtil.sendError(event.getChannel(), "You do not have sufficient permissions to perform this action!");
         } else
         {

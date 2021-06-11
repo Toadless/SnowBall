@@ -96,7 +96,7 @@ public class QueueCommand extends Command
             return;
         }
 
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         List<AudioTrack> tracks = musicManager.getScheduler().getQueue();
 

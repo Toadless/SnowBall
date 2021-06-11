@@ -55,7 +55,7 @@ public class ClearCommand extends Command
     @Override
     public void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         if (Integer.parseInt(ctx.getOption("amount")) > 100)
         {

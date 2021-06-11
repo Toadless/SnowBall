@@ -73,7 +73,7 @@ public class SpotifyCommand extends Command
             audioManager.openAudioConnection(memberChannel);
         }
 
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         BotController.getMusicModule().play(ctx, ctx.getOption("song"), SearchProvider.URL, false, false);
     }

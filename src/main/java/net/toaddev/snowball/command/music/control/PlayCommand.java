@@ -103,7 +103,7 @@ public class PlayCommand extends Command
             channel.sendMessage("Searching :mag_right: `" + song + "`").queue();
         }
 
-        ctx.getEvent().acknowledge().queue();
+        ctx.getEvent().deferReply().queue();
 
         MusicModule.getInstance()
                 .play(ctx, song, searchProvider, true, false);

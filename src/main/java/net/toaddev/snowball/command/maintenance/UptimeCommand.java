@@ -23,6 +23,7 @@
 package net.toaddev.snowball.command.maintenance;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.toaddev.snowball.main.BotController;
 import net.toaddev.snowball.objects.command.Command;
 import net.toaddev.snowball.objects.command.CommandContext;
@@ -47,7 +48,7 @@ public class UptimeCommand extends Command
     public void run(@Nonnull CommandContext ctx, @NotNull Consumer<CommandException> failure)
     {
         Duration uptime = Duration.between(BotController.getStartTimestamp(), LocalDateTime.now());
-        ctx.getEvent().reply(new EmbedBuilder()
+        ctx.getEvent().replyEmbeds(new EmbedBuilder()
                 .setDescription(
                         "Uptime: " + uptime.toDaysPart() +
                                 " days, " + uptime.toHoursPart() +

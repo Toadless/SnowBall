@@ -100,7 +100,7 @@ public class VolumeCommand extends Command
                 final AudioPlayer audioPlayer = musicManager.getAudioPlayer();
                 audioPlayer.setVolume(volume);
 
-                ctx.getEvent().acknowledge().queue();
+                ctx.getEvent().deferReply().queue();
 
                 if (volume < 100)
                 {
