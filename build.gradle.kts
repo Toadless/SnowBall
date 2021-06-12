@@ -79,7 +79,7 @@ dependencies {
 
     // other
     implementation ("io.github.classgraph:classgraph:4.8.108")
-    implementation ("com.github.ben-manes.caffeine:caffeine:2.8.8")
+    implementation ("com.github.ben-manes.caffeine:caffeine:3.0.2")
     implementation ("com.squareup.okhttp3:okhttp:$httpClientVersion")
 }
 
