@@ -94,7 +94,5 @@ object Launcher {
         BotControllerBuilder()
                 .setXmlDoc(xmlDoc)
                 .build() // Starting the bot
-
-        log.info("You can safely ignore the big red warning about illegal reflection.")
     }
 }
