@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
-  <jar>C:\Users\Thomas\Desktop\SnowBall\build\libs\Snowball-4.1.0.jar</jar>
+  <jar>C:\Users\Thomas\IdeaProjects\SnowBall\build\libs\Snowball.jar</jar>
   <outfile>C:\Users\Thomas\Desktop\Snowball.exe</outfile>
   <errTitle>You have the incorrect version on java. Please download the latest version.</errTitle>
   <cmdLine></cmdLine>
