@@ -18,6 +18,8 @@ object Launcher {
     private val log = LoggerFactory.getLogger(Launcher::class.java)
     private var version = "Unknown"
 
+    public var gui = true;
+
     val startTime = System.currentTimeMillis()
 
     private fun getVersionInfo(indentation: String = "\t", vanity: Boolean = true): String {
@@ -78,6 +80,11 @@ object Launcher {
                 (args[0].equals("-v", ignoreCase = true) || args[0].equals("--version", ignoreCase = true))) {
             println(getVersionInfo(indentation = "", vanity = false))
             return
+        }
+
+        if (args.isNotEmpty() &&
+            (args[0].equals("-nogui", ignoreCase = true) || args[0].equals("--nogui", ignoreCase = true))) {
+            this.gui = false;
         }
 
         val xml = IOUtil.getResourceFileContents("snowball/snowball.xml") // Loading xml

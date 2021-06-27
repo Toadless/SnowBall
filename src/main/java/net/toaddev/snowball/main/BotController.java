@@ -29,6 +29,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.toaddev.snowball.data.Config;
 import net.toaddev.snowball.data.Constants;
+import net.toaddev.snowball.gui.GUI;
 import net.toaddev.snowball.modules.MusicModule;
 import net.toaddev.snowball.objects.module.Module;
 import net.toaddev.snowball.services.Modules;
@@ -71,6 +72,12 @@ public class BotController
     public BotController(Document xmlDoc) throws IOException, ParserConfigurationException, SAXException
     {
         startTimestamp = LocalDateTime.now();
+
+        if (Launcher.INSTANCE.getGui())
+        {
+            GUI gui = new GUI();
+            gui.init();
+        }
 
         version = IOUtil.getXmlVal(xmlDoc, "Version");
         String configFile = IOUtil.getXmlVal(xmlDoc, "ConfigFile") + ".yml";
