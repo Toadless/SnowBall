@@ -9,12 +9,14 @@ import java.awt.event.WindowListener;
 
 public class GUI {
     private final ConsolePanel console;
+    private final InfoPanel info;
     private final JFrame frame;
 
     public GUI()
     {
         System.setProperty("java.awt.headless", "false");
         console = new ConsolePanel();
+        info = new InfoPanel();
         frame = new JFrame();
     }
 
@@ -25,6 +27,7 @@ public class GUI {
 
         JTabbedPane tabs = new JTabbedPane();
         tabs.add("Console", console);
+        tabs.add("Info", info);
 
         frame.getContentPane().add(tabs);
         frame.pack();
