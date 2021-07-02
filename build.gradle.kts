@@ -78,7 +78,7 @@ dependencies {
     implementation(group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version = "1.5.0-native-mt")
 
     // other
-    implementation ("io.github.classgraph:classgraph:4.8.108")
+    implementation ("io.github.classgraph:classgraph:4.8.109")
     implementation ("com.github.ben-manes.caffeine:caffeine:3.0.2")
     implementation ("com.squareup.okhttp3:okhttp:$httpClientVersion")
 }
