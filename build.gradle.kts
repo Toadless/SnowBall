@@ -42,7 +42,7 @@ repositories {
 
 val jdaVersion = "4.3.0_277"
 val logbackVersion = "1.3.0-alpha5"
-val lavaplayerVersion = "1.3.77"
+val lavaplayerVersion = "1.3.78"
 val yamlVersion = "1.7.2"
 val groovyVersion = "3.0.7"
 val mongoVersion = "3.12.8"
