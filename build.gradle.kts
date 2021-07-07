@@ -49,7 +49,7 @@ val mongoVersion = "3.12.8"
 val jsonVersion = "20210307"
 val caffeineVersion = "2.8.8"
 val utilsVersion = "3.0.5"
-val springBootVersion = "2.5.1"
+val springBootVersion = "2.5.2"
 val httpClientVersion = "4.9.1"
 val spotifyVersion = "6.5.4"
 
